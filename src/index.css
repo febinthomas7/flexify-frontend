@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.slick-slide > div {
+  margin-right: 10px;
+}
+.slick-slider > button {
+  display: none !important;
+}
+/* .slick-slider > button:hover {
+  visibility: visible;
+} */

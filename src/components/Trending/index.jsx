@@ -1,71 +1,39 @@
+import { useEffect, useState } from "react";
 import Slider from "react-slick";
 
 const Trending = () => {
-  const trendingMovies = [
-    {
-      id: 1,
-      title: "Avengers: Endgame",
-      thumbnail: "/p1.webp",
-    },
-    {
-      id: 2,
-      title: "Joker",
-      thumbnail: "/p2.webp",
-    },
-    {
-      id: 3,
-      title: "The Shawshank Redemption",
-      thumbnail: "/p3.webp",
-    },
-    {
-      id: 4,
-      title: "Avengers: Endgame",
-      thumbnail: "/p1.webp",
-    },
-    {
-      id: 5,
-      title: "Joker",
-      thumbnail: "/p2.webp",
-    },
-    {
-      id: 6,
-      title: "The Shawshank Redemption",
-      thumbnail: "/p3.webp",
-    },
-    {
-      id: 2,
-      title: "Joker",
-      thumbnail: "/p2.webp",
-    },
-    {
-      id: 3,
-      title: "The Shawshank Redemption",
-      thumbnail: "/p3.webp",
-    },
-    {
-      id: 4,
-      title: "Avengers: Endgame",
-      thumbnail: "/p1.webp",
-    },
-    {
-      id: 5,
-      title: "Joker",
-      thumbnail: "/p2.webp",
-    },
-    {
-      id: 6,
-      title: "The Shawshank Redemption",
-      thumbnail: "/p3.webp",
-    },
-    // Add more movies here
-  ];
+  // const [data, setData] = useState([]);
+  const [movies, setMovies] = useState([]);
+
+  // useEffect(() => {
+  //   const trend = async () => {
+  //     const result = await fetch("/api/trending");
+  //     const jsonData = await result.json();
+
+  //     setData(jsonData);
+  //   };
+  //   trend();
+  // }, []);
+  useEffect(() => {
+    const trend = async () => {
+      const result = await fetch(
+        `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=${
+          import.meta.env.VITE_API_KEY
+        }`
+      );
+      const jsonData = await result.json();
+      setMovies(jsonData.results);
+    };
+    trend();
+  }, []);
+
   var settings = {
-    dots: true,
+    dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 8,
     slidesToScroll: 4,
-    initialSlide: 0,
+    initialSlide: 1,
     responsive: [
       {
         breakpoint: 1024,
@@ -93,21 +61,20 @@ const Trending = () => {
       },
     ],
   };
-
   return (
     <section className="trending  bg-black py-4">
       <h2 className="text-2xl font-bold text-white px-4">Trending Movies</h2>
 
       <div className="  px-8 space-x-4 mt-4">
         <Slider {...settings}>
-          {trendingMovies.map((movie) => (
+          {movies?.map((movie, index) => (
             <div
-              key={movie.id}
+              key={index}
               className="w-80 md:w-48  flex-shrink-0 cursor-pointer"
             >
               <img
-                src={movie.thumbnail}
-                alt={movie.title}
+                src={`https://image.tmdb.org/t/p/w400/${movie.poster_path}`}
+                alt={movie.poster_path}
                 className="w-full rounded"
               />
               <h3 className="mt-2 text-white text-sm md:text-base truncate">

@@ -11,3 +11,9 @@
 /* .slick-slider > button:hover {
   visibility: visible;
 } */
+.slick-dots li button:before {
+  color: rgb(187, 187, 187);
+}
+.slick-dots li button:active {
+  color: rgb(224, 224, 224);
+}

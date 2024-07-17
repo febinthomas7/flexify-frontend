@@ -19,7 +19,7 @@ const Header = () => {
     },
   ];
   return (
-    <header className=" text-white p-4 flex justify-between items-center">
+    <header className=" text-white p-2 sm:p-4 flex justify-between items-center">
       <div className="logo   flex justify-center items-center text-[15px]">
         <img src="/logo.png" alt="" className="w-[100px] " />
       </div>
@@ -39,7 +39,7 @@ const Header = () => {
         <img
           src="/profile.jpeg"
           alt="Profile"
-          className="w-9 outline outline-offset-2 outline-black outline-2 rounded-full"
+          className="w-9 hover:outline outline-offset-2 outline-white outline-2 rounded-md cursor-pointer"
         />
       </div>
     </header>

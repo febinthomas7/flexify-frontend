@@ -1,5 +1,7 @@
 import { Link, createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
+import MovieDetails from "../pages/MovieDetails";
+import SeriesDetails from "../pages/SeriesDetails";
 const Home = lazy(() => import("../pages/Home"));
 const Movie = lazy(() => import("../pages/Movie"));
 const Profile = lazy(() => import("../pages/ProfilePage"));
@@ -32,10 +34,26 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/tvshows",
+    path: "/series",
     element: (
       <>
         <TVShowsPage />
+      </>
+    ),
+  },
+  {
+    path: "/series/:id",
+    element: (
+      <>
+        <SeriesDetails />
+      </>
+    ),
+  },
+  {
+    path: "/movies/:id",
+    element: (
+      <>
+        <MovieDetails />
       </>
     ),
   },

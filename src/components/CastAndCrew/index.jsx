@@ -38,7 +38,7 @@ const CastAndCrew = () => {
     },
   ];
   return (
-    <section className="cast-crew  bg-gray-800 text-white p-4 md:p-8">
+    <section className=" cast-crew  bg-[#101010b8] text-white p-4 md:p-8">
       <h2 className="text-2xl font-bold">Cast & Crew</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
         {castAndCrew.map((member) => (

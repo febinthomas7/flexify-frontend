@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-b from-[#030d1b]  via-[#02070d]  to-[#000000]   text-white p-4 md:p-8">
-      <div className="container mx-auto flex flex-col md:flex-row justify-between">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <div className="mb-4 md:mb-0">
           <a href="/about" className="hover:underline mr-4">
             About

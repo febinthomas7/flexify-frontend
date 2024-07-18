@@ -17,3 +17,25 @@
 .slick-dots li button:active {
   color: rgb(224, 224, 224);
 }
+
+.hide::-webkit-scrollbar {
+  width: 20px;
+}
+.hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #b01818;
+  /* border-radius: 10px; */
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}

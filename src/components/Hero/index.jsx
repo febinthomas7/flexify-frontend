@@ -1,24 +1,11 @@
 import React from "react";
-import Slider from "react-slick";
+
 const Hero = () => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    speed: 2000,
-    autoplaySpeed: 2000,
-    cssEase: "linear",
-  };
   return (
     <section
       className=" flex items-center"
       // style={{ backgroundImage: "url(/hero.webp)" }}
     >
-      {/* <Slider {...settings}>
-        
-      </Slider> */}
       <div
         className="hero bg-cover w-full bg-center h-80 md:h-svh text-white flex items-center"
         style={{ backgroundImage: "url(/hero.webp)" }}

@@ -3,16 +3,20 @@ import Header from "../../components/Header";
 import Hero from "../../components/Hero";
 import Trending from "../../components/Trending";
 import Footer from "../../components/Footer";
+import Movies from "../../components/Movies";
+import Series from "../../components/Series";
+import UpcomingMovies from "../../components/UpcomingMovies";
+import UpcomingSeries from "../../components/UpcomingSeries";
 const Home = () => {
   return (
     <>
-      <div className="fixed w-full ">
-        <Header />
-      </div>
-
+      <Header />
       <Hero />
-
-      <Trending />
+      {/* <Trending /> */}
+      <Movies />
+      <Series />
+      <UpcomingMovies />
+      <UpcomingSeries />
       <Footer />
     </>
   );

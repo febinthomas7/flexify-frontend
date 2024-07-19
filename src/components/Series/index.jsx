@@ -3,6 +3,7 @@ import ScrollComponent from "../ScrollComponent";
 
 const Series = () => {
   const [seriesData, setSeriesData] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const data = async () => {
       const result = await fetch(
@@ -12,11 +13,17 @@ const Series = () => {
       );
       const jsonData = await result.json();
       setSeriesData(jsonData.results);
+      setLoading(false);
     };
     data();
   }, []);
   return (
-    <ScrollComponent data={seriesData} heading={"Series"} type={"series"} />
+    <ScrollComponent
+      data={seriesData}
+      heading={"Series"}
+      type={"series"}
+      loading={loading}
+    />
   );
 };
 

@@ -4,7 +4,7 @@ const MovieDetails = () => {
   const { id } = useParams();
   return (
     <div
-      className="w-full h-svh bg-black flex flex-col gap-4  items-center justify-center  bg-no-repeat bg-top overflow-y-auto p-6 relative"
+      className="w-full h-screen bg-black flex flex-col gap-4  items-center justify-center  bg-no-repeat bg-center overflow-y-auto p-6 relative"
       style={{ backgroundImage: "url(/bgImage.svg)" }}
     >
       <Link to="/">

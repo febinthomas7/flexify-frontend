@@ -3,6 +3,7 @@ import ScrollComponent from "../ScrollComponent";
 
 const UpcomingMovies = () => {
   const [upcomingmovieData, setUpcomingMovieData] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const data = async () => {
       const result = await fetch(
@@ -12,6 +13,7 @@ const UpcomingMovies = () => {
       );
       const jsonData = await result.json();
       setUpcomingMovieData(jsonData.results);
+      setLoading(false);
     };
     data();
   }, []);
@@ -20,6 +22,7 @@ const UpcomingMovies = () => {
       data={upcomingmovieData}
       heading={"Upcoming Movies"}
       type={"movies"}
+      loading={loading}
     />
   );
 };

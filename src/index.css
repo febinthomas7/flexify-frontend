@@ -21,6 +21,9 @@
 .hide::-webkit-scrollbar {
   width: 20px;
 }
+.scroll {
+  overflow-y: hidden;
+}
 .hide {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */

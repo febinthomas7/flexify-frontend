@@ -2,14 +2,8 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <section
-      className=" flex items-center"
-      // style={{ backgroundImage: "url(/hero.webp)" }}
-    >
-      <div
-        className="hero bg-cover w-full bg-center h-80 md:h-svh text-white flex items-center"
-        style={{ backgroundImage: "url(/hero.webp)" }}
-      >
+    <section className=" flex items-center">
+      <div className="hero bg-cover w-full bg-center h-80 md:h-svh text-white flex items-center  bg-[url('/hero.webp')]">
         <div className="container mx-auto px-4 text-center md:text-left">
           <h1 className="text-2xl md:text-4xl font-bold">
             Featured Movie Title

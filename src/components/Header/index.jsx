@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 const Header = () => {
   const [bgcolor, setBgColor] = useState(false);
+  const navigation = useLocation();
+
   const nav = [
     {
       path: "/",
@@ -30,7 +32,7 @@ const Header = () => {
   });
   return (
     <header
-      className={` text-white p-2 sm:p-4 flex justify-between fixed w-full ${
+      className={` text-white p-2 sm:p-4 z-50 flex justify-between fixed w-full ${
         bgcolor ? "bg-[#000000b1]" : null
       } items-center duration-75 ease-in`}
     >
@@ -42,7 +44,15 @@ const Header = () => {
 
       <nav className="hidden md:flex space-x-4">
         {nav.map((item, index) => (
-          <Link key={index} to={item.path} className="hover:text-[#ffffffc1]">
+          <Link
+            key={index}
+            to={item.path}
+            className={`hover:text-[#ffffffc1] ${
+              navigation.pathname == item.path
+                ? "text-[#ffffffc1]"
+                : "text-[#c5c5c5c1]"
+            } `}
+          >
             {item.label}
           </Link>
         ))}

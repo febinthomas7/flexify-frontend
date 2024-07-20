@@ -1,6 +1,6 @@
 const Profile = () => {
   return (
-    <section className="profile bg-[#06081d] text-white p-4 md:py-20 md:px-8">
+    <section className="profile bg-[#0b0b0b] text-white p-4 md:py-20 md:px-8">
       <div className="container mx-auto flex flex-col items-center md:flex-row">
         <img
           src="/avatar.webp"

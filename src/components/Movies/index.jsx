@@ -22,6 +22,7 @@ const Movies = () => {
       data={movieData}
       heading={"Movies"}
       type={"movies"}
+      mode={"movie"}
       loading={loading}
     />
   );

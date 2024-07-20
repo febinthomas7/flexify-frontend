@@ -22,6 +22,7 @@ const Series = () => {
       data={seriesData}
       heading={"Series"}
       type={"series"}
+      mode={"tv"}
       loading={loading}
     />
   );

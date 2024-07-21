@@ -7,7 +7,7 @@ const UpcomingMovies = () => {
   useEffect(() => {
     const data = async () => {
       const result = await fetch(
-        `${import.meta.env.BASE_URL}/api/upcomingmovies`
+        `${import.meta.env.VITE_BASE_URL}/api/upcomingmovies`
       );
       const jsonData = await result.json();
       setUpcomingMovieData(jsonData);

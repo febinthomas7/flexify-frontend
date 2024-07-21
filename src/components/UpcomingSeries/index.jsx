@@ -7,7 +7,7 @@ const UpcomingSeries = () => {
   useEffect(() => {
     const data = async () => {
       const result = await fetch(
-        `${import.meta.env.BASE_URL}/api/upcomingseries`
+        `${import.meta.env.VITE_BASE_URL}/api/upcomingseries`
       );
       const jsonData = await result.json();
       setUpcomingSeriesData(jsonData);

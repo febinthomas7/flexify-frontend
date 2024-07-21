@@ -6,7 +6,7 @@ const Series = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const data = async () => {
-      const result = await fetch(`${import.meta.env.BASE_URL}/api/series`);
+      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/series`);
       const jsonData = await result.json();
       setSeriesData(jsonData);
       setLoading(false);

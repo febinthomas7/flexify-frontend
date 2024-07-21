@@ -6,7 +6,7 @@ const Movies = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const data = async () => {
-      const result = await fetch(`/api/movies`);
+      const result = await fetch(`${import.meta.env.BASE_URL}/api/movies`);
       const jsonData = await result.json();
       setMovieData(jsonData);
       setLoading(false);

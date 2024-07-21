@@ -6,7 +6,7 @@ const Trending = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const data = async () => {
-      const result = await fetch(`/api/trending`);
+      const result = await fetch(`${import.meta.env.BASE_URL}/api/trending`);
       const jsonData = await result.json();
       setTrendingShowsandMovies(jsonData);
       setLoading(false);

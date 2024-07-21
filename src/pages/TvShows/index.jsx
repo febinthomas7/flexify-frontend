@@ -25,7 +25,7 @@ const TvShowsPage = () => {
   };
   useEffect(() => {
     const data = async () => {
-      const result = await fetch(`/api/series`);
+      const result = await fetch(`${import.meta.env.BASE_URL}/api/series`);
       const jsonData = await result.json();
       setMovieData(jsonData);
       setLoading(false);

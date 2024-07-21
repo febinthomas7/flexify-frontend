@@ -6,7 +6,9 @@ const UpcomingMovies = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const data = async () => {
-      const result = await fetch(`/api/upcomingmovies`);
+      const result = await fetch(
+        `${import.meta.env.BASE_URL}/api/upcomingmovies`
+      );
       const jsonData = await result.json();
       setUpcomingMovieData(jsonData);
       setLoading(false);

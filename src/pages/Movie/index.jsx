@@ -25,7 +25,7 @@ const Movie = () => {
   };
   useEffect(() => {
     const data = async () => {
-      const result = await fetch(`/api/movies`);
+      const result = await fetch(`${import.meta.env.BASE_URL}/api/movies`);
       const jsonData = await result.json();
       setMovieData(jsonData);
       setLoading(false);

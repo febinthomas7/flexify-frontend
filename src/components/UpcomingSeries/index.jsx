@@ -6,7 +6,9 @@ const UpcomingSeries = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const data = async () => {
-      const result = await fetch(`/api/upcomingseries`);
+      const result = await fetch(
+        `${import.meta.env.BASE_URL}/api/upcomingseries`
+      );
       const jsonData = await result.json();
       setUpcomingSeriesData(jsonData);
       setLoading(false);

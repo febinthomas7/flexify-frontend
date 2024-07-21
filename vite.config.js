@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-const ProxyTarget = "https://flexify-backend.onrender.com";
+const ProxyTarget = import.meta.env.BASE_URL;
 export default defineConfig({
   server: {
     proxy: {

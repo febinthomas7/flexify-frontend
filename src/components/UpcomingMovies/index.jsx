@@ -6,13 +6,9 @@ const UpcomingMovies = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const data = async () => {
-      const result = await fetch(
-        `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1&api_key=${
-          import.meta.env.VITE_API_KEY
-        }`
-      );
+      const result = await fetch(`/api/upcomingmovies`);
       const jsonData = await result.json();
-      setUpcomingMovieData(jsonData.results);
+      setUpcomingMovieData(jsonData);
       setLoading(false);
     };
     data();
@@ -21,7 +17,8 @@ const UpcomingMovies = () => {
     <ScrollComponent
       data={upcomingmovieData}
       heading={"Upcoming Movies"}
-      type={"movies"}
+      type={"movie"}
+      mode={"movie"}
       loading={loading}
     />
   );

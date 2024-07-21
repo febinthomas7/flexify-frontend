@@ -10,12 +10,12 @@ const Header = () => {
       label: "Home",
     },
     {
-      path: "/movies",
+      path: "/movie",
       label: "Movies",
     },
     {
-      path: "/series",
-      label: "Series",
+      path: "/tv",
+      label: "TvShows",
     },
     {
       path: "/mylist",
@@ -47,9 +47,9 @@ const Header = () => {
           <Link
             key={index}
             to={item.path}
-            className={`hover:text-[#ffffffc1] ${
+            className={`hover:text-[#b01818] font-semibold ${
               navigation.pathname == item.path
-                ? "text-[#ffffffc1]"
+                ? "text-[#b01818]"
                 : "text-[#c5c5c5c1]"
             } `}
           >

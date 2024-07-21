@@ -147,12 +147,12 @@ const Genres = [
     name: "Western",
   },
 ];
-const Card = ({ movie, type, MoreInfo }) => {
+const Card = ({ movie, type, MoreInfo, mode }) => {
   const navigation = useNavigate();
   return (
     <div
       className="relative group "
-      onClick={() => navigation(`/${type}/${movie.id}`)}
+      onClick={() => navigation(`/${type || mode}/${movie.id}`)}
     >
       <div className="w-40 md:w-44  cursor-pointer group shadow-md shadow-[black] ">
         <div className="absolute bottom-0 w-full h-0  duration-150 ease-in group-hover:h-full bg-[#1c1c1c7f] cursor-pointer overflow-hidden rounded">

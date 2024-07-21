@@ -43,7 +43,7 @@ const Movie = () => {
       {moreInfo && (
         <MoreInfoComponent
           closeinfo={closeinfo}
-          type={"movies"}
+          type={"movie"}
           mode={"movie"}
           moreInfoData={moreInfoData}
           MoreInfo={MoreInfo}

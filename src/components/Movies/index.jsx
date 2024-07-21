@@ -6,13 +6,9 @@ const Movies = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const data = async () => {
-      const result = await fetch(
-        `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=${
-          import.meta.env.VITE_API_KEY
-        }`
-      );
+      const result = await fetch(`/api/movies`);
       const jsonData = await result.json();
-      setMovieData(jsonData.results);
+      setMovieData(jsonData);
       setLoading(false);
     };
     data();
@@ -21,7 +17,7 @@ const Movies = () => {
     <ScrollComponent
       data={movieData}
       heading={"Movies"}
-      type={"movies"}
+      type={"movie"}
       mode={"movie"}
       loading={loading}
     />

@@ -5,6 +5,8 @@ import { RxCrossCircled } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import DownloadFilesForMovies from "../DownloadFilesForMovies";
+import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
+import axios from "axios";
 import Card from "../Card";
 const Genres = [
   {
@@ -162,19 +164,25 @@ const MoreInfoComponent = ({
   const navigation = useNavigate();
 
   useEffect(() => {
-    const data = async () => {
-      const result = await fetch(
-        `https://api.themoviedb.org/3/${mode}/${
-          moreInfoData?.id
-        }/recommendations?language=en-US&page=1&sort_by=popularity.desc&api_key=${
-          import.meta.env.VITE_API_KEY
-        }`
-      );
-      const jsonData = await result.json();
-      setMovieData(jsonData.results);
-      setLoading(false);
+    const options = {
+      method: "GET",
+      url: "/api/recommendations",
+      params: {
+        id: moreInfoData?.id,
+        mode: moreInfoData?.media_type,
+        mode2: mode,
+      },
     };
-    data();
+
+    axios
+      .request(options)
+      .then((response) => {
+        setMovieData(response.data);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   }, []);
   return (
     <div
@@ -188,16 +196,20 @@ const MoreInfoComponent = ({
             className="w-full h-full object-cover blur-[2px]"
             id="backdrop"
             src={`https://image.tmdb.org/t/p/w500/${moreInfoData?.backdrop_path}`}
-            alt=""
+            alt={moreInfoData?.title || moreInfoData?.name}
           />
           <div className="absolute bottom-0 p-4">
-            <h1 className=" font-extrabold text-[30px] invert drop-shadow-lg">
+            <h1 className=" font-extrabold text-[20px] sm:text-[30px] invert drop-shadow-lg">
               {moreInfoData?.title || moreInfoData?.name}
             </h1>
             <div className="flex justify-between items-center text-[20px] py-3 text-[#c0c0c0]">
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => navigation(`/${type}/${moreInfoData?.id}`)}
+                  onClick={() =>
+                    navigation(
+                      `/${moreInfoData?.media_type || type}/${moreInfoData?.id}`
+                    )
+                  }
                   type="button"
                   className="text-[15px] px-5 py-1 font-bold text-black rounded bg-white hover:bg-slate-100 drop-shadow-lg"
                 >
@@ -237,21 +249,25 @@ const MoreInfoComponent = ({
             {moreInfoData?.overview}
           </p>
         </div>
-        <DownloadFilesForMovies id={moreInfoData?.id} mode={mode} />
+        {mode == "movie" && <DownloadFilesForMovies id={moreInfoData?.id} />}
 
         <div className="text-white capitalize text-center">
-          Recommended {type}
+          Recommended {moreInfoData?.media_type || type}
         </div>
         <div className="w-full flex flex-wrap justify-center gap-6">
-          {movieData?.map((movie, index) => (
-            <Card
-              key={index}
-              movie={movie}
-              type={type}
-              mode={mode}
-              MoreInfo={(e) => MoreInfo(e, movie)}
-            />
-          ))}
+          {loading ? (
+            <LoadingComponentForMovieAndSeries />
+          ) : (
+            movieData?.map((movie, index) => (
+              <Card
+                key={index}
+                movie={movie}
+                type={movie.media_typ || type}
+                mode={mode}
+                MoreInfo={(e) => MoreInfo(e, movie)}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>

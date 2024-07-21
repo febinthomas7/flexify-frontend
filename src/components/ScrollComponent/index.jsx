@@ -2,6 +2,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
 import { RxCrossCircled } from "react-icons/rx";
 import { LoadingComponentForScroll } from "../LoadingComponent";
+import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
 import MoreInfoComponent from "../MoreInfoComponent";
 import Card from "../Card";
 const ScrollComponent = ({ data, heading, type, mode, loading }) => {
@@ -20,7 +21,7 @@ const ScrollComponent = ({ data, heading, type, mode, loading }) => {
     document.body.classList.add("scroll");
     setMoreInfoData(movie);
     setIsOpen(false);
-    document.getElementById("backdrop").scrollIntoView();
+    document.getElementById("backdrop")?.scrollIntoView(0);
   };
 
   const closeinfo = (e) => {
@@ -43,15 +44,20 @@ const ScrollComponent = ({ data, heading, type, mode, loading }) => {
         >
           <div className="w-[70%] flex flex-wrap gap-6 justify-center rounded overflow-y-auto bg-[#000000f4] p-10 mt-24 relative">
             <RxCrossCircled className="absolute right-4 top-4 text-gray-300 cursor-pointer hover:scale-105 hover:text-white z-30 text-[30px]" />
-            {data?.map((movie, index) => (
-              <Card
-                key={index}
-                movie={movie}
-                type={type}
-                mode={mode}
-                MoreInfo={(e) => MoreInfo(e, movie)}
-              />
-            ))}
+
+            {loading ? (
+              <LoadingComponentForMovieAndSeries />
+            ) : (
+              data?.map((movie, index) => (
+                <Card
+                  key={index}
+                  movie={movie}
+                  type={movie?.media_type || type}
+                  mode={mode}
+                  MoreInfo={(e) => MoreInfo(e, movie)}
+                />
+              ))
+            )}
           </div>
         </div>
       )}
@@ -97,7 +103,7 @@ const ScrollComponent = ({ data, heading, type, mode, loading }) => {
               <Card
                 key={index}
                 movie={movie}
-                type={type}
+                type={movie?.media_type || type}
                 mode={mode}
                 MoreInfo={(e) => MoreInfo(e, movie)}
               />

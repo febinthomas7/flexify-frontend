@@ -1,50 +1,61 @@
 import { useEffect, useState } from "react";
 
-const DownloadFilesForMovies = ({ id, mode }) => {
+import axios from "axios";
+
+const DownloadFilesForMovies = ({ id }) => {
   const [files, setFiles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const data = async () => {
-      const result = await fetch(
-        `https://api.themoviedb.org/3/${mode}/${id}?language=en-US&api_key=${
-          import.meta.env.VITE_API_KEY
-        }`
-      );
-      const jsonData = await result.json();
-      downloadableFiles(jsonData?.imdb_id);
+    const options = {
+      method: "GET",
+      url: "/api/download/movie",
+      params: {
+        id: id,
+      },
     };
-    data();
+
+    axios.request(options).then((response) => {
+      setFiles(response.data);
+      setIsLoading(false);
+    });
   }, [id]);
 
-  const downloadableFiles = async (data) => {
-    try {
-      let res = await fetch(
-        `https://yts.mx/api/v2/movie_details.json?imdb_id=${data}`
-      );
-      let d = await res.json();
-      let torr = d.data.movie.torrents;
-
-      setFiles(torr);
-    } catch (error) {
-      <h1>no files to download</h1>;
-    }
-  };
   if (files === null || typeof files === "undefined") {
-    return null;
+    return;
   } else {
     return (
       <>
-        <div className="flex gap-3  flex-wrap p-3 ">
-          {files.map((e, index) => {
-            return (
-              <div
-                className="p-2 bg-slate-800 rounded-lg cursor-pointer text-white hover:bg-slate-700"
-                key={index}
-              >
-                <a href={e.url}>{e.quality}</a>
-              </div>
-            );
-          })}
+        <div className="flex gap-3  flex-wrap justify-center items-baseline">
+          {files.length <= 0 ? null : (
+            <h1 className="text-white flex justify-center items-center gap-3">
+              Download:
+            </h1>
+          )}
+
+          {isLoading &&
+            Array.from({ length: 4 }, (_, i) => i).map((e) => {
+              return (
+                <div
+                  key={e}
+                  className="py-1 px-2 h-[32px] w-[59px] bg-[#0d1015ed] rounded-lg text-transparent"
+                >
+                  {e}
+                </div>
+              );
+            })}
+          {files.length <= 0
+            ? null
+            : files?.map((e, index) => {
+                return (
+                  <div
+                    className="py-1 px-2  bg-slate-800 rounded-lg cursor-pointer text-white hover:bg-slate-700"
+                    key={index}
+                  >
+                    <a href={e.url}>{e.quality}</a>
+                  </div>
+                );
+              })}
         </div>
       </>
     );

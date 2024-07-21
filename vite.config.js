@@ -1,17 +1,16 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-
-// https://vitejs.dev/config/
+const ProxyTarget = "https://flexify-backend.onrender.com";
 export default defineConfig({
   server: {
     proxy: {
-      "/api/trending": "https://flexify-backend.onrender.com",
-      "/api/movies": "https://flexify-backend.onrender.com",
-      "/api/series": "https://flexify-backend.onrender.com",
-      "/api/upcomingmovies": "https://flexify-backend.onrender.com",
-      "/api/upcomingseries": "https://flexify-backend.onrender.com",
-      "/api/recommendations": "https://flexify-backend.onrender.com",
-      "/api/download/movie": "https://flexify-backend.onrender.com",
+      "/api/trending": ProxyTarget,
+      "/api/movies": ProxyTarget,
+      "/api/series": ProxyTarget,
+      "/api/upcomingmovies": ProxyTarget,
+      "/api/upcomingseries": ProxyTarget,
+      "/api/recommendations": ProxyTarget,
+      "/api/download/movie": ProxyTarget,
     },
   },
   plugins: [react()],

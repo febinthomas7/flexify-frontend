@@ -38,7 +38,7 @@ const TvShowsPage = () => {
       {moreInfo && (
         <MoreInfoComponent
           closeinfo={closeinfo}
-          type={"series"}
+          type={"tv"}
           mode={"tv"}
           moreInfoData={moreInfoData}
           MoreInfo={MoreInfo}
@@ -52,7 +52,7 @@ const TvShowsPage = () => {
             <Card
               key={index}
               movie={movie}
-              type={"series"}
+              type={"tv"}
               mode={"tv"}
               MoreInfo={(e) => MoreInfo(e, movie)}
             />

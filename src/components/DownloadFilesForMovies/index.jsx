@@ -9,7 +9,7 @@ const DownloadFilesForMovies = ({ id }) => {
   useEffect(() => {
     const options = {
       method: "GET",
-      url: "/api/download/movie",
+      url: `${import.meta.env.VITE_BASE_URL}/api/download/movie`,
       params: {
         id: id,
       },

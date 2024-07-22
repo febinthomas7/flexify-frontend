@@ -54,7 +54,7 @@ const Movie = () => {
             <Card
               key={index}
               movie={movie}
-              type={"movies"}
+              type={"movie"}
               mode={"movie"}
               MoreInfo={(e) => MoreInfo(e, movie)}
             />

@@ -1,28 +1,19 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import ScrollComponent from "../ScrollComponent";
 
 const Trending = () => {
-  const [trendingShowsandMovies, setTrendingShowsandMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const data = async () => {
-      const result = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/trending`
-      );
-      const jsonData = await result.json();
-      setTrendingShowsandMovies(jsonData);
-      setLoading(false);
-    };
-    data();
-  }, []);
-
+  const { isPending, data } = useQuery({
+    queryKey: ["ScrollTrending"],
+    queryFn: () =>
+      fetch(`${import.meta.env.VITE_BASE_URL}/api/trending`).then((res) =>
+        res.json()
+      ),
+  });
   return (
     <ScrollComponent
-      data={trendingShowsandMovies}
+      data={data}
       heading={"Trending Movies/Shows"}
-      // type={"movie"}
-      // mode={"movie"}
-      loading={loading}
+      loading={isPending}
     />
   );
 };

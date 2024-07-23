@@ -64,13 +64,21 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
-  window.addEventListener("scroll", (e) => {
+  const handleWindowListener = useCallback(() => {
     if (window.scrollY > 60) {
       setBgColor(true);
     } else {
       setBgColor(false);
     }
-  });
+  }, []);
+  useEffect(() => {
+    window.addEventListener("scroll", handleWindowListener);
+
+    return () => {
+      window.removeEventListener("scroll", handleWindowListener);
+    };
+  }, []);
+
   return (
     <>
       {isOpen && (

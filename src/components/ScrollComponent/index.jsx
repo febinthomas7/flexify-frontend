@@ -1,5 +1,5 @@
 import { IoIosArrowForward } from "react-icons/io";
-import { useState, useRef } from "react";
+import { useState, useRef, lazy } from "react";
 import { RxCrossCircled } from "react-icons/rx";
 import {
   MdOutlineKeyboardDoubleArrowRight,
@@ -7,13 +7,16 @@ import {
 } from "react-icons/md";
 import { LoadingComponentForScroll } from "../LoadingComponent";
 import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
-import MoreInfoComponent from "../MoreInfoComponent";
+const MoreInfoComponent = lazy(() => import("../MoreInfoComponent"));
 import Card from "../Card";
 const ScrollComponent = ({ data, heading, type, mode, loading }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
+  const [prevButtonVisible, setPrevButtonVisible] = useState(false);
+  const [nextButtonVisible, setNextButtonVisible] = useState(true);
   const scrollRef = useRef(null);
+
   const explore = (e) => {
     e.stopPropagation();
     setIsOpen(true);
@@ -41,11 +44,32 @@ const ScrollComponent = ({ data, heading, type, mode, loading }) => {
   };
 
   const handleScroll = (direction) => {
+    console.log(prevButtonVisible, nextButtonVisible);
     if (scrollRef.current) {
       const scrollAmount = 300; // Adjust this value based on your layout
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+
       if (direction === "next") {
         scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+
+        // Check if user has reached the end after scrolling
+        setTimeout(() => {
+          if (scrollRef.current.scrollLeft + clientWidth >= scrollWidth - 50) {
+            setNextButtonVisible(false);
+          } else {
+            setNextButtonVisible(true);
+            setPrevButtonVisible(true);
+          }
+        }, 300);
       } else if (direction === "prev") {
+        setTimeout(() => {
+          if (scrollRef.current.scrollLeft < 20) {
+            setPrevButtonVisible(false);
+          } else {
+            setPrevButtonVisible(true);
+            setNextButtonVisible(true);
+          }
+        }, 300);
         scrollRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
       }
     }
@@ -112,14 +136,18 @@ const ScrollComponent = ({ data, heading, type, mode, loading }) => {
         <div
           title="prev"
           onClick={() => handleScroll("prev")}
-          className="h-[264px] flex justify-center items-center cursor-pointer absolute mt-[16px] left-0 w-[50px] z-30 bg-transparent group hover:bg-[#000000b1] rounded-r-xl"
+          className={`h-[264px] flex justify-center ${
+            prevButtonVisible ? null : "hidden"
+          }  items-center cursor-pointer absolute mt-[16px] left-0 w-[50px] z-30 bg-transparent group hover:bg-[#000000b1] rounded-r-xl`}
         >
           <MdOutlineKeyboardDoubleArrowLeft className="text-[25px] invisible group-hover:visible" />
         </div>
         <div
           title="next"
           onClick={() => handleScroll("next")}
-          className="h-[264px]  flex justify-center right-0 mt-[16px] items-center cursor-pointer  absolute w-[50px] z-30 bg-transparent group hover:bg-[#000000b1] rounded-l-xl"
+          className={`h-[264px] ${
+            nextButtonVisible ? null : "hidden"
+          }  flex justify-center right-0 mt-[16px] items-center cursor-pointer  absolute w-[50px] z-30 bg-transparent group hover:bg-[#000000b1] rounded-l-xl`}
         >
           <MdOutlineKeyboardDoubleArrowRight className="text-[25px] invisible group-hover:visible" />
         </div>

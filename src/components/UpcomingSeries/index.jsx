@@ -1,27 +1,21 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import ScrollComponent from "../ScrollComponent";
 
 const UpcomingSeries = () => {
-  const [upcomingseriesData, setUpcomingSeriesData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const data = async () => {
-      const result = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/upcomingseries`
-      );
-      const jsonData = await result.json();
-      setUpcomingSeriesData(jsonData);
-      setLoading(false);
-    };
-    data();
-  }, []);
+  const { isPending, data } = useQuery({
+    queryKey: ["ScrollUpcomingSeries"],
+    queryFn: () =>
+      fetch(`${import.meta.env.VITE_BASE_URL}/api/upcomingseries`).then((res) =>
+        res.json()
+      ),
+  });
   return (
     <ScrollComponent
-      data={upcomingseriesData}
+      data={data}
       heading={"Upcoming Series"}
       type={"tv"}
       mode={"tv"}
-      loading={loading}
+      loading={isPending}
     />
   );
 };

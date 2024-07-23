@@ -20,7 +20,10 @@ const Card = ({ movie, type, MoreInfo, mode }) => {
             <div className="w-8 h-8 bg-black rounded-full flex justify-center text-white text-xs items-center outline outline-2 outline-offset-2 outline-[red] absolute top-[-20px]">
               <span>{len?.toFixed(1)}%</span>
             </div>
-            <h3 className="mt-2 text-white text-sm md:text-base truncate">
+            <h3
+              title={movie.title || movie.name}
+              className="mt-2 text-white text-sm md:text-base truncate"
+            >
               {movie.title || movie.name}
             </h3>
             <div className="flex justify-between items-center text-[20px] py-3 text-[#c0c0c0]">
@@ -51,7 +54,7 @@ const Card = ({ movie, type, MoreInfo, mode }) => {
                 return (
                   <h1
                     key={index}
-                    className="before:content-['.'] text-[10px] drop-shadow-lg"
+                    className="before:content-['.'] text-[10px] drop-shadow-lg hover:text-[#c0c0c0]"
                   >
                     {genreName}
                   </h1>

@@ -21,6 +21,7 @@ const SearchBox = ({ value, onchange, searchResults, set, input }) => {
       document.body.classList.remove("scroll");
     }
   };
+  console.log(searchResults);
 
   return (
     <div className="fixed w-full h-screen   bg-[#2c2c2cd0] flex flex-col items-center z-50 hide">
@@ -34,6 +35,7 @@ const SearchBox = ({ value, onchange, searchResults, set, input }) => {
           closeinfo={closeinfo}
           moreInfoData={moreInfoData}
           MoreInfo={MoreInfo}
+          mode={"movie"}
         />
       )}
 
@@ -48,14 +50,16 @@ const SearchBox = ({ value, onchange, searchResults, set, input }) => {
 
       <div className="w-full h-full flex flex-wrap gap-6 overflow-x-auto justify-center rounded border-t-2 border-[red] bg-black p-10 mt-[100px]">
         {searchResults.length > 0 &&
-          searchResults?.map((movie, index) => (
-            <Card
-              key={index}
-              movie={movie}
-              type={movie?.media_type}
-              MoreInfo={(e) => MoreInfo(e, movie)}
-            />
-          ))}
+          searchResults
+            ?.filter((e) => e?.media_type !== "person")
+            ?.map((movie, index) => (
+              <Card
+                key={index}
+                movie={movie}
+                type={movie?.media_type}
+                MoreInfo={(e) => MoreInfo(e, movie)}
+              />
+            ))}
       </div>
     </div>
   );

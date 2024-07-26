@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import ScrollComponent from "../ScrollComponent";
 
 const Trending = () => {
-  const { isPending, data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["ScrollTrending"],
     queryFn: () =>
       fetch(`${import.meta.env.VITE_BASE_URL}/api/trending`).then((res) =>
@@ -13,7 +13,7 @@ const Trending = () => {
     <ScrollComponent
       data={data}
       heading={"Trending Movies/Shows"}
-      loading={isPending}
+      loading={isFetching}
     />
   );
 };

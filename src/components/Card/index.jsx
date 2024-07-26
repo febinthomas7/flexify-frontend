@@ -4,14 +4,13 @@ import { FaRegThumbsDown } from "react-icons/fa6";
 import { TfiArrowCircleDown } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
 import Genres from "../../Genre.json";
-
 const Card = ({ movie, type, MoreInfo, mode }) => {
   const navigation = useNavigate();
   const len = movie?.vote_average;
 
   return (
     <div
-      className="relative group "
+      className="relative group h-[240px] sm:h-[265px] "
       onClick={() => navigation(`/${type || mode}/${movie.id}`)}
     >
       <div className="w-40 md:w-44  cursor-pointer group shadow-md shadow-[black] ">

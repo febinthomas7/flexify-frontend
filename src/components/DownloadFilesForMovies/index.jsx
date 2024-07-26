@@ -53,6 +53,7 @@ const DownloadFilesForMovies = ({ id }) => {
                     key={index}
                   >
                     <a href={e.url}>{e.quality}</a>
+                    <span className="uppercase">.{e?.type}</span>
                   </div>
                 );
               })}

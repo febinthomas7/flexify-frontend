@@ -8,8 +8,8 @@ import { LoadingComponentForMovieAndSeries } from "../../components/LoadingCompo
 const TvShowsPage = () => {
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
-  const { isPending, data } = useQuery({
-    queryKey: ["Series"],
+  const { data, isFetching } = useQuery({
+    queryKey: ["ScrollSeries"],
     queryFn: () =>
       fetch(`${import.meta.env.VITE_BASE_URL}/api/series`).then((res) =>
         res.json()
@@ -43,7 +43,7 @@ const TvShowsPage = () => {
         />
       )}
       <div className="w-full h-full flex-wrap flex text-sm text-white gap-8  justify-center mx-auto  items-start py-20">
-        {isPending ? (
+        {isFetching ? (
           <LoadingComponentForMovieAndSeries />
         ) : (
           data?.map((movie, index) => (

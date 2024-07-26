@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import ScrollComponent from "../ScrollComponent";
 
 const Series = () => {
-  const { isPending, data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["ScrollSeries"],
     queryFn: () =>
       fetch(`${import.meta.env.VITE_BASE_URL}/api/series`).then((res) =>
@@ -15,7 +15,7 @@ const Series = () => {
       heading={"Series"}
       type={"tv"}
       mode={"tv"}
-      loading={isPending}
+      loading={isFetching}
     />
   );
 };

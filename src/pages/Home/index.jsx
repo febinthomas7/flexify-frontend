@@ -9,7 +9,7 @@ import UpcomingMovies from "../../components/UpcomingMovies";
 import UpcomingSeries from "../../components/UpcomingSeries";
 const Home = () => {
   return (
-    <>
+    <div className="overflow-hidden">
       <Header />
       <Hero />
       <Trending />
@@ -18,7 +18,7 @@ const Home = () => {
       <UpcomingMovies />
       <UpcomingSeries />
       <Footer />
-    </>
+    </div>
   );
 };
 

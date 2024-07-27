@@ -43,6 +43,11 @@ const MoreInfoComponent = ({
         console.error(error);
       });
   }, []);
+  const seeMore = (e) => {
+    e.stopPropagation();
+    navigation(`/${moreInfoData?.media_type || type}`);
+    document.body.classList.remove("scroll");
+  };
   return (
     <div
       className="fixed w-full h-screen top-0 z-40 justify-center flex shadow-md shadow-[black] bg-[#000000b3]"
@@ -111,7 +116,9 @@ const MoreInfoComponent = ({
             {moreInfoData?.overview}
           </p>
         </div>
-        {mode == "movie" && <DownloadFilesForMovies id={moreInfoData?.id} />}
+        {(mode || moreInfoData?.media_type) == "movie" && (
+          <DownloadFilesForMovies id={moreInfoData?.id} />
+        )}
 
         <div className="text-white capitalize text-center">
           Recommended {moreInfoData?.media_type || type}
@@ -132,6 +139,15 @@ const MoreInfoComponent = ({
               );
             })
           )}
+        </div>
+
+        <div className="w-full p-4 flex justify-center">
+          <div
+            onClick={seeMore}
+            className="bg-red-700 text-white rounded p-1 cursor-pointer"
+          >
+            see more
+          </div>
         </div>
       </div>
     </div>

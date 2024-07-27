@@ -51,6 +51,7 @@ const DownloadFilesForMovies = ({ id }) => {
                   <div
                     className="py-1 px-2  bg-slate-800 rounded-lg cursor-pointer text-white hover:bg-slate-700"
                     key={index}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <a href={e.url}>{e.quality}</a>
                     <span className="uppercase">.{e?.type}</span>

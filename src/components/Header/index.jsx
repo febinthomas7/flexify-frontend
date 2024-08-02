@@ -4,30 +4,41 @@ import { IoIosSearch } from "react-icons/io";
 import { debounce } from "../../debounce";
 import axios from "axios";
 import SearchBox from "../SearchBox";
+import { RxCross1 } from "react-icons/rx";
+import { IoMdHome } from "react-icons/io";
+import { RiMovieLine } from "react-icons/ri";
+import { CgProfile } from "react-icons/cg";
+import { VscThreeBars } from "react-icons/vsc";
+import { MdLocalMovies } from "react-icons/md";
 
 const Header = () => {
   const [bgcolor, setBgColor] = useState(false);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [dropDown, setDropDown] = useState(false);
   const navigation = useLocation();
 
   const nav = [
     {
-      path: "/",
+      path: "/home",
       label: "Home",
+      icon: <IoMdHome />,
     },
     {
       path: "/movie",
       label: "Movies",
+      icon: <RiMovieLine />,
     },
     {
       path: "/tv",
       label: "TvShows",
+      icon: <MdLocalMovies />,
     },
     {
-      path: "/mylist",
-      label: "My List",
+      path: "/myprofile",
+      label: "My Profile",
+      icon: <CgProfile />,
     },
   ];
 
@@ -97,7 +108,7 @@ const Header = () => {
           bgcolor ? "bg-[#000000b1]" : null
         } items-center duration-75 ease-in`}
       >
-        <Link to="/">
+        <Link to="/home">
           <div className="logo   flex justify-center items-center text-[15px]">
             <img src="/logo.png" alt="" className="w-[100px] " />
           </div>
@@ -126,11 +137,44 @@ const Header = () => {
           >
             <IoIosSearch className="text-[20px] text-[#ededed] group-hover:text-white group-hover:scale-105" />
           </div>
-          <img
-            src="/avatar.webp"
-            alt="Profile"
-            className="w-9 hover:outline outline-offset-2 outline-white outline-2 rounded-md cursor-pointer"
-          />
+          <Link to="/myprofile">
+            <img
+              src="/avatar.webp"
+              alt="Profile"
+              className="w-9 hover:outline outline-offset-2 outline-white outline-2 rounded-full cursor-pointer"
+            />
+          </Link>
+          <nav className="flex flex-col justify-center items-center  md:hidden relative">
+            {dropDown ? (
+              <RxCross1
+                className="text-[20px]"
+                onClick={() => setDropDown(!dropDown)}
+              />
+            ) : (
+              <VscThreeBars
+                className="text-[20px]"
+                onClick={() => setDropDown(!dropDown)}
+              />
+            )}
+
+            {dropDown && (
+              <div className="absolute  top-6 flex flex-col gap-4 bg-black p-4 rounded">
+                {nav.map((item, index) => (
+                  <Link
+                    key={index}
+                    to={item.path}
+                    className={`hover:text-[#b01818] block font-semibold rounded-full ${
+                      navigation.pathname == item.path
+                        ? "text-[#b01818]"
+                        : "text-[#c5c5c5c1]"
+                    } `}
+                  >
+                    {item.icon}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </nav>
         </div>
       </header>
     </>

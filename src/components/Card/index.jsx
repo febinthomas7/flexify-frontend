@@ -17,7 +17,7 @@ const Card = ({ movie, type, MoreInfo, mode }) => {
         <div className="absolute bottom-0 w-full h-0  duration-150 ease-in group-hover:h-full bg-gradient-to-b from-[#1c1c1c7f] to-black cursor-pointer overflow-hidden rounded">
           <div className="w-full absolute bottom-0    p-3">
             <div className="w-8 h-8 bg-black rounded-full flex justify-center text-white text-xs items-center outline outline-2 outline-offset-2 outline-[red] absolute top-[-20px]">
-              <span>{len?.toFixed(1)}%</span>
+              <span>{len ? len?.toFixed(1) : "5.1"}%</span>
             </div>
             <h3
               title={movie.title || movie.name}

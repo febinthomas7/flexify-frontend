@@ -1,30 +1,33 @@
+import { FaFacebookF } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
 const Footer = () => {
   return (
     <footer className="bg-black   text-white p-4 md:p-8">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-        <div className="mb-4 md:mb-0">
-          <a href="/about" className="hover:underline mr-4">
+        <div className="flex gap-4 py-3 text-[13px] sm:text-[15px]">
+          <a href="#" className="hover:underline  text-wrap">
             About
           </a>
-          <a href="/contact" className="hover:underline mr-4">
+          <a href="#" className="hover:underline ">
             Contact
           </a>
-          <a href="/terms" className="hover:underline mr-4">
+          <a href="#" className="hover:underline ">
             Terms of Service
           </a>
-          <a href="/privacy" className="hover:underline">
+          <a href="#" className="hover:underline ">
             Privacy Policy
           </a>
         </div>
         <div className="flex space-x-4 justify-center md:justify-start">
           <a href="#">
-            <img src="/facebook.webp" alt="Facebook" className="w-6 h-6" />
+            <FaFacebookF />
           </a>
           <a href="#">
-            <img src="/twitter.webp" alt="Twitter" className="w-6 h-6" />
+            <FaTwitter />
           </a>
           <a href="#">
-            <img src="/insta.webp" alt="Instagram" className="w-6 h-6" />
+            <FaInstagram />
           </a>
         </div>
       </div>

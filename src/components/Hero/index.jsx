@@ -3,7 +3,12 @@ import { useState, useEffect } from "react";
 import MoreInfoComponent from "../MoreInfoComponent";
 import Genres from "../../Genre.json";
 import { useLocation, useNavigate } from "react-router-dom";
+
 const Hero = () => {
+  const [moreInfoData, setMoreInfoData] = useState();
+  const [moreInfo, setMoreInfo] = useState(false);
+  const navigation = useNavigate();
+  const location = useLocation();
   const { data, isFetching } = useQuery({
     queryKey: ["topratedmovies"],
     queryFn: () =>
@@ -11,11 +16,6 @@ const Hero = () => {
         res.json()
       ),
   });
-
-  const [moreInfoData, setMoreInfoData] = useState();
-  const [moreInfo, setMoreInfo] = useState(false);
-  const navigation = useNavigate();
-  const location = useLocation();
 
   const MoreInfo = (e, movie) => {
     e.stopPropagation();
@@ -32,7 +32,7 @@ const Hero = () => {
     document.body.classList.remove("scroll");
   };
   useEffect(() => {
-    navigation(`/`);
+    navigation(`/home`);
   }, []);
 
   return (

@@ -22,8 +22,7 @@ const MovieDetails = () => {
       <div className="w-full h-[300px] sm:w-[80%] sm:h-[600px]  shadow-2xl  rounded-md overflow-hidden bg-[#17171784]">
         <iframe
           className="w-full h-full   rounded-md"
-          src={`https://vidsrc.to/embed/movie/${id}`}
-          frameBorder="0"
+          src={`https://vidsrc.xyz/embed/movie/${id}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen

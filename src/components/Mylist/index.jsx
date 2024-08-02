@@ -1,26 +1,40 @@
-const Mylist = () => {
-  const savedMovies = [
-    { id: 1, title: "Inception", thumbnail: "p3.webp" },
-    { id: 2, title: "The Matrix", thumbnail: "p2.webp" },
-    { id: 3, title: "Interstellar", thumbnail: "p1.webp" },
-    // Add more movies as needed
-  ];
+import { useEffect, useState } from "react";
+import ScrollComponent from "../ScrollComponent";
 
+const Mylist = () => {
+  const [userList, setUserList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const userWatched = async () => {
+    try {
+      const url = `${import.meta.env.VITE_BASE_URL}/auth/userlist`;
+      const headers = {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      };
+      const response = await fetch(url, headers);
+      const result = await response.json();
+      setLoading(false);
+      setUserList(result);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    userWatched();
+  }, []);
+  console.log(userList);
   return (
     <section className="my-list  bg-black text-white p-4 md:p-8">
-      <h2 className="text-2xl font-bold">My List</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
-        {savedMovies.map((movie) => (
-          <div key={movie.id} className="text-center cursor-pointer">
-            <img
-              src={movie.thumbnail}
-              alt={movie.title}
-              className="w-full rounded"
-            />
-            <h3 className="mt-2 text-sm md:text-base">{movie.title}</h3>
-          </div>
-        ))}
-      </div>
+      <ScrollComponent
+        data={userList}
+        heading={"Recently Watched"}
+        type={"movie"}
+        mode={"movie"}
+        loading={loading}
+      />
     </section>
   );
 };

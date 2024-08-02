@@ -43,6 +43,7 @@ const MoreInfoComponent = ({
         console.error(error);
       });
   }, []);
+  
   const seeMore = (e) => {
     e.stopPropagation();
     navigation(`/${moreInfoData?.media_type || type}`);

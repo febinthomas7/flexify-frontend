@@ -23,7 +23,7 @@ const SeriesDetails = () => {
       <div className="w-full h-[300px] sm:w-[80%] sm:h-[600px]  shadow-2xl  rounded-md overflow-hidden bg-[#17171784]">
         <iframe
           className="w-full h-full   rounded-md"
-          src={`https://vidsrc.to/embed/tv/${id}`}
+          src={`https://vidsrc.xyz/embed/tv/${id}`}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"

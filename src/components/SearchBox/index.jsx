@@ -21,7 +21,6 @@ const SearchBox = ({ value, onchange, searchResults, set, input }) => {
       document.body.classList.remove("scroll");
     }
   };
-  console.log(searchResults);
 
   return (
     <div className="fixed w-full h-screen   bg-[#2c2c2cd0] flex flex-col items-center z-50 hide">
@@ -44,7 +43,7 @@ const SearchBox = ({ value, onchange, searchResults, set, input }) => {
         value={value}
         onChange={onchange}
         autoFocus
-        placeholder="Search Movies, TV Shows, or People"
+        placeholder="Search For Movies and TV Shows"
         className="w-[95%] px-4 py-2 text-sm border fixed top-[80px] z-30  shadow-md shadow-[#7a7979] border-gray-300 rounded-md focus:outline-none focus:ring-blue-500"
       />
 

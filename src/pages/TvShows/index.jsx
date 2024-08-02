@@ -42,7 +42,7 @@ const TvShowsPage = () => {
           MoreInfo={MoreInfo}
         />
       )}
-      <div className="w-full h-full flex-wrap flex text-sm text-white gap-8  justify-center mx-auto  items-start py-20">
+      <div className="w-full h-full flex-wrap flex text-sm text-white gap-4 sm:gap-8  justify-center mx-auto  items-start py-20">
         {isFetching ? (
           <LoadingComponentForMovieAndSeries />
         ) : (

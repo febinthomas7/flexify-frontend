@@ -9,7 +9,7 @@ import { LoadingComponentForScroll } from "../LoadingComponent";
 import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
 const MoreInfoComponent = lazy(() => import("../MoreInfoComponent"));
 import Card from "../Card";
-const ScrollComponent = ({ data, heading, type, mode, loading }) => {
+const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
@@ -167,6 +167,7 @@ const ScrollComponent = ({ data, heading, type, mode, loading }) => {
                 type={movie?.media_type || type}
                 mode={mode}
                 MoreInfo={(e) => MoreInfo(e, movie)}
+                page={page}
               />
             ))
           )}

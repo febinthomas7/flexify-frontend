@@ -1,5 +1,10 @@
-import { Link, createBrowserRouter } from "react-router-dom";
-import { lazy, useState } from "react";
+import {
+  Link,
+  createBrowserRouter,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import { lazy, useEffect, useState } from "react";
 const MainPage = lazy(() => import("../pages/MainPage"));
 const MovieDetails = lazy(() => import("../pages/MovieDetails"));
 const SeriesDetails = lazy(() => import("../pages/SeriesDetails"));
@@ -13,32 +18,37 @@ import { Navigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("token");
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  return isAuthenticated ? children : <Navigate to="/login" replace={false} />;
+};
+
+const RefreshHandler = ({ children }) => {
+  const isAuthenticated = localStorage.getItem("token");
+  return !isAuthenticated ? children : <Navigate to="/home" replace={false} />;
 };
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <>
+      <RefreshHandler>
         <MainPage />
-      </>
+      </RefreshHandler>
     ),
   },
 
   {
     path: "/login",
     element: (
-      <>
+      <RefreshHandler>
         <Login />
-      </>
+      </RefreshHandler>
     ),
   },
   {
     path: "/signin",
     element: (
-      <>
+      <RefreshHandler>
         <Signin />
-      </>
+      </RefreshHandler>
     ),
   },
   {

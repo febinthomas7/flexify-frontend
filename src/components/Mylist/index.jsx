@@ -25,16 +25,22 @@ const Mylist = () => {
   useEffect(() => {
     userWatched();
   }, []);
-  console.log(userList);
   return (
     <section className="my-list  bg-black text-white p-4 md:p-8">
-      <ScrollComponent
-        data={userList}
-        heading={"Recently Watched"}
-        type={"movie"}
-        mode={"movie"}
-        loading={loading}
-      />
+      {userList.length > 0 ? (
+        <ScrollComponent
+          data={userList}
+          heading={"Added PlayList"}
+          type={"movie"}
+          mode={"movie"}
+          loading={loading}
+          page={"mylist"}
+        />
+      ) : (
+        <div className="text-white w-full h-[200px] flex justify-center items-center bg-[#0b0b0b] rounded">
+          <h1>nothing added yet</h1>
+        </div>
+      )}
     </section>
   );
 };

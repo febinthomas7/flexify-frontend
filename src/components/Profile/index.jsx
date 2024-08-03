@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleError, handleSuccess } from "../../utils";
-
+import { handleSuccess } from "../../utils";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Profile = () => {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -12,10 +13,10 @@ const Profile = () => {
     setUserEmail(localStorage.getItem("email"));
   }, []);
   const userLogOut = () => {
-    handleSuccess("Logged out successfully!");
     localStorage.removeItem("token");
     localStorage.removeItem("name");
     localStorage.removeItem("email");
+    handleSuccess("Logged out successfully!");
     setTimeout(() => {
       navigate("/");
     }, 1000);
@@ -42,6 +43,7 @@ const Profile = () => {
           Log Out
         </button>
       </div>
+      <ToastContainer />
     </section>
   );
 };

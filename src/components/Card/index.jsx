@@ -4,9 +4,60 @@ import { FaRegThumbsDown } from "react-icons/fa6";
 import { TfiArrowCircleDown } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
 import Genres from "../../Genre.json";
-const Card = ({ movie, type, MoreInfo, mode }) => {
+import { RxCross1 } from "react-icons/rx";
+const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const navigation = useNavigate();
   const len = movie?.vote_average;
+  const addwatch = async (e) => {
+    e.stopPropagation();
+
+    try {
+      const url = `${import.meta.env.VITE_BASE_URL}/auth/addwatch`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(movie),
+      });
+
+      const result = await response.json();
+
+      const { sucess, message, error } = result;
+      if (sucess) {
+        handleSuccess(message);
+      } else if (error) {
+        handleError(error?.details[0].message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteMovieById = async (e) => {
+    e.stopPropagation();
+    try {
+      const url = `${import.meta.env.VITE_BASE_URL}/auth/deletewatch`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: movie?._id }),
+      });
+
+      const result = await response.json();
+
+      const { sucess, message, error } = result;
+      if (sucess) {
+        handleSuccess(message);
+      } else if (error) {
+        handleError(error?.details[0].message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div
@@ -15,6 +66,12 @@ const Card = ({ movie, type, MoreInfo, mode }) => {
     >
       <div className="w-40 md:w-44  cursor-pointer group shadow-md shadow-[black] ">
         <div className="absolute bottom-0 w-full h-0  duration-150 ease-in group-hover:h-full bg-gradient-to-b from-[#1c1c1c7f] to-black cursor-pointer overflow-hidden rounded">
+          {page == "mylist" && (
+            <RxCross1
+              onClick={deleteMovieById}
+              className=" absolute top-3 right-3 cursor-pointer "
+            />
+          )}
           <div className="w-full absolute bottom-0    p-3">
             <div className="w-8 h-8 bg-black rounded-full flex justify-center text-white text-xs items-center outline outline-2 outline-offset-2 outline-[red] absolute top-[-20px]">
               <span>{len ? len?.toFixed(1) : "5.1"}%</span>
@@ -28,6 +85,7 @@ const Card = ({ movie, type, MoreInfo, mode }) => {
             <div className="flex justify-between items-center text-[20px] py-3 text-[#c0c0c0]">
               <div className="flex items-center gap-3">
                 <BsPlusCircle
+                  onClick={addwatch}
                   className="hover:scale-105 hover:text-white"
                   title="add"
                 />

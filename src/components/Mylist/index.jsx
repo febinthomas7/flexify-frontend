@@ -37,7 +37,7 @@ const Mylist = () => {
           page={"mylist"}
         />
       ) : (
-        <div className="text-white w-full h-[200px] flex justify-center items-center bg-[#0b0b0b] rounded">
+        <div className="text-white w-full h-[361px] flex justify-center items-center bg-[#0b0b0b] rounded">
           <h1>nothing added yet</h1>
         </div>
       )}

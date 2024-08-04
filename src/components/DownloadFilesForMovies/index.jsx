@@ -49,7 +49,7 @@ const DownloadFilesForMovies = ({ id }) => {
             : files?.map((e, index) => {
                 return (
                   <div
-                    className="py-1 px-2  bg-slate-800 rounded-lg cursor-pointer text-white hover:bg-slate-700"
+                    className="py-1 px-2  bg-[#0d1015ed] rounded-lg cursor-pointer text-white hover:bg-slate-700"
                     key={index}
                     onClick={(e) => e.stopPropagation()}
                   >

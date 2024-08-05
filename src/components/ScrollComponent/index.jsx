@@ -9,7 +9,16 @@ import { LoadingComponentForScroll } from "../LoadingComponent";
 import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
 const MoreInfoComponent = lazy(() => import("../MoreInfoComponent"));
 import Card from "../Card";
-const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
+const ScrollComponent = ({
+  data,
+  heading,
+  type,
+  mode,
+  loading,
+  page,
+  setDeleteWatch,
+  deleteWatch,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
@@ -44,7 +53,6 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
   };
 
   const handleScroll = (direction) => {
-    console.log(prevButtonVisible, nextButtonVisible);
     if (scrollRef.current) {
       const scrollAmount = 300; // Adjust this value based on your layout
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
@@ -91,8 +99,8 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
                 <Card
                   key={index}
                   movie={movie}
-                  type={movie?.media_type || type}
-                  mode={mode}
+                  type={movie?.media_type || type || movie?.type}
+                  mode={mode || movie?.mode}
                   MoreInfo={(e) => MoreInfo(e, movie)}
                 />
               ))
@@ -164,10 +172,12 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
               <Card
                 key={index}
                 movie={movie}
-                type={movie?.media_type || type}
-                mode={mode}
+                type={movie?.media_type || type || movie?.type}
+                mode={mode || movie?.mode}
                 MoreInfo={(e) => MoreInfo(e, movie)}
                 page={page}
+                setDeleteWatch={setDeleteWatch}
+                deleteWatch={deleteWatch}
               />
             ))
           )}

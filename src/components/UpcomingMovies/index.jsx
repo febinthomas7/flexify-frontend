@@ -12,7 +12,7 @@ const UpcomingMovies = () => {
   return (
     <ScrollComponent
       data={data}
-      heading={"Upcoming Movies"}
+      heading={"New Movies"}
       type={"movie"}
       mode={"movie"}
       loading={isPending}

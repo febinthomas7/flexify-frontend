@@ -12,7 +12,7 @@ const UpcomingSeries = () => {
   return (
     <ScrollComponent
       data={data}
-      heading={"Upcoming Series"}
+      heading={"New Series"}
       type={"tv"}
       mode={"tv"}
       loading={isPending}

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import DownloadFilesForMovies from "../DownloadFilesForMovies";
 import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
+import { FaPlay } from "react-icons/fa";
+import { FaPause } from "react-icons/fa";
 import axios from "axios";
 import Card from "../Card";
 import Genres from "../../Genre.json";
@@ -19,17 +21,18 @@ const MoreInfoComponent = ({
 }) => {
   const [movieData, setMovieData] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [seeTrailer, setSeeTrailer] = useState(false);
+  const [trailerKey, setTrailerKey] = useState();
   const navigation = useNavigate();
 
   useEffect(() => {
     const options = {
       method: "GET",
-      url: `${import.meta.env.VITE_BASE_URL}/api/recommendations`,
+      url: `${import.meta.env.VITE_BASE_URL}/api/similar`,
       params: {
         id: moreInfoData?.id,
-        mode: moreInfoData?.media_type,
-        mode2: mode,
+        mode: moreInfoData?.media_type || moreInfoData?.type,
+        mode2: mode || moreInfoData?.mode,
       },
     };
 
@@ -43,10 +46,37 @@ const MoreInfoComponent = ({
         console.error(error);
       });
   }, []);
-  
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      url: `${import.meta.env.VITE_BASE_URL}/api/trailer`,
+      params: {
+        id: moreInfoData?.id,
+        mode: moreInfoData?.media_type || moreInfoData?.mode,
+        mode2: type || moreInfoData?.type,
+      },
+    };
+
+    axios
+      .request(options)
+      .then((response) => {
+        setTrailerKey(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, [moreInfoData?.id]);
+
   const seeMore = (e) => {
     e.stopPropagation();
-    navigation(`/${moreInfoData?.media_type || type}`);
+    navigation(
+      `/${
+        moreInfoData?.media_type ||
+        type ||
+        moreInfoData?.type ||
+        moreInfoData?.mode
+      }`
+    );
     document.body.classList.remove("scroll");
   };
   return (
@@ -54,8 +84,10 @@ const MoreInfoComponent = ({
       className="fixed w-full h-screen top-0 z-40 justify-center flex shadow-md shadow-[black] bg-[#000000b3]"
       onClick={closeinfo}
     >
-      <div className=" w-[80%] sm:w-[70%] md:w-[60%] lg:w-[50%] flex flex-col gap-6  overflow-x-auto bg-[#000000f4] rounded mt-24 relative">
-        <RxCrossCircled className="absolute right-4 top-4 text-gray-300 cursor-pointer hover:scale-105 hover:text-white z-30 text-[30px] drop-shadow-lg" />
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className=" w-[80%] sm:w-[70%] md:w-[60%] lg:w-[50%] flex flex-col gap-6  overflow-x-auto bg-[#000000f4] rounded mt-24 relative"
+      >
         <div className="w-full h-[420px] relative ">
           <img
             className="w-full h-full object-cover blur-[2px]"
@@ -75,7 +107,12 @@ const MoreInfoComponent = ({
                 <button
                   onClick={() =>
                     navigation(
-                      `/${moreInfoData?.media_type || type}/${moreInfoData?.id}`
+                      `/${
+                        moreInfoData?.media_type ||
+                        type ||
+                        moreInfoData?.type ||
+                        moreInfoData?.mode
+                      }/${moreInfoData?.id}`
                     )
                   }
                   type="button"
@@ -108,6 +145,37 @@ const MoreInfoComponent = ({
               })}
             </div>
           </div>
+
+          {seeTrailer &&
+            trailerKey
+              ?.filter((e) => e.type == "Trailer")
+              .map((e) => {
+                return (
+                  <iframe
+                    key={e.key}
+                    type="text/html"
+                    className="w-full h-full object-contain absolute top-0"
+                    src={`//www.youtube.com/embed/${e.key}`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  ></iframe>
+                );
+              })}
+        </div>
+        <div className="w-full px-3">
+          <button
+            className="outline outline-1 font-semibold p-2 text-sm rounded gap-2 group text-white outline-red-700 flex justify-center text-center items-center"
+            onClick={() => setSeeTrailer(!seeTrailer)}
+          >
+            Trailer{" "}
+            {seeTrailer ? (
+              <FaPause className=" group-hover:scale-105" />
+            ) : (
+              <FaPlay className="group-hover:scale-105" />
+            )}
+          </button>
         </div>
 
         <div className="p-3">
@@ -117,12 +185,21 @@ const MoreInfoComponent = ({
             {moreInfoData?.overview}
           </p>
         </div>
-        {(mode || moreInfoData?.media_type) == "movie" && (
+        {(mode ||
+          type ||
+          moreInfoData?.media_type ||
+          moreInfoData?.type ||
+          moreInfoData?.mode) == "movie" && (
           <DownloadFilesForMovies id={moreInfoData?.id} />
         )}
 
         <div className="text-white capitalize text-center">
-          Recommended {moreInfoData?.media_type || type}
+          Similar{" "}
+          {moreInfoData?.media_type ||
+            type ||
+            mode ||
+            moreInfoData?.type ||
+            moreInfoData?.mode}
         </div>
         <div className="w-full flex flex-wrap justify-center gap-6">
           {loading ? (
@@ -133,8 +210,13 @@ const MoreInfoComponent = ({
                 <Card
                   key={index}
                   movie={movie}
-                  type={movie?.media_type || type}
-                  mode={mode}
+                  type={
+                    movie?.media_type ||
+                    type ||
+                    moreInfoData?.type ||
+                    moreInfoData?.mode
+                  }
+                  mode={mode || moreInfoData?.type || moreInfoData?.mode}
                   MoreInfo={(e) => MoreInfo(e, movie)}
                 />
               );

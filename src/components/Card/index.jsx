@@ -4,10 +4,25 @@ import { FaRegThumbsDown } from "react-icons/fa6";
 import { TfiArrowCircleDown } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
 import Genres from "../../Genre.json";
+import { handleSuccess, handleError } from "../../utils";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { RxCross1 } from "react-icons/rx";
-const Card = ({ movie, type, MoreInfo, mode, page }) => {
+import { MdDone } from "react-icons/md";
+import { useState, useEffect } from "react";
+const Card = ({
+  movie,
+  type,
+  MoreInfo,
+  mode,
+  page,
+  setDeleteWatch,
+  deleteWatch,
+}) => {
   const navigation = useNavigate();
+  const [list, setList] = useState(false);
   const len = movie?.vote_average;
+
   const addwatch = async (e) => {
     e.stopPropagation();
 
@@ -18,13 +33,12 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(movie),
+        body: JSON.stringify({ movie, type, mode }),
       });
 
       const result = await response.json();
-
-      const { sucess, message, error } = result;
-      if (sucess) {
+      const { success, message, error } = result;
+      if (success) {
         handleSuccess(message);
       } else if (error) {
         handleError(error?.details[0].message);
@@ -47,10 +61,12 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
       });
 
       const result = await response.json();
+      const { success, message, error } = result;
 
-      const { sucess, message, error } = result;
-      if (sucess) {
+      if (success) {
         handleSuccess(message);
+        setDeleteWatch(!deleteWatch);
+        localStorage.setItem("deletewatch", message);
       } else if (error) {
         handleError(error?.details[0].message);
       }
@@ -59,11 +75,19 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
     }
   };
 
+  useEffect(() => {
+    const userList = JSON.parse(localStorage.getItem("userList"));
+
+    const movieExists = userList.some((element) => element.id == movie.id);
+
+    setList(movieExists);
+  }, [movie]);
   return (
     <div
       className="relative group h-[240px] sm:h-[265px] "
       onClick={() => navigation(`/${type || mode}/${movie.id}`)}
     >
+      <ToastContainer />
       <div className="w-40 md:w-44  cursor-pointer group shadow-md shadow-[black] ">
         <div className="absolute bottom-0 w-full h-0  duration-150 ease-in group-hover:h-full bg-gradient-to-b from-[#1c1c1c7f] to-black cursor-pointer overflow-hidden rounded">
           {page == "mylist" && (
@@ -84,11 +108,20 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
             </h3>
             <div className="flex justify-between items-center text-[20px] py-3 text-[#c0c0c0]">
               <div className="flex items-center gap-3">
-                <BsPlusCircle
-                  onClick={addwatch}
-                  className="hover:scale-105 hover:text-white"
-                  title="add"
-                />
+                {list ? (
+                  <MdDone
+                    onClick={(e) => e.stopPropagation()}
+                    className="hover:scale-105 hover:text-white"
+                    title="added "
+                  />
+                ) : (
+                  <BsPlusCircle
+                    onClick={addwatch}
+                    className="hover:scale-105 hover:text-white"
+                    title="add"
+                  />
+                )}
+
                 <FaRegThumbsUp
                   className="hover:scale-105 hover:text-white"
                   title="like"

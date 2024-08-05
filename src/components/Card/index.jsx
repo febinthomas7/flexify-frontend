@@ -78,7 +78,7 @@ const Card = ({
   useEffect(() => {
     const userList = JSON.parse(localStorage.getItem("userList"));
 
-    const movieExists = userList.some((element) => element.id == movie.id);
+    const movieExists = userList?.some((element) => element.id == movie.id);
 
     setList(movieExists);
   }, [movie]);

@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { RxCross1 } from "react-icons/rx";
 import { MdDone } from "react-icons/md";
 import { useState, useEffect } from "react";
+import { GoPlay } from "react-icons/go";
 const Card = ({
   movie,
   type,
@@ -76,17 +77,17 @@ const Card = ({
   };
 
   useEffect(() => {
-    const userList = JSON.parse(localStorage.getItem("userList"));
+    const storedUserList = localStorage.getItem("userList");
+    const userList = storedUserList ? JSON.parse(storedUserList) : [];
 
-    const movieExists = userList?.some((element) => element.id == movie.id);
+    const movieExists = Array.isArray(userList)
+      ? userList.some((element) => element.id === movie.id)
+      : false;
 
     setList(movieExists);
   }, [movie]);
   return (
-    <div
-      className="relative group h-[240px] sm:h-[265px] "
-      onClick={() => navigation(`/${type || mode}/${movie.id}`)}
-    >
+    <div className="relative group h-[240px] sm:h-[265px] ">
       <ToastContainer />
       <div className="w-40 md:w-44  cursor-pointer group shadow-md shadow-[black] ">
         <div className="absolute bottom-0 w-full h-0  duration-150 ease-in group-hover:h-full bg-gradient-to-b from-[#1c1c1c7f] to-black cursor-pointer overflow-hidden rounded">
@@ -100,6 +101,15 @@ const Card = ({
             <div className="w-8 h-8 bg-black rounded-full flex justify-center text-white text-xs items-center outline outline-2 outline-offset-2 outline-[red] absolute top-[-20px]">
               <span>{len ? len?.toFixed(1) : "5.1"}%</span>
             </div>
+
+            <div className="w-full h-8 flex justify-center left-0  text-xs items-center  absolute top-[-60px]">
+              <GoPlay
+                onClick={() => navigation(`/${type || mode}/${movie.id}`)}
+                title="play"
+                className=" text-[60px] hover:scale-105 duration-75 ease-in text-[#8d9095cf] hover:text-white"
+              />
+            </div>
+
             <h3
               title={movie.title || movie.name}
               className="mt-2 text-white text-sm md:text-base truncate"
@@ -156,7 +166,7 @@ const Card = ({
         <img
           src={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
           onError={(e) => {
-            e.target.src = "/fallback_poster.png";
+            e.target.src = "/fallback_poster-removebg-preview.png";
           }}
           alt={movie?.poster_path}
           className="w-full rounded"

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ScrollComponent from "../ScrollComponent";
-import { parse } from "postcss";
 
 const Mylist = () => {
   const [userList, setUserList] = useState([]);
@@ -30,7 +29,7 @@ const Mylist = () => {
   }, [deleteWatch]);
   return (
     <section className="my-list  bg-black text-white p-4 md:p-8">
-      {userList.length > 0 ? (
+      {userList?.length > 0 ? (
         <ScrollComponent
           data={userList}
           heading={"Added PlayList"}

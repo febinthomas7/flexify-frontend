@@ -25,7 +25,6 @@ const ScrollComponent = ({
   const [prevButtonVisible, setPrevButtonVisible] = useState(false);
   const [nextButtonVisible, setNextButtonVisible] = useState(true);
   const scrollRef = useRef(null);
-
   const explore = (e) => {
     e.stopPropagation();
     setIsOpen(true);
@@ -112,8 +111,8 @@ const ScrollComponent = ({
       {moreInfo && (
         <MoreInfoComponent
           closeinfo={closeinfo}
-          type={type}
-          mode={mode}
+          type={type || moreInfoData?.media_type}
+          mode={mode || moreInfoData?.media_type}
           moreInfoData={moreInfoData}
           MoreInfo={MoreInfo}
         />

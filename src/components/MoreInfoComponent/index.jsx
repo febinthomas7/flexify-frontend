@@ -53,7 +53,7 @@ const MoreInfoComponent = ({
       params: {
         id: moreInfoData?.id,
         mode: moreInfoData?.media_type || moreInfoData?.mode,
-        mode2: type || moreInfoData?.type,
+        mode2: type || moreInfoData?.type || moreInfoData?.media_type,
       },
     };
 

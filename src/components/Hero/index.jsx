@@ -82,6 +82,9 @@ const Hero = () => {
                     className={`w-full h-full flex-shrink-0 flex-grow-0 object-cover  snap-center`}
                     src={`https://image.tmdb.org/t/p/w500/${e?.backdrop_path}`}
                     alt={index}
+                    onError={(e) => {
+                      e.target.src = "/fallback_bg-removebg.png";
+                    }}
                   />
                 );
               })}

@@ -3,7 +3,7 @@ import { FaTwitter } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 const Footer = () => {
   return (
-    <footer className="bg-black   text-white p-4 md:p-8">
+    <footer className="bg-black   text-white px-4 py-8 md:px-8 md:py-8">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <div className="flex gap-4 py-3 text-[13px] sm:text-[15px]">
           <a href="#" className="hover:underline  text-wrap">

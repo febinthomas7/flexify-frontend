@@ -2,7 +2,7 @@ import ScrollComponent from "../ScrollComponent";
 import { useQuery } from "@tanstack/react-query";
 const Movies = () => {
   const { data, isFetching } = useQuery({
-    queryKey: ["ScrollMovies"],
+    queryKey: ["Movies"],
     queryFn: () =>
       fetch(`${import.meta.env.VITE_BASE_URL}/api/movies`).then((res) =>
         res.json()
@@ -11,7 +11,7 @@ const Movies = () => {
 
   return (
     <ScrollComponent
-      data={data}
+      data={data?.results}
       heading={"Movies"}
       type={"movie"}
       mode={"movie"}

@@ -3,18 +3,26 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Card from "../../components/Card";
 import { useQuery } from "@tanstack/react-query";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowRight } from "react-icons/md";
 import MoreInfoComponent from "../../components/MoreInfoComponent";
 import { LoadingComponentForMovieAndSeries } from "../../components/LoadingComponent";
 const TvShowsPage = () => {
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
+
+  const [page, setPage] = useState(1);
+  const fetchProjects = (page = 1) =>
+    fetch(`${import.meta.env.VITE_BASE_URL}/api/series?page=${page}`).then(
+      (res) => res.json()
+    );
+
   const { data, isFetching } = useQuery({
-    queryKey: ["ScrollSeries"],
-    queryFn: () =>
-      fetch(`${import.meta.env.VITE_BASE_URL}/api/series`).then((res) =>
-        res.json()
-      ),
+    queryKey: ["Series", page],
+    queryFn: () => fetchProjects(page),
+    placeholderData: true,
   });
+
   const MoreInfo = (e, movie) => {
     e.stopPropagation();
     setMoreInfo(true);
@@ -46,7 +54,7 @@ const TvShowsPage = () => {
         {isFetching ? (
           <LoadingComponentForMovieAndSeries />
         ) : (
-          data?.map((movie, index) => (
+          data?.results?.map((movie, index) => (
             <Card
               key={index}
               movie={movie}
@@ -57,6 +65,29 @@ const TvShowsPage = () => {
           ))
         )}
       </div>
+      <div className="flex justify-center items-center gap-3">
+        <button
+          className={`text-white w-auto p-2 ${
+            page === 1 ? "bg-red-400 cursor-not-allowed" : "bg-red-600"
+          } bg-red-600 rounded`}
+          onClick={() => setPage((old) => old - 1)}
+          disabled={page === 1}
+        >
+          <MdKeyboardArrowLeft />
+        </button>
+        <span className="text-white">
+          {page} .... {data?.total_pages}
+        </span>
+        <button
+          className="text-white w-auto p-2 bg-red-600 rounded"
+          onClick={() => {
+            setPage((old) => old + 1);
+          }}
+        >
+          <MdKeyboardArrowRight />
+        </button>
+      </div>
+      {isFetching ? <span className="text-white"> Loading...</span> : null}
 
       <Footer />
     </div>

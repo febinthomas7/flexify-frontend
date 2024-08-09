@@ -137,7 +137,7 @@ const Header = () => {
           >
             <IoIosSearch className="text-[20px] text-[#ededed] group-hover:text-white group-hover:scale-105" />
           </div>
-          <Link to="/myprofile">
+          <Link to="/myprofile" className="max-[490px]:hidden">
             <img
               src="/avatar.webp"
               alt="Profile"

@@ -22,8 +22,8 @@ const Profile = () => {
     }, 1000);
   };
   return (
-    <section className=" justify-center bg-[#0b0b0b] text-white p-4 pt-16 md:py-20 md:px-8">
-      <div className="container mx-auto flex flex-col gap-2 sm:gap-6 justify-center items-center ">
+    <section className=" justify-center bg-[#0b0b0b] text-white p-4 pt-24 md:py-20 md:px-8">
+      <div className="container mx-auto flex flex-col gap-5 sm:gap-6 justify-center items-center ">
         <div className="flex gap-6 justify-center items-center">
           <img
             src="/avatar.webp"
@@ -33,7 +33,7 @@ const Profile = () => {
           <div className=" md:mt-0  md:text-left">
             <h1 className="text-2xl md:text-3xl font-bold">{userName}</h1>
             <p className="mt-2">{userEmail}</p>
-            <p className="mt-2">Subscription: Premium</p>
+            <p className="mt-2 ">Subscription: Premium</p>
           </div>
         </div>
         <button

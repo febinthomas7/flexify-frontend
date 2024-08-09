@@ -1,13 +1,14 @@
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { RxCrossCircled } from "react-icons/rx";
 import { handleError, handleSuccess } from "../../utils";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
 const Login = () => {
   const navigate = useNavigate();
+  const [isBtn, setIsBtn] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsBtn(true);
 
     try {
       const formData = new FormData(e.target);
@@ -24,6 +25,10 @@ const Login = () => {
       const result = await response.json();
 
       const { sucess, message, error, jwtToken, name, email } = result;
+      if (!sucess) {
+        handleError(message);
+        setIsBtn(false);
+      }
       if (sucess) {
         handleSuccess("Logged in successfully");
         localStorage.setItem("token", jwtToken);
@@ -31,12 +36,15 @@ const Login = () => {
         localStorage.setItem("email", email);
         setTimeout(() => {
           navigate("/home");
+          setIsBtn(true);
         }, 1000);
       } else if (error) {
         handleError(error?.details[0].message);
+        setIsBtn(false);
       }
     } catch (error) {
       console.log(error);
+      setIsBtn(false);
     }
   };
   return (
@@ -82,7 +90,12 @@ const Login = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-red-700  hover:scale-105 duration-100 ease-in text-white font-bold py-3 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+              disabled={isBtn}
+              className={`w-full  ${
+                !isBtn
+                  ? "hover:scale-105 bg-red-700"
+                  : "bg-red-500 cursor-not-allowed"
+              }  duration-100 ease-in text-white font-bold py-3 rounded focus:outline-none focus:ring-2 focus:ring-red-500`}
             >
               Login
             </button>

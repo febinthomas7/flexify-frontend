@@ -1,14 +1,16 @@
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { RxCrossCircled } from "react-icons/rx";
 import { handleError, handleSuccess } from "../../utils";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
 
 const Signin = () => {
   const navigate = useNavigate();
+  const [isBtn, setIsBtn] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsBtn(true);
 
     try {
       const formData = new FormData(e.target);
@@ -16,6 +18,7 @@ const Signin = () => {
       const { name, email, password } = data;
 
       if (!name || !email || !password) {
+        setIsBtn(false);
         return handleError("All fields are required");
       }
 
@@ -31,16 +34,24 @@ const Signin = () => {
       const result = await response.json();
 
       const { sucess, message, error } = result;
+      if (!sucess) {
+        handleError(message);
+        setIsBtn(false);
+      }
+
       if (sucess) {
         handleSuccess(message);
         setTimeout(() => {
           navigate("/login");
+          setIsBtn(false);
         }, 1000);
       } else if (error) {
         handleError(error?.details[0].message);
+        setIsBtn(false);
       }
     } catch (error) {
       console.log(error);
+      setIsBtn(false);
     }
   };
   return (
@@ -99,7 +110,11 @@ const Signin = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-red-700  hover:scale-105 duration-100 ease-in text-white font-bold py-3 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+              className={`w-full  ${
+                !isBtn
+                  ? "hover:scale-105 bg-red-700"
+                  : "bg-red-500 cursor-not-allowed"
+              }  duration-100 ease-in text-white font-bold py-3 rounded focus:outline-none focus:ring-2 focus:ring-red-500`}
             >
               Sign In
             </button>

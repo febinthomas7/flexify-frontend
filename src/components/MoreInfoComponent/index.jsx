@@ -28,7 +28,7 @@ const MoreInfoComponent = ({
   useEffect(() => {
     const options = {
       method: "GET",
-      url: `${import.meta.env.VITE_BASE_URL}/api/similar`,
+      url: `${import.meta.env.VITE_BASE_URL}/api/recommendations`,
       params: {
         id: moreInfoData?.id,
         mode: moreInfoData?.media_type || moreInfoData?.type,

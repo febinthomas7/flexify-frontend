@@ -98,16 +98,17 @@ const Card = ({
             />
           )}
           <div className="w-full absolute bottom-0    p-3">
-            <div className="w-8 h-8 bg-black rounded-full flex justify-center text-white text-xs items-center outline outline-2 outline-offset-2 outline-[red] absolute top-[-20px]">
-              <span>{len ? len?.toFixed(1) : "5.1"}%</span>
-            </div>
-
-            <div className="w-full h-8 flex justify-center left-0  text-xs items-center  absolute top-[-60px]">
-              <GoPlay
-                onClick={() => navigation(`/${type || mode}/${movie.id}`)}
+            <div className="w-full h-8 gap-3 flex justify-between px-3 left-0  text-xs items-center  absolute top-[-20px]">
+              <div className="w-10 h-7 bg-black rounded-full flex justify-center text-white text-[10px] items-center outline outline-2 outline-offset-2 outline-[red] ">
+                <span>{len ? len?.toFixed(1) : "5.1"}%</span>
+              </div>
+              <button
                 title="play"
-                className=" text-[60px] hover:scale-105 duration-75 ease-in text-[#8d9095cf] hover:text-white"
-              />
+                onClick={() => navigation(`/${type || mode}/${movie.id}`)}
+                className="w-full h-7 capitalize text-[13px] hover:scale-105 duration-75 outline outline-2 outline-[#292929] outline-offset-1 ease-in bg-[#000000e8] rounded text-white"
+              >
+                watch now
+              </button>
             </div>
 
             <h3

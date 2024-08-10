@@ -7,7 +7,9 @@ const Mylist = () => {
   const [deleteWatch, setDeleteWatch] = useState(false);
   const userWatched = async () => {
     try {
-      const url = `${import.meta.env.VITE_BASE_URL}/auth/userlist`;
+      const url = `${
+        import.meta.env.VITE_BASE_URL
+      }/auth/userlist?userId=${localStorage.getItem("userId")}`;
       const headers = {
         headers: {
           Authorization: localStorage.getItem("token"),
@@ -16,8 +18,8 @@ const Mylist = () => {
       const response = await fetch(url, headers);
       const result = await response.json();
       setLoading(false);
-      setUserList(result);
-      localStorage.setItem("userList", JSON.stringify(result));
+      setUserList(result.watchlist);
+      localStorage.setItem("userList", JSON.stringify(result.watchlist));
     } catch (error) {
       console.log(error);
       setLoading(false);

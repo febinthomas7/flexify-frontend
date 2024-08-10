@@ -101,6 +101,8 @@ const ScrollComponent = ({
                   type={movie?.media_type || type || movie?.type}
                   mode={mode || movie?.mode}
                   MoreInfo={(e) => MoreInfo(e, movie)}
+                  setDeleteWatch={setDeleteWatch}
+                  deleteWatch={deleteWatch}
                 />
               ))
             )}
@@ -115,6 +117,8 @@ const ScrollComponent = ({
           mode={mode || moreInfoData?.media_type}
           moreInfoData={moreInfoData}
           MoreInfo={MoreInfo}
+          setDeleteWatch={setDeleteWatch}
+          deleteWatch={deleteWatch}
         />
       )}
 

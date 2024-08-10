@@ -24,7 +24,8 @@ const Login = () => {
 
       const result = await response.json();
 
-      const { sucess, message, error, jwtToken, name, email } = result;
+      const { sucess, message, error, jwtToken, name, email, _id } = result;
+      console.log(result);
       if (!sucess) {
         handleError(message);
         setIsBtn(false);
@@ -34,6 +35,7 @@ const Login = () => {
         localStorage.setItem("token", jwtToken);
         localStorage.setItem("name", name);
         localStorage.setItem("email", email);
+        localStorage.setItem("userId", _id);
         setTimeout(() => {
           navigate("/home");
           setIsBtn(true);

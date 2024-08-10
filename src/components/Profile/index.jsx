@@ -16,6 +16,8 @@ const Profile = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("name");
     localStorage.removeItem("email");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userList");
     handleSuccess("Logged out successfully!");
     setTimeout(() => {
       navigate("/");

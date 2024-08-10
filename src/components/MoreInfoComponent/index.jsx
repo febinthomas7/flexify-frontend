@@ -18,6 +18,8 @@ const MoreInfoComponent = ({
   moreInfoData,
   mode,
   MoreInfo,
+  setDeleteWatch,
+  deleteWatch,
 }) => {
   const [movieData, setMovieData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -218,6 +220,8 @@ const MoreInfoComponent = ({
                   }
                   mode={mode || moreInfoData?.type || moreInfoData?.mode}
                   MoreInfo={(e) => MoreInfo(e, movie)}
+                  setDeleteWatch={setDeleteWatch}
+                  deleteWatch={deleteWatch}
                 />
               );
             })

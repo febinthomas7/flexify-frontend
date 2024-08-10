@@ -6,7 +6,7 @@ export const LoadingComponentForScroll = () => {
       {Array.from({ length: 8 }, (_, i) => i)?.map((e) => (
         <div
           key={e}
-          className=" w-[160px] h-[235px] sm:w-[192px] sm:h-[288px] text-center   bg-[#0d1015ed] rounded "
+          className=" w-[160px] h-[240px] sm:w-[192px] sm:h-[288px] text-center   bg-[#0d1015ed] rounded "
         >
           <h1 className="invisible">
             LOADING......................................
@@ -23,12 +23,8 @@ export const LoadingComponentForMovieAndSeries = () => {
       {Array.from({ length: 8 }, (_, i) => i)?.map((e) => (
         <div
           key={e}
-          className=" w-[160px] h-[235px] sm:w-[192px] sm:h-[288px] text-center   bg-[#0d1015ed] rounded "
-        >
-          <h1 className="invisible">
-            LOADING......................................
-          </h1>
-        </div>
+          className=" w-[160px] h-[240px] sm:w-[192px] sm:h-[288px] text-center   bg-[#0d1015ed] rounded "
+        ></div>
       ))}
     </>
   );

@@ -10,7 +10,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { RxCross1 } from "react-icons/rx";
 import { MdDone } from "react-icons/md";
 import { useState, useEffect } from "react";
-import { GoPlay } from "react-icons/go";
 const Card = ({
   movie,
   type,
@@ -23,24 +22,37 @@ const Card = ({
   const navigation = useNavigate();
   const [list, setList] = useState(false);
   const len = movie?.vote_average;
-
+  const [movieAdded, setMovieAdded] = useState(false);
   const addwatch = async (e) => {
     e.stopPropagation();
 
     try {
       const url = `${import.meta.env.VITE_BASE_URL}/auth/addwatch`;
+      const userId = localStorage.getItem("userId");
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ movie, type, mode }),
+        body: JSON.stringify({ movie, type, mode, userId }),
       });
 
       const result = await response.json();
       const { success, message, error } = result;
       if (success) {
-        handleSuccess(message);
+        const url = `${
+          import.meta.env.VITE_BASE_URL
+        }/auth/userlist?userId=${localStorage.getItem("userId")}`;
+        const headers = {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        };
+        const response = await fetch(url, headers);
+        const result = await response.json();
+
+        localStorage.setItem("userList", JSON.stringify(result.watchlist));
+        setMovieAdded(!movieAdded);
       } else if (error) {
         handleError(error?.details[0].message);
       }
@@ -65,9 +77,7 @@ const Card = ({
       const { success, message, error } = result;
 
       if (success) {
-        handleSuccess(message);
         setDeleteWatch(!deleteWatch);
-        localStorage.setItem("deletewatch", message);
       } else if (error) {
         handleError(error?.details[0].message);
       }
@@ -85,10 +95,9 @@ const Card = ({
       : false;
 
     setList(movieExists);
-  }, [movie]);
+  }, [movie, movieAdded]);
   return (
     <div className="relative group h-[240px] sm:h-[265px] ">
-      <ToastContainer />
       <div className="w-40 md:w-44  cursor-pointer group shadow-md shadow-[black] ">
         <div className="absolute bottom-0 w-full h-0  duration-150 ease-in group-hover:h-full bg-gradient-to-b from-[#1c1c1c7f] to-black cursor-pointer overflow-hidden rounded">
           {page == "mylist" && (

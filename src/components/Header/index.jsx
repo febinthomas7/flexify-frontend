@@ -139,9 +139,12 @@ const Header = () => {
           </div>
           <Link to="/myprofile" className="max-[490px]:hidden">
             <img
-              src="/avatar.webp"
               alt="Profile"
-              className="w-9 hover:outline outline-offset-2 outline-white outline-2 rounded-full cursor-pointer"
+              src={localStorage.getItem("avatar") || "/avatar.webp"}
+              onError={(e) => {
+                e.target.src = "/avatar.webp";
+              }}
+              className="w-9 h-9 object-cover  rounded-full cursor-pointer"
             />
           </Link>
           <nav className="flex flex-col justify-center items-center  md:hidden relative">

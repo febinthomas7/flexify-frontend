@@ -24,8 +24,7 @@ const Login = () => {
 
       const result = await response.json();
 
-      const { sucess, message, error, jwtToken, name, email, _id } = result;
-      console.log(result);
+      const { sucess, message, error, jwtToken, name, email, _id, dp } = result;
       if (!sucess) {
         handleError(message);
         setIsBtn(false);
@@ -36,6 +35,10 @@ const Login = () => {
         localStorage.setItem("name", name);
         localStorage.setItem("email", email);
         localStorage.setItem("userId", _id);
+
+        if (!dp === undefined || "undefined" || "") {
+          localStorage.setItem("avatar", dp);
+        }
         setTimeout(() => {
           navigate("/home");
           setIsBtn(true);

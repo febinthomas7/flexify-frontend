@@ -5,16 +5,17 @@ import { ToastContainer } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
 import { IoPencilSharp } from "react-icons/io5";
 import "react-toastify/dist/ReactToastify.css";
+import { MdDeleteForever } from "react-icons/md";
 
 const Profile = () => {
   const [userName, setUserName] = useState("");
-
   const [editedUserName, setEditedUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [backgroundImage, setBackgroundImage] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [profileDelete, setProfileDelete] = useState(false);
   const navigate = useNavigate("");
 
   const handleInputChange = async (e) => {
@@ -37,6 +38,33 @@ const Profile = () => {
       localStorage.setItem("name", result.name);
       localStorage.setItem("avatar", result.userdp);
       localStorage.setItem("background", result.background);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const deleteOption = async (e) => {
+    console.log(e);
+    try {
+      const url = `${
+        import.meta.env.VITE_BASE_URL
+      }/auth/deleteuserprofileinfo?userId=${localStorage.getItem(
+        "userId"
+      )}&item=${e}`;
+      const headers = {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      };
+      const response = await fetch(url, headers);
+      const result = await response.json();
+      console.log(result);
+
+      setAvatarUrl(result.dp);
+      localStorage.setItem("avatar", result.dp);
+      setBackgroundImage(result.background);
+      localStorage.setItem("background", result.background);
+      handleSuccess(result.message);
+      setProfileDelete(false);
     } catch (error) {
       console.log(error);
     }
@@ -67,9 +95,12 @@ const Profile = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setUserName(localStorage.setItem("name", data.name));
-        setBackgroundImage(localStorage.setItem("background", data.background));
-        setAvatarUrl(localStorage.setItem("avatar", data.dp));
+        setUserName(data.name);
+        localStorage.setItem("name", data.name);
+        setBackgroundImage(data.background);
+        localStorage.setItem("background", data.background);
+        setAvatarUrl(data.dp);
+        localStorage.setItem("avatar", data.dp);
         if (data.success) {
           handleSuccess(data.message);
         } else {
@@ -86,6 +117,7 @@ const Profile = () => {
   useEffect(() => {
     handleInputChange();
     setUserName(localStorage.getItem("name"));
+
     setUserEmail(localStorage.getItem("email"));
   }, []);
   const userLogOut = () => {
@@ -101,6 +133,11 @@ const Profile = () => {
       navigate("/");
     }, 1000);
   };
+
+  const option = () => {
+    setOpen(!open);
+    setProfileDelete(false);
+  };
   return (
     <section
       className={` justify-center bg-[#0b0b0b] text-white p-4 pt-24 md:py-20 md:px-8   bg-cover bg-center`}
@@ -113,47 +150,80 @@ const Profile = () => {
       <div className="container mx-auto flex flex-col gap-5 sm:gap-6 justify-center items-center relative ">
         <div className="flex gap-6 justify-center items-center relative">
           {open && (
-            <div className="absolute top-0 bg-black z-10 flex gap-3 flex-col justify-center items-center rounded py-4 px-[20px]">
-              <img
-                src={avatarUrl || "/avatar.webp"}
-                onError={(e) => {
-                  e.target.src = "/avatar.webp";
-                }}
-                alt="Current Avatar"
-                className="w-16 h-16 object-contain bg-white rounded-full"
-              />
+            <div className="absolute top-0 bg-black z-10 flex  flex-col justify-center items-center rounded py-4 px-[5px]">
+              <div className="absolute top-14 right-2 flex   justify-center items-center ">
+                <MdDeleteForever
+                  title="delete"
+                  className="text-white cursor-pointer"
+                  onClick={() => setProfileDelete(!profileDelete)}
+                />
+                {profileDelete && (
+                  <div className="absolute right-10  text-white bg-[#000000a2] outline outline-gray-600 outline-1">
+                    <button
+                      onClick={() => deleteOption("dp")}
+                      className="px-4 hover:bg-red-700"
+                    >
+                      remove_dp
+                    </button>
+                    <button
+                      onClick={() => deleteOption("backgroundImg")}
+                      className="px-4 hover:bg-red-700"
+                    >
+                      remove_bg
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <form
                 onSubmit={handleSubmit}
                 className="w-full flex flex-col justify-center items-center gap-3 text-black"
               >
-                <div className="w-full flex gap-1 text-white">
-                  <label htmlFor="avatar">dp:</label>
+                <label htmlFor="avatar-input">
+                  {" "}
+                  <img
+                    src={avatarUrl || "/avatar.webp"}
+                    onError={(e) => {
+                      e.target.src = "/avatar.webp";
+                    }}
+                    alt="Current Avatar"
+                    className="w-16 h-16 object-contain bg-white rounded-full cursor-pointer"
+                  />
+                </label>
+
+                <div className="w-full  gap-1 text-white hidden ">
                   <input
                     type="file"
+                    id="avatar-input"
                     name="avatar"
                     className="text-white w-fit bg-red-800"
                     placeholder="Upload Avatar"
                   />
                 </div>
+                <div className="w-full flex gap-1 justify-center items-end text-white">
+                  <label htmlFor="name">Name:</label>
+                  <input
+                    autoFocus
+                    value={editedUserName}
+                    onChange={(e) => setEditedUserName(e.target.value)}
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="your name"
+                    className=" w-full bg-transparent outline-none"
+                  />
+                </div>
 
-                <div className="w-full flex gap-1 text-white">
-                  <label htmlFor="background">bg:</label>
+                <div className=" flex gap-1 justify-center items-end text-white">
                   <input
                     type="file"
+                    id="background"
                     name="background"
-                    className="text-white w-fit bg-blue-800"
+                    className="text-white w-fit bg-blue-800 cursor-pointer"
                     placeholder="Upload Background"
                   />
                 </div>
 
-                <input
-                  value={editedUserName}
-                  onChange={(e) => setEditedUserName(e.target.value)}
-                  type="text"
-                  name="name"
-                  placeholder="enter name"
-                  className="p-1 w-full"
-                />
                 <button
                   className={` text-white font-bold rounded px-2 py-1 w-fit  ${
                     loading
@@ -161,6 +231,7 @@ const Profile = () => {
                       : "cursor-pointer bg-red-800 hover:scale-105"
                   }`}
                   type="submit"
+                  title="save"
                   disabled={loading}
                 >
                   save
@@ -171,13 +242,13 @@ const Profile = () => {
 
           {open ? (
             <RxCross1
-              onClick={() => setOpen(!open)}
-              className="text-white absolute top-1 right-1 z-20 cursor-pointer hover:scale-105"
+              onClick={option}
+              className="text-white absolute top-2 -right-2 sm:right-1  z-20 cursor-pointer hover:scale-105"
               title="close"
             />
           ) : (
             <IoPencilSharp
-              onClick={() => setOpen(!open)}
+              onClick={option}
               className="text-white absolute top-1 right-1 cursor-pointer hover:scale-105"
               title="edit"
             />

@@ -17,6 +17,7 @@ const Header = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState("");
   const navigation = useLocation();
 
   const nav = [
@@ -90,6 +91,10 @@ const Header = () => {
     };
   }, []);
 
+  useEffect(() => {
+    setAvatarUrl(localStorage.getItem("avatar"));
+  }, [localStorage.getItem("avatar")]);
+
   return (
     <>
       {isOpen && (
@@ -99,7 +104,6 @@ const Header = () => {
           searchResults={searchResults}
           set={openSearch}
           setSearchResults={setSearchResults}
-          input="input"
         />
       )}
 
@@ -140,11 +144,11 @@ const Header = () => {
           <Link to="/myprofile" className="max-[490px]:hidden">
             <img
               alt="Profile"
-              src={localStorage.getItem("avatar") || "/avatar.webp"}
+              src={avatarUrl || "/avatar.webp"}
               onError={(e) => {
                 e.target.src = "/avatar.webp";
               }}
-              className="w-9 h-9 object-cover  rounded-full cursor-pointer"
+              className="w-9 h-9  object-contain rounded-full bg-white cursor-pointer"
             />
           </Link>
           <nav className="flex flex-col justify-center items-center  md:hidden relative">

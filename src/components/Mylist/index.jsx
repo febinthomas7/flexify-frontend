@@ -31,7 +31,7 @@ const Mylist = () => {
   }, [deleteWatch]);
   return (
     <section className="my-list  bg-black text-white p-4 md:p-8">
-      {userList?.length > 0 ? (
+      {userList?.length > 0 && (
         <ScrollComponent
           data={userList}
           heading={"Added PlayList"}
@@ -40,11 +40,24 @@ const Mylist = () => {
           setDeleteWatch={setDeleteWatch}
           deleteWatch={deleteWatch}
         />
-      ) : (
+      )}
+      {loading && (
         <div className="text-white w-full h-[361px] flex justify-center items-center bg-[#0b0b0b] rounded">
-          <h1>nothing added yet</h1>
+          <div className="spinner">
+            <div className="r1"></div>
+            <div className="r2"></div>
+            <div className="r3"></div>
+            <div className="r4"></div>
+            <div className="r5"></div>
+          </div>
         </div>
       )}
+      {!loading && userList.length === 0 ? (
+        <div className="text-white w-full h-[361px] flex flex-col justify-center items-center bg-[#0b0b0b] rounded">
+          <img src="userNotLogggedIn.webp" alt="" />
+          <h1 className="capitalize">nothing added yet</h1>
+        </div>
+      ) : null}
     </section>
   );
 };

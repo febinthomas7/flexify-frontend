@@ -263,8 +263,10 @@ const MessagingPage = () => {
               />
               <button
                 onClick={sendMessage}
-                disabled={!receiverId}
-                className="bg-red-700 text-white px-4 py-2 rounded"
+                disabled={message == "" ? false : true}
+                className={` ${
+                  message == "" ? "bg-red-500 cursor-not-allowed" : "bg-red-700"
+                } text-white px-4 py-2 rounded`}
               >
                 Send
               </button>

@@ -52,7 +52,7 @@ const Mylist = () => {
           </div>
         </div>
       )}
-      {!loading && userList.length === 0 ? (
+      {!loading && userList?.length === 0 ? (
         <div className="text-white w-full h-[361px] flex flex-col justify-center items-center bg-[#0b0b0b] rounded">
           <img src="userNotLogggedIn.webp" alt="" />
           <h1 className="capitalize">nothing added yet</h1>

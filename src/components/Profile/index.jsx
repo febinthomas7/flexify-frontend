@@ -6,6 +6,7 @@ import { RxCross1 } from "react-icons/rx";
 import { IoPencilSharp } from "react-icons/io5";
 import "react-toastify/dist/ReactToastify.css";
 import { MdDeleteForever } from "react-icons/md";
+import { BiSolidMessageSquareEdit } from "react-icons/bi";
 
 const Profile = () => {
   const [userName, setUserName] = useState("");
@@ -158,7 +159,7 @@ const Profile = () => {
                   onClick={() => setProfileDelete(!profileDelete)}
                 />
                 {profileDelete && (
-                  <div className="absolute right-10  text-white bg-[#000000a2] outline outline-gray-600 outline-1">
+                  <div className="absolute right-10 z-10  text-white bg-[#000000a2] outline outline-gray-600 outline-1">
                     <button
                       onClick={() => deleteOption("dp")}
                       className="px-4 hover:bg-red-700"
@@ -179,18 +180,21 @@ const Profile = () => {
                 onSubmit={handleSubmit}
                 className="w-full flex flex-col justify-center items-center gap-3 text-black"
               >
+                {" "}
                 <label htmlFor="avatar-input">
-                  {" "}
-                  <img
-                    src={avatarUrl || "/avatar.webp"}
-                    onError={(e) => {
-                      e.target.src = "/avatar.webp";
-                    }}
-                    alt="Current Avatar"
-                    className="w-16 h-16 object-contain bg-white rounded-full cursor-pointer"
-                  />
+                  <div className="relative" title="edit">
+                    {" "}
+                    <img
+                      src={avatarUrl || "/no_image.jpg"}
+                      onError={(e) => {
+                        e.target.src = "/no_image.jpg";
+                      }}
+                      alt="Current Avatar"
+                      className="w-16 h-16 object-contain bg-white rounded-full cursor-pointer"
+                    />
+                    <BiSolidMessageSquareEdit className="text-gray-300 absolute top-0 right-0 shadow-sm cursor-pointer" />
+                  </div>
                 </label>
-
                 <div className="w-full  gap-1 text-white hidden ">
                   <input
                     type="file"
@@ -213,7 +217,6 @@ const Profile = () => {
                     className=" w-full bg-transparent outline-none"
                   />
                 </div>
-
                 <div className=" flex gap-1 justify-center items-end text-white">
                   <input
                     type="file"
@@ -223,7 +226,6 @@ const Profile = () => {
                     placeholder="Upload Background"
                   />
                 </div>
-
                 <button
                   className={` text-white font-bold rounded px-2 py-1 w-fit  ${
                     loading
@@ -258,10 +260,11 @@ const Profile = () => {
             src={avatarUrl || localStorage.getItem("avatar")}
             alt={avatarUrl}
             onError={(e) => {
-              e.target.src = "/avatar.webp";
+              e.target.src = "/no_image.jpg";
             }}
             className="w-24 h-24 object-contain bg-white md:w-32 md:h-32 rounded-full"
           />
+
           <div className=" md:mt-0  md:text-left">
             <h1 className="text-2xl md:text-3xl font-bold">
               {userName || localStorage.getItem("name")}

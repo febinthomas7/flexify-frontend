@@ -10,6 +10,7 @@ import { RiMovieLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
 import { VscThreeBars } from "react-icons/vsc";
 import { MdLocalMovies } from "react-icons/md";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
 
 const Header = () => {
   const [bgcolor, setBgColor] = useState(false);
@@ -35,6 +36,11 @@ const Header = () => {
       path: "/tv",
       label: "TvShows",
       icon: <MdLocalMovies />,
+    },
+    {
+      path: "/chat",
+      label: "Chat",
+      icon: <IoChatboxEllipsesOutline />,
     },
     {
       path: "/myprofile",
@@ -144,9 +150,9 @@ const Header = () => {
           <Link to="/myprofile" className="max-[490px]:hidden">
             <img
               alt="Profile"
-              src={avatarUrl || "/avatar.webp"}
+              src={avatarUrl || "/no_image.jpg"}
               onError={(e) => {
-                e.target.src = "/avatar.webp";
+                e.target.src = "/no_image.jpg";
               }}
               className="w-9 h-9  object-contain rounded-full bg-white cursor-pointer"
             />

@@ -1,10 +1,6 @@
-import {
-  Link,
-  createBrowserRouter,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
-import { lazy, useEffect, useState } from "react";
+import { Link, createBrowserRouter } from "react-router-dom";
+import { lazy } from "react";
+import { Navigate } from "react-router-dom";
 const MainPage = lazy(() => import("../pages/MainPage"));
 const MovieDetails = lazy(() => import("../pages/MovieDetails"));
 const SeriesDetails = lazy(() => import("../pages/SeriesDetails"));
@@ -14,7 +10,8 @@ const Home = lazy(() => import("../pages/Home"));
 const Movie = lazy(() => import("../pages/Movie"));
 const Profile = lazy(() => import("../pages/ProfilePage"));
 const TVShowsPage = lazy(() => import("../pages/TvShows"));
-import { Navigate } from "react-router-dom";
+
+const MessagingPage = lazy(() => import("../pages/MessagingPage"));
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("token");
@@ -99,7 +96,14 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
   },
-
+  {
+    path: "/chat",
+    element: (
+      <PrivateRoute>
+        <MessagingPage />
+      </PrivateRoute>
+    ),
+  },
   {
     path: "*",
     element: (

@@ -129,6 +129,9 @@ const Profile = () => {
     localStorage.removeItem("userList");
     localStorage.removeItem("avatar");
     localStorage.removeItem("background");
+    localStorage.removeItem("receiverDp");
+    localStorage.removeItem("receiverId");
+    localStorage.removeItem("receiverName");
     handleSuccess("Logged out successfully!");
     setTimeout(() => {
       navigate("/");

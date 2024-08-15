@@ -10,7 +10,10 @@ import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
 import axios from "axios";
 import Card from "../Card";
+import { useQuery } from "@tanstack/react-query";
+
 import Genres from "../../Genre.json";
+import ScrollForCastAndCrew from "../ScrollForCastAndCrew";
 
 const MoreInfoComponent = ({
   closeinfo,
@@ -26,6 +29,17 @@ const MoreInfoComponent = ({
   const [seeTrailer, setSeeTrailer] = useState(false);
   const [trailerKey, setTrailerKey] = useState();
   const navigation = useNavigate();
+
+  const { data, isFetching } = useQuery({
+    queryKey: ["cast"],
+    queryFn: () =>
+      fetch(
+        `${import.meta.env.VITE_BASE_URL}/api/credits?id=${
+          moreInfoData?.id
+        }&mode=${mode || type}`
+      ).then((res) => res.json()),
+  });
+  console.log(data);
 
   useEffect(() => {
     const options = {
@@ -83,12 +97,12 @@ const MoreInfoComponent = ({
   };
   return (
     <div
-      className="fixed w-full h-screen top-0 z-40 justify-center flex shadow-md shadow-[black] bg-[#000000b3]"
+      className="fixed w-full h-screen top-0 z-40 justify-center  flex shadow-md shadow-[black] bg-[#000000b3]"
       onClick={closeinfo}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className=" w-[80%] sm:w-[70%] md:w-[60%] lg:w-[50%] flex flex-col gap-6  overflow-x-auto bg-[#000000f4] rounded mt-24 relative"
+        className=" w-[80%] sm:w-[70%] md:w-[60%] lg:w-[50%] flex flex-col gap-6  overflow-x-hidden overflow-y-auto bg-[#000000f4] rounded mt-24 relative"
       >
         <div className="w-full h-[420px] relative ">
           <img
@@ -187,6 +201,15 @@ const MoreInfoComponent = ({
             {moreInfoData?.overview}
           </p>
         </div>
+
+        {data?.cast.length != 0 && (
+          <ScrollForCastAndCrew
+            data={data}
+            loading={isFetching}
+            heading={"cast"}
+          />
+        )}
+
         {(mode ||
           type ||
           moreInfoData?.media_type ||

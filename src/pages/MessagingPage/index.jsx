@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-
 import { RiArrowLeftSLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
 import Header from "../../components/Header";
-
+import io from "socket.io-client";
+import {
+  LoadingComponentForchatUsers,
+  LoadingComponentForchatMessages,
+} from "../../components/LoadingComponent";
+const socket = io(import.meta.env.VITE_BASE_URL, {
+  query: {
+    userId: localStorage.getItem("userId"),
+  },
+});
 const MessagingPage = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -12,8 +19,13 @@ const MessagingPage = () => {
   const [receiverId, setReceiverId] = useState("");
   const [flags, setFlags] = useState(false);
   const [hide, setHide] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [chatLoading, setChatLoading] = useState(false);
+  const [online, setOnline] = useState("");
+  const [consversationId, setConversationId] = useState("");
 
   const userData = async () => {
+    setLoading(true);
     try {
       const url = `${
         import.meta.env.VITE_BASE_URL
@@ -28,8 +40,10 @@ const MessagingPage = () => {
       const result = await response.json();
       console.log(result);
       setUsers(result.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -78,19 +92,20 @@ const MessagingPage = () => {
       });
 
       const result = await response.json();
-      setMessage("");
-
-      setUser(result.data);
-      setFlags(!flags);
-
       console.log(result);
+
+      setMessage("");
+      setMessages([...messages, result?.newMessage]);
+
+      setFlags(!flags);
+      setUser(result.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   const getMessage = async () => {
-    console.log(message);
+    setChatLoading(true);
     try {
       const url = `${
         import.meta.env.VITE_BASE_URL
@@ -105,15 +120,19 @@ const MessagingPage = () => {
       });
 
       const result = await response.json();
-      console.log(result);
-      if (result.success) {
-        setMessages(result.message);
+      const { success, message, chatId } = result;
+      if (success) {
+        setMessages(message);
+        setConversationId(chatId);
+        setChatLoading(false);
       }
-      if (!result.success) {
+      if (!success) {
         setMessages([]);
+        setChatLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setChatLoading(false);
     }
   };
 
@@ -127,17 +146,34 @@ const MessagingPage = () => {
   }, [messages]);
   useEffect(() => {
     getMessage();
-  }, [receiverId, flags]);
+  }, [receiverId]);
+
+  useEffect(() => {
+    socket.on("getOnlineUser", (message) => {
+      setOnline(message);
+    });
+    return () => socket.off();
+  }, [socket, localStorage.getItem("userId")]);
+  useEffect(() => {
+    socket?.on("newMessage", (newMessage) => {
+      setMessages([...messages, newMessage]);
+      scrollToBottom();
+
+      return () => socket?.off("newMessage");
+    });
+  }, [socket, messages, setMessages]);
 
   return (
     <>
       <Header />
       <div className=" bg-black w-full  h-screen flex overflow-hidden ">
         <div
-          className={`w-[400px] bg-black flex flex-col gap-2 ${
+          className={`w-[400px] bg-black flex flex-col gap-2 overflow-auto ${
             !hide ? "flex" : "hidden sm:flex"
           }  relative px-2 h-[calc(100%-5rem)] sm:h-[calc(100%-6rem)] p-2 mt-[5rem] sm:mt-[6rem] `}
         >
+          {loading && <LoadingComponentForchatUsers />}
+
           {users?.map((e, index) => {
             return (
               <div
@@ -149,14 +185,19 @@ const MessagingPage = () => {
                     : "bg-[#6f6f6f75]"
                 } items-center cursor-pointer sm:hover:scale-105`}
               >
-                <img
-                  src={e.dp || "/no_image.jpg"}
-                  onError={(e) => {
-                    e.target.src = "/no_image.jpg";
-                  }}
-                  alt="/no_image.jpg"
-                  className="rounded-full w-9 h-9 object-contain bg-black"
-                />
+                <div className="relative">
+                  <img
+                    src={e.dp || "/no_image.jpg"}
+                    onError={(e) => {
+                      e.target.src = "/no_image.jpg";
+                    }}
+                    alt="/no_image.jpg"
+                    className="rounded-full w-9 h-9 object-contain bg-black"
+                  />
+                  {online.includes(e?._id) && (
+                    <span className="p-1 rounded-full w-3 h-3  border-black border -right-1 t-0 absolute top-0   bg-green-500"></span>
+                  )}
+                </div>
 
                 <div className="flex flex-col p-1 w-full text-white">
                   <div className="w-full flex justify-between items-center">
@@ -203,10 +244,10 @@ const MessagingPage = () => {
             className="mb-4 w-full h-full overflow-auto hide py-16"
             id="scroll-container"
           >
-            {messages.length <= 0 &&
-              (receiverId || localStorage.getItem("receiverId")) && (
-                <div className="text-center text-white">No messages yet.</div>
-              )}
+            {chatLoading && <LoadingComponentForchatMessages />}
+            {messages.length <= 0 && !chatLoading && (
+              <div className="text-center text-white">No messages yet.</div>
+            )}
             {messages?.map((msg, index) => {
               const dateObject = new Date(msg.updatedAt);
 
@@ -236,7 +277,7 @@ const MessagingPage = () => {
                 >
                   <div>
                     <div
-                      className={` rounded-xl text-white px-2 pt-3 pb-4 inline-block relative min-w-[50px] text-left ${
+                      className={` rounded-xl text-white px-2 pt-3 pb-4 inline-block relative min-w-[50px] max-w-[335px] sm:max-w-[340px] text-left ${
                         msg.senderId === localStorage.getItem("userId")
                           ? "bg-[#969696af] rounded-xl rounded-br-none"
                           : " bg-[#686868af] rounded-xl rounded-bl-none"

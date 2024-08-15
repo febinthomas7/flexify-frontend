@@ -9,6 +9,7 @@ const Series = () => {
         res.json()
       ),
   });
+  console.log(data);
   return (
     <ScrollComponent
       data={data?.results}

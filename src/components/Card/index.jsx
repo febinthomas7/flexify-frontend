@@ -106,6 +106,9 @@ const Card = ({
               className=" absolute top-3 right-3 cursor-pointer "
             />
           )}
+
+          {/* <div className=" absolute top-3 left-3 cursor-pointer ">en</div> */}
+
           <div className="w-full absolute bottom-0    p-3">
             <div className="w-full h-8 gap-3 flex justify-between px-3 left-0  text-xs items-center  absolute top-[-20px]">
               <div className="w-10 h-7 bg-black rounded-full flex justify-center text-white text-[10px] items-center outline outline-2 outline-offset-2 outline-[red] ">
@@ -126,6 +129,16 @@ const Card = ({
             >
               {movie.title || movie.name}
             </h3>
+            {(movie.release_date || movie.first_air_date) && (
+              <h3
+                title={movie.release_date || movie.first_air_date}
+                className=" text-[#c0c0c0] text-xs"
+              >
+                {movie?.release_date?.split("-")[0] ||
+                  movie?.first_air_date?.split("-")[0]}
+              </h3>
+            )}
+
             <div className="flex justify-between items-center text-[20px] py-3 text-[#c0c0c0]">
               <div className="flex items-center gap-3">
                 {list ? (
@@ -182,6 +195,9 @@ const Card = ({
           className="w-full rounded"
           loading="lazy"
         />
+        <div className=" absolute top-3 right-3 cursor-pointer group-hover:invisible text-center text-white rounded bg-black px-2 py-1 ">
+          {movie.original_language}
+        </div>
       </div>
     </div>
   );

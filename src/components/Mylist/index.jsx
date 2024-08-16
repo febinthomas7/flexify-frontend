@@ -19,7 +19,11 @@ const Mylist = () => {
       const result = await response.json();
       setLoading(false);
       setUserList(result.watchlist);
-      localStorage.setItem("userList", JSON.stringify(result.watchlist));
+      if (result.watchlist == undefined) {
+        localStorage.setItem("userList", JSON.stringify([]));
+      } else {
+        localStorage.setItem("userList", JSON.stringify(result.watchlist));
+      }
     } catch (error) {
       console.log(error);
       setLoading(false);

@@ -62,10 +62,16 @@ const MessagingPage = () => {
       });
 
       const result = await response.json();
-      console.log(result);
-      setReceiverId(result.data._id);
+      if (result.data._id == undefined) {
+        setReceiverId("");
+        localStorage.setItem("receiverId", []);
+      } else {
+        setReceiverId(result.data._id);
+        localStorage.setItem("receiverId", result.data._id);
+      }
+
       setUser(result.data);
-      localStorage.setItem("receiverId", result.data._id);
+
       localStorage.setItem("receiverName", result.data.name);
       localStorage.setItem("receiverDp", result.data.dp);
       setHide(!hide);

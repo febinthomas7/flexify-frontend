@@ -48,7 +48,7 @@ const SearchBox = ({ value, onchange, searchResults, set, input }) => {
       />
 
       <div className="w-full h-full flex flex-wrap gap-6 overflow-x-auto justify-center rounded border-t-2 border-[red] bg-black p-10 mt-[100px]">
-        {searchResults.length > 0 &&
+        {searchResults?.length > 0 &&
           searchResults
             ?.filter((e) => e?.media_type !== "person")
             ?.map((movie, index) => (

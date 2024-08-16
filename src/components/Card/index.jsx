@@ -52,6 +52,7 @@ const Card = ({
         const result = await response.json();
 
         localStorage.setItem("userList", JSON.stringify(result.watchlist));
+
         setMovieAdded(!movieAdded);
       } else if (error) {
         handleError(error?.details[0].message);
@@ -88,6 +89,7 @@ const Card = ({
 
   useEffect(() => {
     const storedUserList = localStorage.getItem("userList");
+
     const userList = storedUserList ? JSON.parse(storedUserList) : [];
 
     const movieExists = Array.isArray(userList)

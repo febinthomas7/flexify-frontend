@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import Header from "../../components/Header";
+import { PiCamera } from "react-icons/pi";
+
 import io from "socket.io-client";
 import {
   LoadingComponentForchatUsers,
@@ -23,6 +25,7 @@ const MessagingPage = () => {
   const [chatLoading, setChatLoading] = useState(false);
   const [online, setOnline] = useState("");
   const [consversationId, setConversationId] = useState("");
+  const [selectedFile, setSelectedFile] = useState("");
 
   const userData = async () => {
     setLoading(true);
@@ -38,7 +41,6 @@ const MessagingPage = () => {
       });
 
       const result = await response.json();
-      console.log(result);
       setUsers(result.data);
       setLoading(false);
     } catch (error) {
@@ -80,7 +82,7 @@ const MessagingPage = () => {
     }
   };
   const sendMessage = async () => {
-    if (message == "") {
+    if (message == "" && !selectedFile) {
       return;
     }
     try {
@@ -92,6 +94,7 @@ const MessagingPage = () => {
         },
         body: JSON.stringify({
           message,
+          image: selectedFile,
           senderId: localStorage.getItem("userId"),
           receiverId: receiverId || localStorage.getItem("receiverId"),
         }),
@@ -99,9 +102,13 @@ const MessagingPage = () => {
 
       const result = await response.json();
       console.log(result);
+      const { success } = result;
 
       setMessage("");
-      setMessages([...messages, result?.newMessage]);
+
+      if (success) {
+        setMessages([...messages, result?.newMessage]);
+      }
 
       setFlags(!flags);
       setUser(result.data);
@@ -207,7 +214,7 @@ const MessagingPage = () => {
 
                 <div className="flex flex-col p-1 w-full text-white">
                   <div className="w-full flex justify-between items-center">
-                    <h1 className="text-sm">{e.name}</h1>{" "}
+                    <h1 className="text-sm">{e?.name}</h1>{" "}
                     {/* <span className="text-xs">11:30 pm</span> */}
                   </div>
                   <div className="w-full flex justify-between items-center">
@@ -255,7 +262,7 @@ const MessagingPage = () => {
               <div className="text-center text-white">No messages yet.</div>
             )}
             {messages?.map((msg, index) => {
-              const dateObject = new Date(msg.updatedAt);
+              const dateObject = new Date(msg?.updatedAt);
 
               // Get hours and minutes
               let hours = dateObject.getHours();
@@ -276,7 +283,7 @@ const MessagingPage = () => {
                   key={index}
                   ref={messagesEndRef}
                   className={`p-2 ${
-                    msg.senderId === localStorage.getItem("userId")
+                    msg?.senderId === localStorage.getItem("userId")
                       ? "text-right"
                       : ""
                   }`}
@@ -284,12 +291,21 @@ const MessagingPage = () => {
                   <div>
                     <div
                       className={` rounded-xl text-white px-2 pt-3 pb-4 inline-block relative min-w-[50px] max-w-[335px] sm:max-w-[340px] text-left ${
-                        msg.senderId === localStorage.getItem("userId")
+                        msg?.senderId === localStorage.getItem("userId")
                           ? "bg-[#969696af] rounded-xl rounded-br-none"
                           : " bg-[#686868af] rounded-xl rounded-bl-none"
                       }`}
                     >
-                      {msg.message}
+                      {msg?.imageUrl && (
+                        <img
+                          src={msg.imageUrl}
+                          onError={(e) => {
+                            e.target.src = "/no_image.jpg";
+                          }}
+                          alt=""
+                        />
+                      )}
+                      <span> {msg?.message}</span>
                       <span className="text-[10px] absolute text-gray-400  bottom-0 right-1">
                         {formattedTime}
                       </span>
@@ -305,14 +321,30 @@ const MessagingPage = () => {
                 type="text"
                 className="border p-2 flex-1"
                 value={message}
+                name="message"
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Type a message..."
               />
+              <input
+                type="file"
+                className="hidden"
+                id="fileInput"
+                name="image"
+                onChange={(e) => setSelectedFile(e.target.files[0])} // handle file selection
+              />
+              {/* <label
+                htmlFor="fileInput"
+                className="cursor-pointer bg-blue-500 text-[20px] text-white px-2 py-2 flex justify-center items-center rounded"
+              >
+                <PiCamera />
+              </label> */}
               <button
                 onClick={sendMessage}
-                disabled={message == "" ? true : false}
+                disabled={message == "" && !selectedFile}
                 className={` ${
-                  message == "" ? "bg-red-500 cursor-not-allowed" : "bg-red-700"
+                  message == "" && !selectedFile
+                    ? "bg-red-500 cursor-not-allowed"
+                    : "bg-red-700"
                 } text-white px-4 py-2 rounded`}
               >
                 Send

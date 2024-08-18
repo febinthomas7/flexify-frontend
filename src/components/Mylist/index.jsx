@@ -5,7 +5,9 @@ const Mylist = () => {
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteWatch, setDeleteWatch] = useState(false);
+  const [error, setError] = useState(false);
   const userWatched = async () => {
+    setError(false);
     try {
       const url = `${
         import.meta.env.VITE_BASE_URL
@@ -19,13 +21,17 @@ const Mylist = () => {
       const result = await response.json();
       setLoading(false);
       setUserList(result.watchlist);
+
       if (result.watchlist == undefined) {
         localStorage.setItem("userList", JSON.stringify([]));
       } else {
         localStorage.setItem("userList", JSON.stringify(result.watchlist));
       }
+      setError(false);
     } catch (error) {
-      console.log(error);
+      console.log(error, "erreo");
+      localStorage.setItem("userList", JSON.stringify([]));
+      setError(true);
       setLoading(false);
     }
   };
@@ -56,12 +62,20 @@ const Mylist = () => {
           </div>
         </div>
       )}
-      {!loading && userList?.length === 0 ? (
+      {!loading && userList?.length === 0 && !error ? (
         <div className="text-white w-full h-[361px] flex flex-col justify-center items-center bg-[#0b0b0b] rounded">
           <img src="userNotLogggedIn.webp" alt="" />
           <h1 className="capitalize">nothing added yet</h1>
         </div>
       ) : null}
+
+      {error && (
+        <div className="text-white w-full h-[361px] flex flex-col justify-center items-center bg-[#0b0b0b] rounded">
+          <img src="userNotLogggedIn.webp" alt="" />
+          <h1 className="capitalize">token expired or unauthorised token</h1>
+          <h1 className="capitalize">login again</h1>
+        </div>
+      )}
     </section>
   );
 };

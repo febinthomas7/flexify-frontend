@@ -74,6 +74,7 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log(e.target.avatar.files[0]);
     if (
       !e.target.avatar.files[0] &&
       !editedUserName &&

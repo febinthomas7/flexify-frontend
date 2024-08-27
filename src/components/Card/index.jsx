@@ -10,6 +10,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { RxCross1 } from "react-icons/rx";
 import { MdDone } from "react-icons/md";
 import { useState, useEffect } from "react";
+import { IoMdShareAlt } from "react-icons/io";
+import { LoadingComponentForchatUsers } from "../LoadingComponent";
 const Card = ({
   movie,
   type,
@@ -21,6 +23,10 @@ const Card = ({
 }) => {
   const navigation = useNavigate();
   const [list, setList] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const len = movie?.vote_average;
   const [movieAdded, setMovieAdded] = useState(false);
   const addwatch = async (e) => {
@@ -86,6 +92,63 @@ const Card = ({
       console.log(error);
     }
   };
+  const share = () => {
+    userData();
+    setOpen(true);
+  };
+
+  const userData = async () => {
+    setLoading(true);
+    try {
+      const url = `${
+        import.meta.env.VITE_BASE_URL
+      }/chat/getusers?id=${localStorage.getItem("userId")}`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+      setUsers(result.data);
+      setLoading(false);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const sendMessage = async (userId, userName) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/chat/share`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            senderId: `${localStorage.getItem("userId")}`,
+            receiverId: userId,
+            message: `https://flexifyy.netlify.app/${type || mode}/${
+              movie.id
+            }  ${movie.title || movie.name}`,
+            imageUrl: `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const result = await response.json();
+
+      console.log(result);
+
+      handleSuccess(`Message sent to ${userName}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const storedUserList = localStorage.getItem("userList");
@@ -100,6 +163,8 @@ const Card = ({
   }, [movie, movieAdded]);
   return (
     <div className="relative group h-[240px] sm:h-[265px] ">
+      <ToastContainer />
+
       <div className="w-40 md:w-44  cursor-pointer group shadow-md shadow-[black] ">
         <div className="absolute bottom-0 w-full h-0  duration-150 ease-in group-hover:h-full bg-gradient-to-b from-[#1c1c1c7f] to-black cursor-pointer overflow-hidden rounded">
           {page == "mylist" && (
@@ -109,7 +174,31 @@ const Card = ({
             />
           )}
 
-          {/* <div className=" absolute top-3 left-3 cursor-pointer ">en</div> */}
+          {open && (
+            <div className="w-full h-full bg-white text-black z-50 top-0 right-0 absolute overflow-y-auto  flex flex-col ">
+              <div className="w-full h-11 bg-black text-white  ">
+                <RxCross1
+                  onClick={() => setOpen(!open)}
+                  className=" absolute top-3 right-3 cursor-pointer "
+                />{" "}
+              </div>
+
+              <div className="w-full h-full bg-[#0e0e0e] text-white overflow-y-auto pt-2 pb-5 px-2 flex flex-col gap-3">
+                {loading && <LoadingComponentForchatUsers />}
+                {users?.map((e, index) => {
+                  return (
+                    <div
+                      key={index}
+                      onClick={() => sendMessage(e._id, e.name)}
+                      className={`w-full rounded p-2 flex gap-2 bg-[#c4c4c475] items-center cursor-pointer sm:hover:scale-105`}
+                    >
+                      {e?.name}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <div className="w-full absolute bottom-0    p-3">
             <div className="w-full h-8 gap-3 flex justify-between px-3 left-0  text-xs items-center  absolute top-[-20px]">
@@ -157,14 +246,20 @@ const Card = ({
                   />
                 )}
 
-                <FaRegThumbsUp
+                <IoMdShareAlt
+                  className="hover:scale-105 hover:text-white"
+                  title="share"
+                  onClick={share}
+                />
+
+                {/* <FaRegThumbsUp
                   className="hover:scale-105 hover:text-white"
                   title="like"
                 />
                 <FaRegThumbsDown
                   className="hover:scale-105 hover:text-white"
                   title="dislike"
-                />
+                /> */}
               </div>
 
               <TfiArrowCircleDown

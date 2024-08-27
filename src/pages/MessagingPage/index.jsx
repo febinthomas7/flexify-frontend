@@ -81,40 +81,46 @@ const MessagingPage = () => {
       console.log(error);
     }
   };
-  const sendMessage = async () => {
-    if (message == "" && !selectedFile) {
+  const sendMessage = async (e) => {
+    e.preventDefault();
+    // console.log(e.target.image.files[0], message);
+    if (message == "" && !e.target.image.files[0]) {
       return;
     }
-    try {
-      const url = `${import.meta.env.VITE_BASE_URL}/chat/sendmessage`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message,
-          image: selectedFile,
-          senderId: localStorage.getItem("userId"),
-          receiverId: receiverId || localStorage.getItem("receiverId"),
-        }),
+
+    const formData = new FormData();
+    formData.append("image", e.target.image.files[0]);
+    formData.append("message", message);
+    formData.append("senderId", localStorage.getItem("userId"));
+    formData.append(
+      "receiverId",
+      receiverId || localStorage.getItem("receiverId")
+    );
+    formData.append("userId", localStorage.getItem("userId"));
+
+    fetch(`${import.meta.env.VITE_BASE_URL}/chat/sendmessage`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        const { success } = result;
+
+        setMessage("");
+        e.target.image.value = "";
+        setSelectedFile("");
+
+        if (success) {
+          setMessages([...messages, result?.newMessage]);
+        }
+
+        setFlags(!flags);
+        setUser(result.data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // setLoading(false);
       });
-
-      const result = await response.json();
-      console.log(result);
-      const { success } = result;
-
-      setMessage("");
-
-      if (success) {
-        setMessages([...messages, result?.newMessage]);
-      }
-
-      setFlags(!flags);
-      setUser(result.data);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const getMessage = async () => {
@@ -192,7 +198,7 @@ const MessagingPage = () => {
               <div
                 key={index}
                 onClick={() => selectUser(e._id)}
-                className={`w-full bg-[#6f6f6f75] rounded p-2 flex gap-2 ${
+                className={`w-full rounded p-2 flex gap-2 ${
                   e._id == localStorage.getItem("receiverId")
                     ? "bg-[#c4c4c475]"
                     : "bg-[#6f6f6f75]"
@@ -278,6 +284,11 @@ const MessagingPage = () => {
               hours = hours % 12 || 12;
 
               const formattedTime = `${hours}:${minutes} ${ampm}`;
+
+              // Regular expression to match URLs
+              const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+              const parts = msg?.message.split(urlRegex);
               return (
                 <div
                   key={index}
@@ -290,22 +301,41 @@ const MessagingPage = () => {
                 >
                   <div>
                     <div
-                      className={` rounded-xl text-white px-2 pt-3 pb-4 inline-block relative min-w-[50px] max-w-[335px] sm:max-w-[340px] text-left ${
+                      className={` rounded-xl text-white px-2 pt-3 pb-4 inline-block relative min-w-[50px] max-w-[300px] sm:max-w-[310px] text-left ${
                         msg?.senderId === localStorage.getItem("userId")
-                          ? "bg-[#969696af] rounded-xl rounded-br-none"
-                          : " bg-[#686868af] rounded-xl rounded-bl-none"
+                          ? "bg-[#181818af] rounded-xl rounded-br-none"
+                          : " bg-[#3d3d3daf] rounded-xl rounded-bl-none"
                       }`}
                     >
                       {msg?.imageUrl && (
                         <img
-                          src={msg.imageUrl}
+                          className="w-full "
+                          src={msg?.imageUrl}
                           onError={(e) => {
                             e.target.src = "/no_image.jpg";
                           }}
                           alt=""
                         />
                       )}
-                      <span> {msg?.message}</span>
+
+                      {parts.map((part, idx) => {
+                        // Check if the part is a URL
+                        if (urlRegex.test(part)) {
+                          return (
+                            <a
+                              key={idx}
+                              href={part}
+                              rel="noopener noreferrer"
+                              className="text-blue-400 underline"
+                            >
+                              {part}
+                            </a>
+                          );
+                        } else {
+                          // Render plain text
+                          return <span key={idx}>{part}</span>;
+                        }
+                      })}
                       <span className="text-[10px] absolute text-gray-400  bottom-0 right-1">
                         {formattedTime}
                       </span>
@@ -316,7 +346,10 @@ const MessagingPage = () => {
             })}
           </div>
           {(receiverId || localStorage.getItem("receiverId")) && (
-            <div className="flex gap-2  p-3 absolute  bottom-0 left-0 w-full bg-black">
+            <form
+              onSubmit={sendMessage}
+              className="flex gap-2  p-3 absolute  bottom-0 left-0 w-full bg-black"
+            >
               <input
                 type="text"
                 className="border p-2 flex-1"
@@ -332,14 +365,15 @@ const MessagingPage = () => {
                 name="image"
                 onChange={(e) => setSelectedFile(e.target.files[0])} // handle file selection
               />
-              {/* <label
+              <label
                 htmlFor="fileInput"
                 className="cursor-pointer bg-blue-500 text-[20px] text-white px-2 py-2 flex justify-center items-center rounded"
               >
                 <PiCamera />
-              </label> */}
+              </label>
               <button
-                onClick={sendMessage}
+                // onClick={sendMessage}
+                type="submit"
                 disabled={message == "" && !selectedFile}
                 className={` ${
                   message == "" && !selectedFile
@@ -349,7 +383,7 @@ const MessagingPage = () => {
               >
                 Send
               </button>
-            </div>
+            </form>
           )}
         </div>
       </div>

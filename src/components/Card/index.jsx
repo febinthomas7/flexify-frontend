@@ -199,7 +199,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   hashtag={"#Flexifyy"}
                   className="hover:scale-105"
                 >
-                  <FacebookIcon size={32} round={true} />
+                  <FacebookIcon size={28} round={true} />
                 </FacebookShareButton>
 
                 <WhatsappShareButton
@@ -208,7 +208,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   hashtag={"#Flexifyy"}
                   className="hover:scale-105"
                 >
-                  <WhatsappIcon size={32} round={true} />
+                  <WhatsappIcon size={28} round={true} />
                 </WhatsappShareButton>
 
                 <TelegramShareButton
@@ -226,7 +226,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   hashtags={"#Flexifyy"}
                   className="hover:scale-105"
                 >
-                  <TwitterIcon size={32} round={true} />
+                  <TwitterIcon size={28} round={true} />
                 </TwitterShareButton>
               </div>
 

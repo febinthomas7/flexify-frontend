@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ScrollComponent from "../ScrollComponent";
-
+import { Watch } from "../../Context";
 const Mylist = () => {
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [deleteWatch, setDeleteWatch] = useState(false);
   const [error, setError] = useState(false);
+  const { deleteWatch } = useContext(Watch);
   const userWatched = async () => {
     setError(false);
     try {
@@ -47,8 +47,6 @@ const Mylist = () => {
           heading={"Added PlayList"}
           loading={loading}
           page={"mylist"}
-          setDeleteWatch={setDeleteWatch}
-          deleteWatch={deleteWatch}
         />
       )}
       {loading && (

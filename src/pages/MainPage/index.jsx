@@ -1,9 +1,21 @@
 import { Link } from "react-router-dom";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import { Helmet } from "react-helmet";
 
 const MainPage = () => {
   return (
     <div className=" w-full h-svh flex justify-center items-center bg-black bg-cover bg-no-repeat bg-[url('/mainpage_bg.jpg')]">
+      <Helmet>
+        <title>Flexifyy</title>
+        <meta
+          name="description"
+          content="Get info for all your movies ,series and watch it freely"
+        />
+        <meta
+          name="keywords"
+          content="movies, series , search movies and series , chat,share ,download movies"
+        />
+      </Helmet>
       <div className=" w-full h-svh flex justify-center items-center fixed bg-gradient-to-b from-[#000000ee] via-[#1c1c1c7f] to-black z-10"></div>
       <header
         className={` text-white sm:px-10 px-4 py-4 sm:py-2 z-40 flex top-0 justify-between fixed w-full  items-center duration-75 ease-in`}

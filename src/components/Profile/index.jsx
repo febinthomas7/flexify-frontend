@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleSuccess, handleError } from "../../utils";
 import { ToastContainer } from "react-toastify";
@@ -7,16 +7,24 @@ import { IoPencilSharp } from "react-icons/io5";
 import "react-toastify/dist/ReactToastify.css";
 import { MdDeleteForever } from "react-icons/md";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
-
+import { Watch } from "../../Context";
 const Profile = () => {
-  const [userName, setUserName] = useState("");
-  const [editedUserName, setEditedUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [backgroundImage, setBackgroundImage] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [profileDelete, setProfileDelete] = useState(false);
+  const {
+    backgroundImage,
+    setBackgroundImage,
+    avatarUrl,
+    setAvatarUrl,
+    userName,
+    setUserName,
+    editedUserName,
+    setEditedUserName,
+    profileDelete,
+    setProfileDelete,
+  } = useContext(Watch);
   const navigate = useNavigate("");
 
   const handleInputChange = async (e) => {
@@ -44,7 +52,6 @@ const Profile = () => {
     }
   };
   const deleteOption = async (e) => {
-    console.log(e);
     try {
       const url = `${
         import.meta.env.VITE_BASE_URL
@@ -58,7 +65,6 @@ const Profile = () => {
       };
       const response = await fetch(url, headers);
       const result = await response.json();
-      console.log(result);
 
       setAvatarUrl(result.dp);
       localStorage.setItem("avatar", result.dp);
@@ -74,7 +80,6 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(e.target.avatar.files[0]);
     if (
       !e.target.avatar.files[0] &&
       !editedUserName &&
@@ -283,8 +288,6 @@ const Profile = () => {
           Log Out
         </button>
       </div>
-
-      <ToastContainer />
     </section>
   );
 };

@@ -8,6 +8,8 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import MoreInfoComponent from "../../components/MoreInfoComponent";
 import { LoadingComponentForMovieAndSeries } from "../../components/LoadingComponent";
 import { AiOutlineLoading } from "react-icons/ai";
+import { Helmet } from "react-helmet";
+import { ToastContainer } from "react-toastify";
 const TvShowsPage = () => {
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
@@ -41,6 +43,11 @@ const TvShowsPage = () => {
 
   return (
     <>
+      <ToastContainer />
+      <Helmet>
+        <title>Tvshow - Flexifyy</title>
+        <meta name="description" content="Explore new series" />
+      </Helmet>
       <Header />
       <div className="bg-[#0b0b0b] w-full  flex flex-col ">
         {moreInfo && (

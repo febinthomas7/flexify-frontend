@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import Header from "../../components/Header";
 import { PiCamera } from "react-icons/pi";
+import { Helmet } from "react-helmet";
 
 import io from "socket.io-client";
 import {
@@ -184,6 +185,10 @@ const MessagingPage = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Chat - Flexifyy</title>
+        <meta name="description" content="user chat" />
+      </Helmet>
       <Header />
       <div className=" bg-black w-full  h-screen flex overflow-hidden ">
         <div

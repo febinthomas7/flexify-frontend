@@ -8,7 +8,8 @@ import { LoadingComponentForMovieAndSeries } from "../../components/LoadingCompo
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineLoading } from "react-icons/ai";
-
+import { Helmet } from "react-helmet";
+import { ToastContainer } from "react-toastify";
 const Movie = () => {
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
@@ -41,6 +42,11 @@ const Movie = () => {
 
   return (
     <>
+      <ToastContainer />
+      <Helmet>
+        <title>Movie - Flexifyy</title>
+        <meta name="description" content="Explore new movies" />
+      </Helmet>
       <Header />
       <div className="bg-[#0b0b0b] w-full  flex flex-col ">
         {moreInfo && (

@@ -11,6 +11,7 @@ import { FaPause } from "react-icons/fa";
 import axios from "axios";
 import Card from "../Card";
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet";
 
 import Genres from "../../Genre.json";
 import ScrollForCastAndCrew from "../ScrollForCastAndCrew";
@@ -21,13 +22,12 @@ const MoreInfoComponent = ({
   moreInfoData,
   mode,
   MoreInfo,
-  setDeleteWatch,
-  deleteWatch,
 }) => {
   const [movieData, setMovieData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [seeTrailer, setSeeTrailer] = useState(false);
   const [trailerKey, setTrailerKey] = useState();
+
   const navigation = useNavigate();
 
   const { data, isFetching } = useQuery({
@@ -39,7 +39,6 @@ const MoreInfoComponent = ({
         }&mode=${mode || type}`
       ).then((res) => res.json()),
   });
-  console.log(data);
 
   useEffect(() => {
     const options = {
@@ -61,7 +60,7 @@ const MoreInfoComponent = ({
       .catch(function (error) {
         console.error(error);
       });
-  }, []);
+  }, [moreInfoData?.id]);
   useEffect(() => {
     const options = {
       method: "GET",
@@ -100,6 +99,10 @@ const MoreInfoComponent = ({
       className="fixed w-full h-screen top-0 z-40 justify-center  flex shadow-md shadow-[black] bg-[#000000b3]"
       onClick={closeinfo}
     >
+      <Helmet>
+        <title>{moreInfoData?.title || moreInfoData?.name}</title>
+        <meta name="description" content={moreInfoData?.overview} />
+      </Helmet>
       <div
         onClick={(e) => e.stopPropagation()}
         className=" w-[80%] sm:w-[70%] md:w-[60%] lg:w-[50%] flex flex-col gap-6  overflow-x-hidden overflow-y-auto bg-[#000000f4] rounded mt-24 relative"
@@ -243,8 +246,8 @@ const MoreInfoComponent = ({
                   }
                   mode={mode || moreInfoData?.type || moreInfoData?.mode}
                   MoreInfo={(e) => MoreInfo(e, movie)}
-                  setDeleteWatch={setDeleteWatch}
-                  deleteWatch={deleteWatch}
+                  // setDeleteWatch={setDeleteWatch}
+                  // deleteWatch={deleteWatch}
                 />
               );
             })

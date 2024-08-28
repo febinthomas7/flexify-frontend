@@ -9,21 +9,14 @@ import { LoadingComponentForScroll } from "../LoadingComponent";
 import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
 const MoreInfoComponent = lazy(() => import("../MoreInfoComponent"));
 import Card from "../Card";
-const ScrollComponent = ({
-  data,
-  heading,
-  type,
-  mode,
-  loading,
-  page,
-  setDeleteWatch,
-  deleteWatch,
-}) => {
+
+const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
   const [prevButtonVisible, setPrevButtonVisible] = useState(false);
   const [nextButtonVisible, setNextButtonVisible] = useState(true);
+
   const scrollRef = useRef(null);
   const explore = (e) => {
     e.stopPropagation();
@@ -101,8 +94,6 @@ const ScrollComponent = ({
                   type={movie?.media_type || type || movie?.type}
                   mode={mode || movie?.mode}
                   MoreInfo={(e) => MoreInfo(e, movie)}
-                  setDeleteWatch={setDeleteWatch}
-                  deleteWatch={deleteWatch}
                 />
               ))
             )}
@@ -117,8 +108,6 @@ const ScrollComponent = ({
           mode={mode || moreInfoData?.media_type}
           moreInfoData={moreInfoData}
           MoreInfo={MoreInfo}
-          setDeleteWatch={setDeleteWatch}
-          deleteWatch={deleteWatch}
         />
       )}
 
@@ -179,8 +168,6 @@ const ScrollComponent = ({
                 mode={mode || movie?.mode}
                 MoreInfo={(e) => MoreInfo(e, movie)}
                 page={page}
-                setDeleteWatch={setDeleteWatch}
-                deleteWatch={deleteWatch}
               />
             ))
           )}

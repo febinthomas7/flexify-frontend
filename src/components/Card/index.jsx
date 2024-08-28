@@ -5,30 +5,39 @@ import { TfiArrowCircleDown } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
 import Genres from "../../Genre.json";
 import { handleSuccess, handleError } from "../../utils";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RxCross1 } from "react-icons/rx";
 import { MdDone } from "react-icons/md";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { IoMdShareAlt } from "react-icons/io";
 import { LoadingComponentForchatUsers } from "../LoadingComponent";
-const Card = ({
-  movie,
-  type,
-  MoreInfo,
-  mode,
-  page,
-  setDeleteWatch,
-  deleteWatch,
-}) => {
+import { Watch } from "../../Context";
+import {
+  FacebookIcon,
+  TelegramIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from "react-share";
+import {
+  FacebookShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from "react-share";
+
+const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const navigation = useNavigate();
   const [list, setList] = useState(false);
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { deleteWatch, setDeleteWatch } = useContext(Watch);
 
   const len = movie?.vote_average;
   const [movieAdded, setMovieAdded] = useState(false);
+
+  const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${movie.id}`;
+  console.log(shareUrl);
   const addwatch = async (e) => {
     e.stopPropagation();
 
@@ -60,6 +69,7 @@ const Card = ({
         localStorage.setItem("userList", JSON.stringify(result.watchlist));
 
         setMovieAdded(!movieAdded);
+        handleSuccess(message);
       } else if (error) {
         handleError(error?.details[0].message);
       }
@@ -85,6 +95,7 @@ const Card = ({
 
       if (success) {
         setDeleteWatch(!deleteWatch);
+        handleSuccess(message);
       } else if (error) {
         handleError(error?.details[0].message);
       }
@@ -163,8 +174,6 @@ const Card = ({
   }, [movie, movieAdded]);
   return (
     <div className="relative group h-[240px] sm:h-[265px] ">
-      <ToastContainer />
-
       <div className="w-40 md:w-44  cursor-pointer group shadow-md shadow-[black] ">
         <div className="absolute bottom-0 w-full h-0  duration-150 ease-in group-hover:h-full bg-gradient-to-b from-[#1c1c1c7f] to-black cursor-pointer overflow-hidden rounded">
           {page == "mylist" && (
@@ -183,6 +192,40 @@ const Card = ({
                 />{" "}
               </div>
 
+              <div className="w-full h-16 flex justify-center gap-3 items-center bg-slate-100">
+                <FacebookShareButton
+                  url={shareUrl}
+                  title={`${movie.title || movie.name}`}
+                  hashtag={"#Flexifyy"}
+                >
+                  <FacebookIcon size={32} round={true} />
+                </FacebookShareButton>
+
+                <WhatsappShareButton
+                  url={shareUrl}
+                  title={`${movie.title || movie.name}`}
+                  hashtag={"#Flexifyy"}
+                >
+                  <WhatsappIcon size={32} round={true} />
+                </WhatsappShareButton>
+
+                <TelegramShareButton
+                  url={shareUrl}
+                  title={`${movie.title || movie.name}`}
+                  hashtag={"#Flexifyy"}
+                >
+                  <TelegramIcon size={32} round={true} />
+                </TelegramShareButton>
+
+                <TwitterShareButton
+                  url={shareUrl}
+                  title={`${movie.title || movie.name}`}
+                  hashtags={"#Flexifyy"}
+                >
+                  <TwitterIcon size={32} round={true} />
+                </TwitterShareButton>
+              </div>
+
               <div className="w-full h-full bg-[#0e0e0e] text-white overflow-y-auto pt-2 pb-5 px-2 flex flex-col gap-3">
                 {loading && <LoadingComponentForchatUsers />}
                 {users?.map((e, index) => {
@@ -190,7 +233,7 @@ const Card = ({
                     <div
                       key={index}
                       onClick={() => sendMessage(e._id, e.name)}
-                      className={`w-full rounded p-2 flex gap-2 bg-[#c4c4c475] items-center cursor-pointer sm:hover:scale-105`}
+                      className={`w-full rounded p-3 flex gap-2 truncate bg-[#c4c4c475] items-center cursor-pointer sm:hover:scale-105`}
                     >
                       {e?.name}
                     </div>

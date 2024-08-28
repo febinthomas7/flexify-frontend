@@ -1,5 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
+import { Helmet } from "react-helmet";
 
 const SeriesDetails = () => {
   const { id } = useParams();
@@ -15,6 +16,10 @@ const SeriesDetails = () => {
   };
   return (
     <div className="w-full h-screen bg-[#000000f4] flex flex-col gap-4  items-center justify-center  bg-no-repeat bg-center overflow-y-auto p-6 relative bg-[url('/bgImage.svg')]">
+      <Helmet>
+        <title>Flexifyy</title>
+        <meta name="description" content="watch series" />
+      </Helmet>
       <HiOutlineArrowSmallLeft
         onClick={goBack}
         className="text-white absolute left-5 sm:left-10 top-10 text-[35px] sm:text-[40px] cursor-pointer"

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import { debounce } from "../../debounce";
@@ -11,6 +11,7 @@ import { CgProfile } from "react-icons/cg";
 import { VscThreeBars } from "react-icons/vsc";
 import { MdLocalMovies } from "react-icons/md";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import { Watch } from "../../Context";
 
 const Header = () => {
   const [bgcolor, setBgColor] = useState(false);
@@ -19,6 +20,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
+  const { profileDelete } = useContext(Watch);
   const navigation = useLocation();
 
   const nav = [
@@ -99,7 +101,7 @@ const Header = () => {
 
   useEffect(() => {
     setAvatarUrl(localStorage.getItem("avatar"));
-  }, [localStorage.getItem("avatar")]);
+  }, [localStorage.getItem("avatar"), profileDelete]);
 
   return (
     <>

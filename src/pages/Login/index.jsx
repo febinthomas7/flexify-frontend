@@ -3,6 +3,8 @@ import { handleError, handleSuccess } from "../../utils";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+import { Helmet } from "react-helmet";
+
 const Login = () => {
   const navigate = useNavigate();
   const [isBtn, setIsBtn] = useState(false);
@@ -54,6 +56,10 @@ const Login = () => {
   };
   return (
     <div className="z-10 w-full h-svh flex justify-center items-center fixed bg-black bg-[url('/mainpage_bg.jpg')]">
+      <Helmet>
+        <title>Login - Flexifyy</title>
+        <meta name="description" content="user login page" />
+      </Helmet>
       <div className=" w-full h-svh flex justify-center items-center fixed bg-gradient-to-b from-[#000000ad] via-[#1c1c1c7f] to-[#000000ad] z-10"></div>
       <header
         className={` text-white sm:px-10 sm:py-2 z-40 flex top-0 justify-between fixed w-full  items-center duration-75 ease-in`}

@@ -6,9 +6,17 @@ import Movies from "../../components/Movies";
 import Series from "../../components/Series";
 import UpcomingMovies from "../../components/UpcomingMovies";
 import UpcomingSeries from "../../components/UpcomingSeries";
+import { Helmet } from "react-helmet";
+import { ToastContainer } from "react-toastify";
+
 const Home = () => {
   return (
     <div className="overflow-hidden">
+      <ToastContainer />
+      <Helmet>
+        <title>Home - Flexifyy</title>
+        <meta name="description" content="Explore movies and series" />
+      </Helmet>
       <Header />
       <Hero />
       <Trending />

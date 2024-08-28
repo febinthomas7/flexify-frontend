@@ -192,11 +192,12 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                 />{" "}
               </div>
 
-              <div className="w-full h-16 flex justify-center gap-3 items-center bg-slate-100">
+              <div className="w-full h-16 flex justify-center gap-2 sm:gap-3 items-center bg-black p-2">
                 <FacebookShareButton
                   url={shareUrl}
                   title={`${movie.title || movie.name}`}
                   hashtag={"#Flexifyy"}
+                  className="hover:scale-105"
                 >
                   <FacebookIcon size={32} round={true} />
                 </FacebookShareButton>
@@ -205,6 +206,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   url={shareUrl}
                   title={`${movie.title || movie.name}`}
                   hashtag={"#Flexifyy"}
+                  className="hover:scale-105"
                 >
                   <WhatsappIcon size={32} round={true} />
                 </WhatsappShareButton>
@@ -213,14 +215,16 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   url={shareUrl}
                   title={`${movie.title || movie.name}`}
                   hashtag={"#Flexifyy"}
+                  className="hover:scale-105"
                 >
-                  <TelegramIcon size={32} round={true} />
+                  <TelegramIcon size={28} round={true} />
                 </TelegramShareButton>
 
                 <TwitterShareButton
                   url={shareUrl}
                   title={`${movie.title || movie.name}`}
                   hashtags={"#Flexifyy"}
+                  className="hover:scale-105"
                 >
                   <TwitterIcon size={32} round={true} />
                 </TwitterShareButton>

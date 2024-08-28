@@ -24,6 +24,7 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
 } from "react-share";
+import { Helmet } from "react-helmet";
 
 const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const navigation = useNavigate();
@@ -198,6 +199,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   title={`${movie.title || movie.name}`}
                   hashtag={"#Flexifyy"}
                   className="hover:scale-105"
+                  media={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
                 >
                   <FacebookIcon size={28} round={true} />
                 </FacebookShareButton>
@@ -207,6 +209,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   title={`${movie.title || movie.name}`}
                   hashtag={"#Flexifyy"}
                   className="hover:scale-105"
+                  media={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
                 >
                   <WhatsappIcon size={28} round={true} />
                 </WhatsappShareButton>
@@ -216,6 +219,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   title={`${movie.title || movie.name}`}
                   hashtag={"#Flexifyy"}
                   className="hover:scale-105"
+                  media={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
                 >
                   <TelegramIcon size={28} round={true} />
                 </TelegramShareButton>
@@ -225,6 +229,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   title={`${movie.title || movie.name}`}
                   hashtags={"#Flexifyy"}
                   className="hover:scale-105"
+                  media={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
                 >
                   <TwitterIcon size={28} round={true} />
                 </TwitterShareButton>

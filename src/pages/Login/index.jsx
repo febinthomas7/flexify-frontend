@@ -4,10 +4,11 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
-
+import { GoEye, GoEyeClosed } from "react-icons/go";
 const Login = () => {
   const navigate = useNavigate();
   const [isBtn, setIsBtn] = useState(false);
+  const [pswd, setPswd] = useState(true);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsBtn(true);
@@ -90,14 +91,23 @@ const Login = () => {
               <label className="block text-gray-400 mb-2" htmlFor="password">
                 Password
               </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                className="w-full p-3 rounded bg-[#39393938] outline outline-white text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                placeholder="Password"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={pswd ? "password" : "text"}
+                  id="password"
+                  name="password"
+                  className="w-full  p-3 rounded bg-[#39393938] outline outline-white text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                  placeholder="Password"
+                  required
+                />
+                <div onClick={() => setPswd(!pswd)} className="cursor-pointer">
+                  {pswd ? (
+                    <GoEyeClosed className="absolute top-1/4 right-3 text-white text-2xl" />
+                  ) : (
+                    <GoEye className="absolute top-1/4 right-3 text-white text-2xl" />
+                  )}
+                </div>
+              </div>
             </div>
             <button
               type="submit"

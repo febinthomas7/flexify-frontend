@@ -1,6 +1,7 @@
 import { Link, createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
+import { Watch } from "../Context";
 const MainPage = lazy(() => import("../pages/MainPage"));
 const MovieDetails = lazy(() => import("../pages/MovieDetails"));
 const SeriesDetails = lazy(() => import("../pages/SeriesDetails"));
@@ -12,7 +13,6 @@ const Profile = lazy(() => import("../pages/ProfilePage"));
 const TVShowsPage = lazy(() => import("../pages/TvShows"));
 
 const MessagingPage = lazy(() => import("../pages/MessagingPage"));
-
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("token");
   return isAuthenticated ? children : <Navigate to="/login" replace={false} />;

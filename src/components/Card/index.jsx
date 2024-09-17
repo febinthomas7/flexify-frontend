@@ -38,7 +38,6 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const [movieAdded, setMovieAdded] = useState(false);
 
   const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${movie.id}`;
-  console.log(shareUrl);
   const addwatch = async (e) => {
     e.stopPropagation();
 

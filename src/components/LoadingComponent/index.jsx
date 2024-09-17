@@ -3,7 +3,7 @@ import React from "react";
 export const LoadingComponentForScroll = () => {
   return (
     <>
-      {Array.from({ length: 8 }, (_, i) => i)?.map((e) => (
+      {Array.from({ length: 20 }, (_, i) => i)?.map((e) => (
         <div
           key={e}
           className=" w-[160px] h-[240px] sm:w-[192px] sm:h-[288px] text-center   bg-[#0d1015ed] rounded "
@@ -20,7 +20,7 @@ export const LoadingComponentForScroll = () => {
 export const LoadingComponentForchatUsers = () => {
   return (
     <>
-      {Array.from({ length: 8 }, (_, i) => i)?.map((e) => (
+      {Array.from({ length: 20 }, (_, i) => i)?.map((e) => (
         <div
           key={e}
           className=" w-full h-[50px] text-center  p-6 bg-[#0d1015ed] rounded "
@@ -56,7 +56,7 @@ export const LoadingComponentForchatMessages = () => {
 export const LoadingComponentForCastAndCrew = () => {
   return (
     <>
-      {Array.from({ length: 8 }, (_, i) => i)?.map((e) => (
+      {Array.from({ length: 20 }, (_, i) => i)?.map((e) => (
         <div
           key={e}
           className=" w-[112px] h-[112px] text-center   bg-[#0d1015ed] rounded-full "
@@ -73,7 +73,7 @@ export const LoadingComponentForCastAndCrew = () => {
 export const LoadingComponentForMovieAndSeries = () => {
   return (
     <>
-      {Array.from({ length: 8 }, (_, i) => i)?.map((e) => (
+      {Array.from({ length: 20 }, (_, i) => i)?.map((e) => (
         <div
           key={e}
           className=" w-[160px] h-[240px] sm:w-[192px] sm:h-[288px] text-center   bg-[#0d1015ed] rounded "

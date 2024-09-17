@@ -1,5 +1,6 @@
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import LoggedInDevices from "../../components/LoggedInDevices";
 import Mylist from "../../components/Mylist";
 import Profile from "../../components/Profile";
 import { Helmet } from "react-helmet";
@@ -17,6 +18,7 @@ const ProfilePage = () => {
       <Header />
       <Profile />
       <Mylist />
+      <LoggedInDevices />
       <Footer />
     </>
   );

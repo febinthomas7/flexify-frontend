@@ -128,16 +128,7 @@ const Profile = () => {
     setUserEmail(localStorage.getItem("email"));
   }, []);
   const userLogOut = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("name");
-    localStorage.removeItem("email");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userList");
-    localStorage.removeItem("avatar");
-    localStorage.removeItem("background");
-    localStorage.removeItem("receiverDp");
-    localStorage.removeItem("receiverId");
-    localStorage.removeItem("receiverName");
+    window.localStorage.clear();
     handleSuccess("Logged out successfully!");
     setTimeout(() => {
       navigate("/");
@@ -194,7 +185,7 @@ const Profile = () => {
                   <div className="relative" title="edit">
                     {" "}
                     <img
-                      src={avatarUrl || "/no_image.jpg"}
+                      src={avatarUrl || localStorage.getItem("avatar")}
                       onError={(e) => {
                         e.target.src = "/no_image.jpg";
                       }}
@@ -260,7 +251,7 @@ const Profile = () => {
           ) : (
             <IoPencilSharp
               onClick={option}
-              className="text-white absolute top-1 right-1 cursor-pointer hover:scale-105"
+              className="text-white text-2xl absolute top-1 right-1 cursor-pointer hover:scale-105 bg-black p-1 rounded-md shadow-md "
               title="edit"
             />
           )}

@@ -35,8 +35,14 @@ const MoreInfoComponent = ({
     queryFn: () =>
       fetch(
         `${import.meta.env.VITE_BASE_URL}/api/credits?id=${
-          moreInfoData?.id
-        }&mode=${mode || type}`
+          moreInfoData?.id || "8859"
+        }&mode=${
+          mode ||
+          type ||
+          moreInfoData?.media_type ||
+          moreInfoData?.mode ||
+          moreInfoData?.type
+        }`
       ).then((res) => res.json()),
   });
 
@@ -46,8 +52,8 @@ const MoreInfoComponent = ({
       url: `${import.meta.env.VITE_BASE_URL}/api/recommendations`,
       params: {
         id: moreInfoData?.id,
-        mode: moreInfoData?.media_type || moreInfoData?.type,
-        mode2: mode || moreInfoData?.mode,
+        mode: moreInfoData?.media_type || moreInfoData?.mode,
+        mode2: type || moreInfoData?.type || moreInfoData?.media_type,
       },
     };
 
@@ -61,6 +67,7 @@ const MoreInfoComponent = ({
         console.error(error);
       });
   }, [moreInfoData?.id]);
+
   useEffect(() => {
     const options = {
       method: "GET",
@@ -94,6 +101,13 @@ const MoreInfoComponent = ({
     );
     document.body.classList.remove("scroll");
   };
+  console.log(
+    mode ||
+      type ||
+      moreInfoData?.media_type ||
+      moreInfoData?.mode ||
+      moreInfoData?.type
+  );
   return (
     <div
       className="fixed w-full h-screen top-0 z-40 justify-center  flex shadow-md shadow-[black] bg-[#000000b3]"
@@ -108,15 +122,33 @@ const MoreInfoComponent = ({
         className=" w-[80%] sm:w-[70%] md:w-[60%] lg:w-[50%] flex flex-col gap-6  overflow-x-hidden overflow-y-auto bg-[#000000f4] rounded mt-24 relative"
       >
         <div className="w-full h-[420px] relative ">
-          <img
-            className="w-full h-full object-cover blur-[2px]"
-            id="backdrop"
-            onError={(e) => {
-              e.target.src = "/fallback_bg.png";
-            }}
-            src={`https://image.tmdb.org/t/p/w500/${moreInfoData?.backdrop_path}`}
-            alt={moreInfoData?.title || moreInfoData?.name}
-          />
+          {moreInfoData?.thumbnail ||
+          (mode ||
+            type ||
+            moreInfoData?.media_type ||
+            moreInfoData?.mode ||
+            moreInfoData?.type) == "anime" ? (
+            <img
+              className="w-full h-full object-cover blur-[2px]"
+              id="backdrop"
+              onError={(e) => {
+                e.target.src = "/fallback_bg.png";
+              }}
+              src={moreInfoData?.thumbnail || moreInfoData?.backdrop_path}
+              alt={moreInfoData?.title || moreInfoData?.name}
+            />
+          ) : (
+            <img
+              className="w-full h-full object-cover blur-[2px]"
+              id="backdrop"
+              onError={(e) => {
+                e.target.src = "/fallback_bg.png";
+              }}
+              src={`https://image.tmdb.org/t/p/w500/${moreInfoData?.backdrop_path}`}
+              alt={moreInfoData?.title || moreInfoData?.name}
+            />
+          )}
+
           <div className="absolute bottom-0 p-4">
             <h1 className=" font-extrabold text-[20px] sm:text-[30px] invert drop-shadow-lg">
               {moreInfoData?.title || moreInfoData?.name}
@@ -205,13 +237,13 @@ const MoreInfoComponent = ({
           </p>
         </div>
 
-        {data?.cast.length != 0 && (
+        {data?.cast.length != 0 && !moreInfoData?.thumbnail ? (
           <ScrollForCastAndCrew
             data={data}
             loading={isFetching}
             heading={"cast"}
           />
-        )}
+        ) : null}
 
         {(mode ||
           type ||
@@ -221,46 +253,53 @@ const MoreInfoComponent = ({
           <DownloadFilesForMovies id={moreInfoData?.id} />
         )}
 
-        <div className="text-white capitalize text-center">
-          Similar{" "}
-          {moreInfoData?.media_type ||
-            type ||
-            mode ||
-            moreInfoData?.type ||
-            moreInfoData?.mode}
-        </div>
-        <div className="w-full flex flex-wrap justify-center gap-6">
-          {loading ? (
-            <LoadingComponentForMovieAndSeries />
-          ) : (
-            movieData?.map((movie, index) => {
-              return (
-                <Card
-                  key={index}
-                  movie={movie}
-                  type={
-                    movie?.media_type ||
-                    type ||
-                    moreInfoData?.type ||
-                    moreInfoData?.mode
-                  }
-                  mode={mode || moreInfoData?.type || moreInfoData?.mode}
-                  MoreInfo={(e) => MoreInfo(e, movie)}
-                  // setDeleteWatch={setDeleteWatch}
-                  // deleteWatch={deleteWatch}
-                />
-              );
-            })
-          )}
-        </div>
+        {!moreInfoData?.thumbnail && (
+          <div className="text-white capitalize text-center">
+            Similar{" "}
+            {moreInfoData?.media_type ||
+              type ||
+              mode ||
+              moreInfoData?.type ||
+              moreInfoData?.mode}
+          </div>
+        )}
+
+        {!moreInfoData?.thumbnail && (
+          <div className="w-full flex flex-wrap justify-center gap-6">
+            {loading ? (
+              <LoadingComponentForMovieAndSeries />
+            ) : (
+              movieData?.map((movie, index) => {
+                return (
+                  <Card
+                    key={index}
+                    movie={movie}
+                    type={
+                      movie?.media_type ||
+                      type ||
+                      moreInfoData?.type ||
+                      moreInfoData?.mode
+                    }
+                    mode={mode || moreInfoData?.type || moreInfoData?.mode}
+                    MoreInfo={(e) => MoreInfo(e, movie)}
+                    // setDeleteWatch={setDeleteWatch}
+                    // deleteWatch={deleteWatch}
+                  />
+                );
+              })
+            )}
+          </div>
+        )}
 
         <div className="w-full p-4 flex justify-center">
-          <div
-            onClick={seeMore}
-            className="bg-red-700 text-white rounded p-1 cursor-pointer"
-          >
-            see more
-          </div>
+          {!moreInfoData?.thumbnail && (
+            <div
+              onClick={seeMore}
+              className="bg-red-700 text-white rounded p-1 cursor-pointer"
+            >
+              see more
+            </div>
+          )}
         </div>
       </div>
     </div>

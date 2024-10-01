@@ -17,13 +17,12 @@ import {
   TelegramIcon,
   TwitterIcon,
   WhatsappIcon,
-} from "react-share";
-import {
   FacebookShareButton,
   TelegramShareButton,
   TwitterShareButton,
   WhatsappShareButton,
 } from "react-share";
+
 import { Helmet } from "react-helmet";
 
 const Card = ({ movie, type, MoreInfo, mode, page }) => {
@@ -33,11 +32,10 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { deleteWatch, setDeleteWatch } = useContext(Watch);
-
   const len = movie?.vote_average;
   const [movieAdded, setMovieAdded] = useState(false);
-
   const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${movie.id}`;
+  console.log(list);
   const addwatch = async (e) => {
     e.stopPropagation();
 
@@ -49,7 +47,12 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ movie, type, mode, userId }),
+        body: JSON.stringify({
+          movie,
+          type,
+          mode,
+          userId,
+        }),
       });
 
       const result = await response.json();
@@ -143,7 +146,10 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
             message: `https://flexifyy.netlify.app/${type || mode}/${
               movie.id
             }  ${movie.title || movie.name}`,
-            imageUrl: `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`,
+            imageUrl:
+              type == "anime"
+                ? movie?.thumbnail
+                : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -152,8 +158,6 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
       );
 
       const result = await response.json();
-
-      console.log(result);
 
       handleSuccess(`Message sent to ${userName}`);
     } catch (error) {
@@ -167,11 +171,14 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
     const userList = storedUserList ? JSON.parse(storedUserList) : [];
 
     const movieExists = Array.isArray(userList)
-      ? userList.some((element) => element.id === movie.id)
+      ? userList.some((element) =>
+          element.id ? element.id === movie.id : element.title === movie.title
+        )
       : false;
 
     setList(movieExists);
   }, [movie, movieAdded]);
+
   return (
     <div className="relative group h-[240px] sm:h-[265px] ">
       <div className="w-40 md:w-44  cursor-pointer group shadow-md shadow-[black] ">
@@ -198,7 +205,11 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   title={`${movie.title || movie.name}`}
                   hashtag={"#Flexifyy"}
                   className="hover:scale-105"
-                  media={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
+                  media={
+                    type == "anime"
+                      ? movie?.thumbnail
+                      : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`
+                  }
                 >
                   <FacebookIcon size={28} round={true} />
                 </FacebookShareButton>
@@ -208,7 +219,11 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   title={`${movie.title || movie.name}`}
                   hashtag={"#Flexifyy"}
                   className="hover:scale-105"
-                  media={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
+                  media={
+                    type == "anime"
+                      ? movie?.thumbnail
+                      : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`
+                  }
                 >
                   <WhatsappIcon size={28} round={true} />
                 </WhatsappShareButton>
@@ -218,7 +233,11 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   title={`${movie.title || movie.name}`}
                   hashtag={"#Flexifyy"}
                   className="hover:scale-105"
-                  media={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
+                  media={
+                    type == "anime"
+                      ? movie?.thumbnail
+                      : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`
+                  }
                 >
                   <TelegramIcon size={28} round={true} />
                 </TelegramShareButton>
@@ -228,7 +247,11 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   title={`${movie.title || movie.name}`}
                   hashtags={"#Flexifyy"}
                   className="hover:scale-105"
-                  media={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
+                  media={
+                    type == "anime"
+                      ? movie?.thumbnail
+                      : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`
+                  }
                 >
                   <TwitterIcon size={28} round={true} />
                 </TwitterShareButton>
@@ -258,7 +281,13 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
               </div>
               <button
                 title="play"
-                onClick={() => navigation(`/${type || mode}/${movie.id}`)}
+                onClick={() =>
+                  navigation(
+                    `/${type || mode}/${
+                      movie.id || movie?.embed_url?.split("embed/")[1]
+                    }`
+                  )
+                }
                 className="w-full h-7 capitalize text-[13px] hover:scale-105 duration-75 outline outline-2 outline-[#292929] outline-offset-1 ease-in bg-[#000000e8] rounded text-white"
               >
                 watch now
@@ -271,13 +300,14 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
             >
               {movie.title || movie.name}
             </h3>
-            {(movie.release_date || movie.first_air_date) && (
+            {(movie.release_date || movie.first_air_date || movie.year) && (
               <h3
-                title={movie.release_date || movie.first_air_date}
+                title={movie.release_date || movie.first_air_date || movie.year}
                 className=" text-[#c0c0c0] text-xs"
               >
                 {movie?.release_date?.split("-")[0] ||
-                  movie?.first_air_date?.split("-")[0]}
+                  movie?.first_air_date?.split("-")[0] ||
+                  movie.year}
               </h3>
             )}
 
@@ -320,31 +350,50 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
               />
             </div>
             <div className="text-white  w-full flex flex-wrap gap-2">
-              {movie?.genre_ids?.map((e, index) => {
-                const genreName = Genres.find((g) => g.id === e)?.name || "";
-                return (
-                  <h1
-                    key={index}
-                    className="before:content-['.'] text-[10px] drop-shadow-lg hover:text-[#c0c0c0]"
-                  >
-                    {genreName}
-                  </h1>
-                );
-              })}
+              {type == "anime" ? (
+                <h1 className="before:content-['.'] text-[10px] drop-shadow-lg hover:text-[#c0c0c0]">
+                  {movie?.genres || movie?.genre_ids}
+                </h1>
+              ) : (
+                movie?.genre_ids?.map((e, index) => {
+                  const genreName = Genres.find((g) => g.id === e)?.name || "";
+                  return (
+                    <h1
+                      key={index}
+                      className="before:content-['.'] text-[10px] drop-shadow-lg hover:text-[#c0c0c0]"
+                    >
+                      {genreName}
+                    </h1>
+                  );
+                })
+              )}
             </div>
           </div>
         </div>
-        <img
-          src={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
-          onError={(e) => {
-            e.target.src = "/fallback_poster-removebg-preview.png";
-          }}
-          alt={movie?.poster_path}
-          className="w-full rounded"
-          loading="lazy"
-        />
+        {type == "anime" ? (
+          <img
+            src={`${movie?.thumbnail || movie?.poster_path}`}
+            onError={(e) => {
+              e.target.src = "/fallback_poster-removebg-preview.png";
+            }}
+            alt={movie?.thumbnail}
+            className="w-full rounded h-[240px] sm:h-[264px]"
+            loading="lazy"
+          />
+        ) : (
+          <img
+            src={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
+            onError={(e) => {
+              e.target.src = "/fallback_poster-removebg-preview.png";
+            }}
+            alt={movie?.poster_path}
+            className="w-full rounded h-[240px] sm:h-[264px]"
+            loading="lazy"
+          />
+        )}
+
         <div className=" absolute top-3 right-3 cursor-pointer group-hover:invisible text-center text-white rounded bg-black px-2 py-1 ">
-          {movie.original_language}
+          {movie.original_language || "Ja"}
         </div>
       </div>
     </div>

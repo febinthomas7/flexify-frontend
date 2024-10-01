@@ -29,7 +29,7 @@ export const getDeviceDetails = async () => {
   } else {
     device = "Desktop";
   }
-
+  console.log(userAgent);
   let ipAddress = "Unknown IP";
 
   try {

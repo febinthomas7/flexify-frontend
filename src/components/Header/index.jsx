@@ -40,6 +40,11 @@ const Header = () => {
       icon: <MdLocalMovies />,
     },
     {
+      path: "/anime",
+      label: "Anime",
+      icon: <MdLocalMovies />,
+    },
+    {
       path: "/chat",
       label: "Chat",
       icon: <IoChatboxEllipsesOutline />,

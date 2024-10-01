@@ -46,7 +46,6 @@ const Mylist = () => {
       setLoading(false);
     }
   };
-  console.log(error);
   useEffect(() => {
     userWatched();
   }, [deleteWatch]);

@@ -2,6 +2,8 @@ import { Link, createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
 import { Watch } from "../Context";
+import Anime from "../pages/Anime";
+import AnimeDetails from "../pages/AnimeDetails";
 const MainPage = lazy(() => import("../pages/MainPage"));
 const MovieDetails = lazy(() => import("../pages/MovieDetails"));
 const SeriesDetails = lazy(() => import("../pages/SeriesDetails"));
@@ -93,6 +95,22 @@ const router = createBrowserRouter([
     element: (
       <PrivateRoute>
         <MovieDetails />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/anime",
+    element: (
+      <PrivateRoute>
+        <Anime />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/anime/:id",
+    element: (
+      <PrivateRoute>
+        <AnimeDetails />
       </PrivateRoute>
     ),
   },

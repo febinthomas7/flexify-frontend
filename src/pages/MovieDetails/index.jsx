@@ -25,10 +25,10 @@ const MovieDetails = () => {
         className="text-white absolute left-5 sm:left-10 top-10 text-[35px] sm:text-[40px] cursor-pointer"
       />
 
-      <div className="w-full h-[300px] sm:w-[80%] sm:h-[600px]  shadow-2xl  rounded-md overflow-hidden bg-[#17171784]">
+      <div className="w-full h-[500px] md:h-[700px] sm:w-[80%] sm:h-[600px]  shadow-2xl  rounded-md overflow-hidden bg-[#17171784]">
         <iframe
           className="w-full h-full   rounded-md"
-          src={`https://vidsrc.xyz/embed/movie/${id}`}
+          src={`https://www.2embed.cc/embed/${id}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen

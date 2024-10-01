@@ -16,7 +16,6 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
   const [moreInfoData, setMoreInfoData] = useState();
   const [prevButtonVisible, setPrevButtonVisible] = useState(false);
   const [nextButtonVisible, setNextButtonVisible] = useState(true);
-
   const scrollRef = useRef(null);
   const explore = (e) => {
     e.stopPropagation();
@@ -32,7 +31,7 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
     setIsOpen(false);
     document.getElementById("backdrop")?.scrollIntoView(0);
   };
-
+  console.log(data);
   const closeinfo = (e) => {
     e.stopPropagation();
     setMoreInfo(false);
@@ -87,15 +86,18 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
             {loading ? (
               <LoadingComponentForMovieAndSeries />
             ) : (
-              data?.map((movie, index) => (
-                <Card
-                  key={index}
-                  movie={movie}
-                  type={movie?.media_type || type || movie?.type}
-                  mode={mode || movie?.mode}
-                  MoreInfo={(e) => MoreInfo(e, movie)}
-                />
-              ))
+              data?.map((movie, index) => {
+                console.log(movie);
+                return (
+                  <Card
+                    key={index}
+                    movie={movie}
+                    type={movie?.media_type || type || movie?.type}
+                    mode={mode || movie?.mode}
+                    MoreInfo={(e) => MoreInfo(e, movie)}
+                  />
+                );
+              })
             )}
           </div>
         </div>

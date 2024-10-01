@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { Helmet } from "react-helmet";
 
-const SeriesDetails = () => {
+const AnimeDetails = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigation = useNavigate();
@@ -18,7 +18,7 @@ const SeriesDetails = () => {
     <div className="w-full h-screen bg-[#000000f4] flex flex-col gap-4  items-center justify-center  bg-no-repeat bg-center overflow-y-auto p-6 relative bg-[url('/bgImage.svg')]">
       <Helmet>
         <title>Flexifyy</title>
-        <meta name="description" content="watch series" />
+        <meta name="description" content="watch anime" />
       </Helmet>
       <HiOutlineArrowSmallLeft
         onClick={goBack}
@@ -27,11 +27,10 @@ const SeriesDetails = () => {
 
       <div className="w-full h-[500px] md:h-[700px] sm:w-[80%] sm:h-[600px]  shadow-2xl  rounded-md overflow-hidden bg-[#17171784]">
         <iframe
+          src={`https://2anime.xyz/embed/${id}`}
           className="w-full h-full   rounded-md"
-          src={`https://www.2embed.cc/embedtvfull/${id}`}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
         ></iframe>
       </div>
@@ -39,4 +38,4 @@ const SeriesDetails = () => {
   );
 };
 
-export default SeriesDetails;
+export default AnimeDetails;

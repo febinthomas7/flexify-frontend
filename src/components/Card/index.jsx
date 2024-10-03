@@ -31,11 +31,10 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { deleteWatch, setDeleteWatch } = useContext(Watch);
+  const { deleteWatch, setDeleteWatch, movieAdded, setMovieAdded } =
+    useContext(Watch);
   const len = movie?.vote_average;
-  const [movieAdded, setMovieAdded] = useState(false);
   const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${movie.id}`;
-  console.log(list);
   const addwatch = async (e) => {
     e.stopPropagation();
 
@@ -127,7 +126,6 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
       const result = await response.json();
       setUsers(result.data);
       setLoading(false);
-      console.log(result);
     } catch (error) {
       console.log(error);
       setLoading(false);

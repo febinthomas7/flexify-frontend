@@ -31,7 +31,6 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
     setIsOpen(false);
     document.getElementById("backdrop")?.scrollIntoView(0);
   };
-  console.log(data);
   const closeinfo = (e) => {
     e.stopPropagation();
     setMoreInfo(false);

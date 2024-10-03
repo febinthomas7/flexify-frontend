@@ -7,9 +7,10 @@ const Mylist = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [tokenExpired, setTokenExpired] = useState(true);
-  const { deleteWatch } = useContext(Watch);
+  const { deleteWatch, movieAdded } = useContext(Watch);
   const navigation = useNavigate();
   const userWatched = async () => {
+    setLoading(true);
     try {
       const url = `${
         import.meta.env.VITE_BASE_URL
@@ -48,7 +49,7 @@ const Mylist = () => {
   };
   useEffect(() => {
     userWatched();
-  }, [deleteWatch]);
+  }, [deleteWatch, movieAdded]);
   return (
     <section className="my-list  bg-black  text-white p-4 md:p-8">
       {userList?.length > 0 && (
@@ -59,17 +60,7 @@ const Mylist = () => {
           page={"mylist"}
         />
       )}
-      {loading && (
-        <div className="text-white w-full h-[361px] flex justify-center items-center bg-[#0b0b0b] rounded">
-          <div className="spinner">
-            <div className="r1"></div>
-            <div className="r2"></div>
-            <div className="r3"></div>
-            <div className="r4"></div>
-            <div className="r5"></div>
-          </div>
-        </div>
-      )}
+
       {!loading && userList?.length === 0 && !error && tokenExpired ? (
         <div className="text-white w-full h-[361px] flex flex-col justify-center items-center bg-[#0b0b0b] rounded">
           <img src="userNotLogggedIn.webp" alt="" />

@@ -101,13 +101,7 @@ const MoreInfoComponent = ({
     );
     document.body.classList.remove("scroll");
   };
-  console.log(
-    mode ||
-      type ||
-      moreInfoData?.media_type ||
-      moreInfoData?.mode ||
-      moreInfoData?.type
-  );
+
   return (
     <div
       className="fixed w-full h-screen top-0 z-40 justify-center  flex shadow-md shadow-[black] bg-[#000000b3]"
@@ -282,8 +276,6 @@ const MoreInfoComponent = ({
                     }
                     mode={mode || moreInfoData?.type || moreInfoData?.mode}
                     MoreInfo={(e) => MoreInfo(e, movie)}
-                    // setDeleteWatch={setDeleteWatch}
-                    // deleteWatch={deleteWatch}
                   />
                 );
               })

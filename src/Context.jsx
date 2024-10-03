@@ -8,6 +8,7 @@ const Context = ({ children }) => {
   const [userName, setUserName] = useState("");
   const [editedUserName, setEditedUserName] = useState("");
   const [profileDelete, setProfileDelete] = useState(false);
+  const [movieAdded, setMovieAdded] = useState(false);
 
   return (
     <Watch.Provider
@@ -24,6 +25,8 @@ const Context = ({ children }) => {
         setEditedUserName,
         profileDelete,
         setProfileDelete,
+        movieAdded,
+        setMovieAdded,
       }}
     >
       {children}

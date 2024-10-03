@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const Hero = () => {
   const [moreInfoData, setMoreInfoData] = useState();
   const [moreInfo, setMoreInfo] = useState(false);
+  const [slideNumber, setSlideNumber] = useState(0);
   const navigation = useNavigate();
   const location = useLocation();
   const { data, isFetching } = useQuery({
@@ -35,6 +36,19 @@ const Hero = () => {
     navigation(`/home`);
   }, []);
 
+  const arr = [1, 2, 3, 4, 5, 6];
+  const changeSlide = (index) => {
+    setSlideNumber(index);
+  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSlideNumber((prev) => (prev === 5 ? 0 : prev + 1));
+    }, 3000);
+
+    // Cleanup function to clear the interval when component unmounts
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="w-[100%]  sm:h-svh relative   ">
       {moreInfo && (
@@ -55,7 +69,7 @@ const Hero = () => {
           />
 
           <div className="absolute z-40 w-full h-[30px] flex  justify-center gap-4 items-center  bottom-0 right-0">
-            {Array.from({ length: 4 }, (_, i) => i).map((e) => {
+            {Array.from({ length: 6 }, (_, i) => i).map((e) => {
               return (
                 <div
                   key={e}
@@ -73,13 +87,16 @@ const Hero = () => {
             className={` w-[100%] overflow-auto scroll-smooth flex h-full snap-x hide`}
           >
             {data
-              ?.filter((e, index) => index < 4)
+              ?.filter((e, index) => index < 6)
               ?.map((e, index) => {
                 return (
                   <img
                     key={index}
-                    id={index}
-                    className={`w-full h-full flex-shrink-0 flex-grow-0 object-cover  snap-center`}
+                    className={`w-full h-full flex-shrink-0 flex-grow-0 object-cover  snap-center ${
+                      slideNumber == index || (slideNumber == "" && index == 0)
+                        ? null
+                        : "hidden"
+                    }`}
                     src={`https://image.tmdb.org/t/p/w500/${e?.backdrop_path}`}
                     alt={index}
                     onError={(e) => {
@@ -90,34 +107,31 @@ const Hero = () => {
               })}
           </div>
           <div className="absolute w-full h-[30px] flex  justify-center gap-4 items-center bg-black bottom-0 right-0">
-            {data
-              ?.filter((e, index) => index < 4)
-              ?.map((e, index) => {
-                return (
-                  <div
-                    key={e.id}
-                    className={`flex items-center justify-center w-[10px] h-[10px] ${
-                      location.hash == `#${index}` ||
-                      (location.hash == "" && index == 0)
-                        ? "bg-red-700"
-                        : "bg-gray-600"
-                    }    rounded-full cursor-pointer`}
-                  >
-                    <a className="w-[10px] h-[10px]" href={`#${index}`}></a>
-                  </div>
-                );
-              })}
+            {arr?.map((e, index) => {
+              return (
+                <div
+                  key={index}
+                  onClick={() => changeSlide(index)}
+                  className={`flex items-center justify-center w-[10px] h-[10px] ${
+                    slideNumber == index || (slideNumber == "" && index == 0)
+                      ? "bg-red-700"
+                      : "bg-gray-600"
+                  }    rounded-full cursor-pointer`}
+                >
+                  {/* <a className="w-[10px] h-[10px]" href={`#${index}`}></a> */}
+                </div>
+              );
+            })}
           </div>
           <div className="absolute bottom-6 w-full h-full px-6 sm:pl-6 text-white bg-gradient-to-b from-[#1c1c1c4a] to-black">
             {data
-              ?.filter((e, index) => index < 4)
+              ?.filter((e, index) => index < 6)
               .map((movie, index) => {
                 return (
                   <div
                     key={movie?.id}
                     className={`${
-                      location.hash == `#${index}` ||
-                      (location.hash == "" && index == 0)
+                      slideNumber == index || (slideNumber == "" && index == 0)
                         ? null
                         : "hidden"
                     } flex flex-col gap-1 sm:gap-3 px-6 sm:pl-6 left-0 absolute bottom-0 sm:bottom-6`}

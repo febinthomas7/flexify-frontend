@@ -17,6 +17,7 @@ export const handleError = (msg) => {
 export const getDeviceDetails = async () => {
   const userAgent = navigator.userAgent;
   let device = "Unknown Device";
+  const screenSize = `${window.screen.width}x${window.screen.height}`;
 
   if (/mobile/i.test(userAgent)) {
     device = "Mobile";
@@ -29,23 +30,12 @@ export const getDeviceDetails = async () => {
   } else {
     device = "Desktop";
   }
-  console.log(userAgent);
-  let ipAddress = "Unknown IP";
 
-  try {
-    const response = await fetch("https://api.ipify.org?format=json");
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    ipAddress = data.ip;
-  } catch (error) {
-    console.error("Error fetching IP address:", error.message);
-  }
+  const uniqueIdentifier = btoa(`${userAgent}-${screenSize}-${device}`);
 
   return {
     device,
     userid: localStorage.getItem("userId"),
-    ipAddress,
+    uniqueIdentifier,
   };
 };

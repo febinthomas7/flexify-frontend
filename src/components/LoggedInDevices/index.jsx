@@ -3,23 +3,22 @@ import { getDeviceDetails } from "../../utils";
 const LoggedInDevices = () => {
   const [deviceDetails, setDeviceDetails] = useState([]);
   useEffect(() => {
-    // const fetchDeviceDetails = async () => {
-    //   const deviceDetails = await getDeviceDetails();
-    //   const response = await fetch(
-    //     `${import.meta.env.VITE_BASE_URL}/auth/user/device`,
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(deviceDetails),
-    //     }
-    //   );
-    //   const data = await response.json();
-    //   setDeviceDetails(data?.user.devicedetails);
-    //   console.log(data.user.devicedetails); // This will log both the IP address and device details
-    // };
-    // fetchDeviceDetails();
+    const fetchDeviceDetails = async () => {
+      const deviceDetails = await getDeviceDetails();
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/auth/user/device`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(deviceDetails),
+        }
+      );
+      const data = await response.json();
+      setDeviceDetails(data?.user.devicedetails);
+    };
+    fetchDeviceDetails();
   }, []);
 
   return (
@@ -29,20 +28,13 @@ const LoggedInDevices = () => {
           Logged in Devices
         </h2>
         <div className="pt-3 h-[400px] w-full">
-          {/* <ul className="flex flex-col gap-2 text-sm">
+          <ul className="flex flex-col gap-2 text-sm">
             {deviceDetails?.map((session, index) => (
               <li key={index}>
-                Device: {session.device}, IP: {session.ipAddress}
+                Device: {session.device}, Count: {index + 1}
               </li>
             ))}
-          </ul> */}
-          {/* <iframe
-            src="https://2anime.xyz/embed/one-piece-episode-2"
-            className="w-full h-full   rounded-md"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe> */}
+          </ul>
         </div>
       </div>
     </section>

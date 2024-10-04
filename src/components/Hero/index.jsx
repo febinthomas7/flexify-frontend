@@ -2,14 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import MoreInfoComponent from "../MoreInfoComponent";
 import Genres from "../../Genre.json";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const [moreInfoData, setMoreInfoData] = useState();
   const [moreInfo, setMoreInfo] = useState(false);
   const [slideNumber, setSlideNumber] = useState(0);
+  const [displayIndex, setDisplayIndex] = useState(slideNumber);
   const navigation = useNavigate();
-  const location = useLocation();
   const { data, isFetching } = useQuery({
     queryKey: ["topratedmovies"],
     queryFn: () =>
@@ -45,12 +45,19 @@ const Hero = () => {
       setSlideNumber((prev) => (prev === 5 ? 0 : prev + 1));
     }, 3000);
 
-    // Cleanup function to clear the interval when component unmounts
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDisplayIndex(slideNumber);
+    }, 200);
+
+    return () => clearTimeout(timeout);
+  }, [slideNumber]);
+
   return (
-    <section className="w-[100%]  sm:h-svh relative   ">
+    <section className="w-[100%] h-[400px] sm:h-svh relative   ">
       {moreInfo && (
         <MoreInfoComponent
           closeinfo={closeinfo}
@@ -89,16 +96,20 @@ const Hero = () => {
             {data
               ?.filter((e, index) => index < 6)
               ?.map((e, index) => {
+                const isVisible = slideNumber === index;
                 return (
                   <img
                     key={index}
-                    className={`w-full h-full flex-shrink-0 flex-grow-0 object-cover  snap-center ${
-                      slideNumber == index || (slideNumber == "" && index == 0)
-                        ? null
-                        : "hidden"
+                    className={`w-full h-full flex-shrink-0 flex-grow-0 object-cover snap-center transition-opacity duration-700 ease-in-out ${
+                      isVisible ? "opacity-100 " : "opacity-0 "
                     }`}
+                    style={{
+                      opacity: isVisible ? 1 : 0,
+                      display: displayIndex === index ? "block" : "none",
+                      transition: "opacity 0.7s ease-in-out",
+                    }}
                     src={`https://image.tmdb.org/t/p/w500/${e?.backdrop_path}`}
-                    alt={index}
+                    alt={e?.title}
                     onError={(e) => {
                       e.target.src = "/fallback_bg-removebg.png";
                     }}
@@ -106,20 +117,18 @@ const Hero = () => {
                 );
               })}
           </div>
-          <div className="absolute w-full h-[30px] flex  justify-center gap-4 items-center bg-black bottom-0 right-0">
+          <div className="absolute w-full h-[40px] flex  justify-center gap-4 items-center bg-black bottom-0  right-0">
             {arr?.map((e, index) => {
               return (
                 <div
                   key={index}
                   onClick={() => changeSlide(index)}
-                  className={`flex items-center justify-center w-[10px] h-[10px] ${
+                  className={`flex  pb-3 z-10 ${
                     slideNumber == index || (slideNumber == "" && index == 0)
-                      ? "bg-red-700"
-                      : "bg-gray-600"
+                      ? "bg-red-700 w-[10px] h-[10px]"
+                      : "bg-gray-600 w-[5px] h-[5px]"
                   }    rounded-full cursor-pointer`}
-                >
-                  {/* <a className="w-[10px] h-[10px]" href={`#${index}`}></a> */}
-                </div>
+                ></div>
               );
             })}
           </div>

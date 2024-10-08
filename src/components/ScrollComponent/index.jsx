@@ -86,7 +86,6 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
               <LoadingComponentForMovieAndSeries />
             ) : (
               data?.map((movie, index) => {
-                console.log(movie);
                 return (
                   <Card
                     key={index}

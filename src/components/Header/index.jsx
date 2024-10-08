@@ -11,6 +11,9 @@ import { CgProfile } from "react-icons/cg";
 import { VscThreeBars } from "react-icons/vsc";
 import { MdLocalMovies } from "react-icons/md";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import { BsEmojiSunglasses } from "react-icons/bs";
+
+import { FaTv } from "react-icons/fa";
 import { Watch } from "../../Context";
 
 const Header = () => {
@@ -32,17 +35,17 @@ const Header = () => {
     {
       path: "/movie",
       label: "Movies",
-      icon: <RiMovieLine />,
+      icon: <MdLocalMovies />,
     },
     {
       path: "/tv",
       label: "TvShows",
-      icon: <MdLocalMovies />,
+      icon: <FaTv />,
     },
     {
       path: "/anime",
       label: "Anime",
-      icon: <MdLocalMovies />,
+      icon: <BsEmojiSunglasses />,
     },
     {
       path: "/chat",

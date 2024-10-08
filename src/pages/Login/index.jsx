@@ -5,10 +5,32 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { GoEye, GoEyeClosed } from "react-icons/go";
+import { getDeviceDetails } from "../../utils";
+
 const Login = () => {
   const navigate = useNavigate();
   const [isBtn, setIsBtn] = useState(false);
   const [pswd, setPswd] = useState(true);
+
+  const fetchDeviceDetails = async () => {
+    const deviceDetails = await getDeviceDetails();
+    const response = await fetch(
+      `${import.meta.env.VITE_BASE_URL}/auth/user/device`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(deviceDetails),
+      }
+    );
+    const data = await response.json();
+    localStorage.setItem(
+      "deviceDetails",
+      JSON.stringify(data?.user.devicedetails)
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsBtn(true);
@@ -27,7 +49,17 @@ const Login = () => {
 
       const result = await response.json();
 
-      const { sucess, message, error, jwtToken, name, email, _id, dp } = result;
+      const {
+        sucess,
+        message,
+        error,
+        jwtToken,
+        name,
+        email,
+        _id,
+        dp,
+        backgroundImg,
+      } = result;
       if (!sucess) {
         handleError(message);
         setIsBtn(false);
@@ -38,9 +70,13 @@ const Login = () => {
         localStorage.setItem("name", name);
         localStorage.setItem("email", email);
         localStorage.setItem("userId", _id);
+        fetchDeviceDetails();
 
         if (!dp === undefined || "undefined" || "") {
           localStorage.setItem("avatar", dp);
+        }
+        if (!backgroundImg === undefined || "undefined" || "") {
+          localStorage.setItem("background", backgroundImg);
         }
         setTimeout(() => {
           navigate("/home");
@@ -120,6 +156,16 @@ const Login = () => {
             >
               Login
             </button>
+            <div>
+              <p className="text-gray-400 mt-4 text-right">
+                <Link
+                  to="/request_reset"
+                  className="text-red-700  hover:underline"
+                >
+                  forget password?
+                </Link>
+              </p>
+            </div>
             <div>
               <p className="text-gray-400 mt-4">
                 Don't have an account?{" "}

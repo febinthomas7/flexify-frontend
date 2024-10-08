@@ -13,7 +13,8 @@ const Home = lazy(() => import("../pages/Home"));
 const Movie = lazy(() => import("../pages/Movie"));
 const Profile = lazy(() => import("../pages/ProfilePage"));
 const TVShowsPage = lazy(() => import("../pages/TvShows"));
-
+const RequestReset = lazy(() => import("../pages/RequestReset"));
+const ResetPassword = lazy(() => import("../pages/ResetPassword"));
 const MessagingPage = lazy(() => import("../pages/MessagingPage"));
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("token");
@@ -104,6 +105,22 @@ const router = createBrowserRouter([
       <PrivateRoute>
         <Anime />
       </PrivateRoute>
+    ),
+  },
+  {
+    path: "/request_reset",
+    element: (
+      <RefreshHandler>
+        <RequestReset />
+      </RefreshHandler>
+    ),
+  },
+  {
+    path: "/reset_password",
+    element: (
+      <RefreshHandler>
+        <ResetPassword />
+      </RefreshHandler>
     ),
   },
   {

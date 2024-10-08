@@ -22,8 +22,9 @@ const Mylist = () => {
       };
       const response = await fetch(url, headers);
       const result = await response.json();
-      setLoading(false);
+
       setUserList(result.watchlist);
+      setLoading(false);
 
       if (result.watchlist == undefined) {
         localStorage.setItem("userList", JSON.stringify([]));
@@ -52,14 +53,12 @@ const Mylist = () => {
   }, [deleteWatch, movieAdded]);
   return (
     <section className="my-list  bg-black  text-white p-4 md:p-8">
-      {userList?.length > 0 && (
-        <ScrollComponent
-          data={userList}
-          heading={"Added PlayList"}
-          loading={loading}
-          page={"mylist"}
-        />
-      )}
+      <ScrollComponent
+        data={userList}
+        heading={"Added PlayList"}
+        loading={loading}
+        page={"mylist"}
+      />
 
       {!loading && userList?.length === 0 && !error && tokenExpired ? (
         <div className="text-white w-full h-[361px] flex flex-col justify-center items-center bg-[#0b0b0b] rounded">

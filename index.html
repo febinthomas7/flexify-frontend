@@ -13,6 +13,19 @@
 
     <title>Flexifyy</title>
   </head>
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-1QZT0M4QRY"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", import.meta.env.GTAG_CODE);
+  </script>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

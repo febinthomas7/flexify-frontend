@@ -42,7 +42,8 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
 
   const deleteMovieById = async (e) => {
     e.stopPropagation();
-    deleteMovie(movie, deleteWatch, setDeleteWatch, userList, setUserList);
+    console.log(userList);
+    deleteMovie(movie, userList, setUserList);
   };
   const share = () => {
     userData(setLoading, setUsers);

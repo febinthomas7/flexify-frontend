@@ -83,10 +83,15 @@ export const deleteMovie = async (movie, userList, setUserList) => {
 
     const result = await response.json();
     const { success, message, error } = result;
-
     if (success) {
-      const updatedUserList = userList.filter((item) => item._id !== movie._id);
-      setUserList(updatedUserList);
+      if (Array.isArray(userList)) {
+        const updatedUserList = userList.filter(
+          (item) => item._id !== movie._id
+        );
+        setUserList(updatedUserList);
+      } else {
+        console.error("userList is not an array:", userList);
+      }
       handleSuccess(message);
     } else if (error) {
       handleError(error?.details[0].message);

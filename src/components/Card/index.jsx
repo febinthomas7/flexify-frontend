@@ -3,13 +3,14 @@ import { TfiArrowCircleDown } from "react-icons/tfi";
 // import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import Genres from "../../Genre.json";
-import { handleSuccess, handleError } from "../../utils";
+// import { handleSuccess, handleError } from "../../utils";
 import "react-toastify/dist/ReactToastify.css";
 import { RxCross1 } from "react-icons/rx";
 import { MdDone } from "react-icons/md";
 import { useState, useEffect, useContext } from "react";
 import { IoMdShareAlt } from "react-icons/io";
 import { LoadingComponentForchatUsers } from "../LoadingComponent";
+import { add, deleteMovie, userData, Message } from "../../utils";
 import { Watch } from "../../Context";
 import {
   FacebookIcon,
@@ -22,217 +23,34 @@ import {
   WhatsappShareButton,
 } from "react-share";
 
-// import { Helmet } from "react-helmet";
-
 const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const navigation = useNavigate();
   const [list, setList] = useState(false);
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [like, setLike] = useState(false);
-  const {
-    deleteWatch,
-    setDeleteWatch,
-    movieAdded,
-    userList,
-    setUserList,
-    userlike,
-    setUserLike,
-  } = useContext(Watch);
+  // const [like, setLike] = useState(false);
+  const { deleteWatch, setDeleteWatch, movieAdded, userList, setUserList } =
+    useContext(Watch);
   const len = movie?.vote_average;
   const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${movie.id}`;
 
-  // const addLike = async (e) => {
-  //   e.stopPropagation();
-  //   try {
-  //     const url = `${import.meta.env.VITE_BASE_URL}/auth/likedWatch`;
-  //     const userId = localStorage.getItem("userId");
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         movie,
-  //         type,
-  //         mode,
-  //         userId,
-  //       }),
-  //     });
-
-  //     const result = await response.json();
-  //     const { success, message, error, data } = result;
-  //     if (success) {
-  //       setUserLike([...userlike, data]);
-
-  //       handleSuccess(message);
-  //     } else if (error) {
-  //       handleError(error?.details[0].message);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const deleteLikeById = async (e) => {
-  //   e.stopPropagation();
-  //   try {
-  //     const url = `${import.meta.env.VITE_BASE_URL}/auth/deletelike`;
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ id: movie?._id }),
-  //     });
-
-  //     const result = await response.json();
-  //     const { success, message, error } = result;
-
-  //     if (success) {
-  //       handleSuccess(message);
-  //     } else if (error) {
-  //       handleError(error?.details[0].message);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const likes = async () => {
-  //   try {
-  //     const url = `${
-  //       import.meta.env.VITE_BASE_URL
-  //     }/auth/userlist?userId=${localStorage.getItem("userId")}`;
-  //     const headers = {
-  //       headers: {
-  //         Authorization: localStorage.getItem("token"),
-  //       },
-  //     };
-  //     const response = await fetch(url, headers);
-  //     const result = await response.json();
-
-  //     setUserLike(result.likedlist);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const addwatch = async (e) => {
     e.stopPropagation();
-
-    try {
-      const url = `${import.meta.env.VITE_BASE_URL}/auth/addwatch`;
-      const userId = localStorage.getItem("userId");
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          movie,
-          type,
-          mode,
-          userId,
-        }),
-      });
-
-      const result = await response.json();
-      const { success, message, error, data } = result;
-      if (success) {
-        setUserList([...userList, data]);
-        handleSuccess(message);
-      } else if (error) {
-        handleError(error?.details[0].message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    add(movie, type, mode, userList, setUserList);
   };
 
   const deleteMovieById = async (e) => {
     e.stopPropagation();
-    try {
-      const url = `${import.meta.env.VITE_BASE_URL}/auth/deletewatch`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: movie?._id }),
-      });
-
-      const result = await response.json();
-      const { success, message, error } = result;
-
-      if (success) {
-        setDeleteWatch(!deleteWatch);
-        handleSuccess(message);
-      } else if (error) {
-        handleError(error?.details[0].message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    deleteMovie(movie, deleteWatch, setDeleteWatch, userList, setUserList);
   };
   const share = () => {
-    userData();
+    userData(setLoading, setUsers);
     setOpen(true);
   };
 
-  const userData = async () => {
-    setLoading(true);
-    try {
-      const url = `${
-        import.meta.env.VITE_BASE_URL
-      }/chat/getusers?id=${localStorage.getItem("userId")}`;
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const result = await response.json();
-      setUsers(result.data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const sendMessage = async (userId, userName) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/chat/share`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            senderId: `${localStorage.getItem("userId")}`,
-            receiverId: userId,
-            message: `https://flexifyy.netlify.app/${type || mode}/${
-              movie.id
-            }  ${movie.title || movie.name}`,
-            imageUrl:
-              type == "anime"
-                ? movie?.thumbnail
-                : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const result = await response.json();
-
-      handleSuccess(`Message sent to ${userName}`);
-    } catch (error) {
-      console.log(error);
-    }
+  const sendMessage = (userId, userName) => {
+    Message(userId, userName, movie, type, mode);
   };
 
   useEffect(() => {

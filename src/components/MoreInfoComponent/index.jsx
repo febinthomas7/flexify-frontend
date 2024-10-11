@@ -253,22 +253,31 @@ const MoreInfoComponent = ({
           </div>
 
           {seeTrailer &&
-            trailerKey
-              ?.filter((e) => e.type == "Trailer")
-              .map((e) => {
-                return (
-                  <iframe
-                    key={e.key}
-                    type="text/html"
-                    className="w-full h-full object-contain absolute top-0"
-                    src={`//www.youtube.com/embed/${e.key}`}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allowFullScreen
-                  ></iframe>
-                );
-              })}
+            trailerKey?.length > 0 &&
+            trailerKey.map((e) => {
+              // Set the source URL conditionally based on the type
+              let videoSrc = "";
+              if (e.type === "Trailer" || e.type === "Teaser") {
+                videoSrc = `https://www.youtube.com/embed/${e.key}`;
+              } else {
+                videoSrc = `https://www.youtube.com/embed/${
+                  e?.key || e[0]?.key
+                }`;
+              }
+
+              return (
+                <iframe
+                  key={e.key || e[0]?.key}
+                  type="text/html"
+                  className="w-full h-full object-contain absolute top-0"
+                  src={videoSrc}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                ></iframe>
+              );
+            })}
         </div>
         <div className="w-full px-3">
           <button

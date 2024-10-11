@@ -3,11 +3,11 @@ import ScrollComponent from "../ScrollComponent";
 import { Watch } from "../../Context";
 import { useNavigate } from "react-router-dom";
 const Mylist = () => {
-  const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [tokenExpired, setTokenExpired] = useState(true);
-  const { deleteWatch, movieAdded } = useContext(Watch);
+  const { deleteWatch, userList, setUserList } = useContext(Watch);
+
   const navigation = useNavigate();
   const userWatched = async () => {
     setLoading(true);
@@ -50,7 +50,7 @@ const Mylist = () => {
   };
   useEffect(() => {
     userWatched();
-  }, [deleteWatch, movieAdded]);
+  }, [deleteWatch]);
   return (
     <section className="my-list  bg-black  text-white p-4 md:p-8">
       <ScrollComponent

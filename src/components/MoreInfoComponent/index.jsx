@@ -1,20 +1,20 @@
 import { BsPlusCircle } from "react-icons/bs";
-import { FaRegThumbsUp } from "react-icons/fa6";
-import { FaRegThumbsDown } from "react-icons/fa6";
-import { RxCrossCircled } from "react-icons/rx";
+
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import DownloadFilesForMovies from "../DownloadFilesForMovies";
 import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
 import axios from "axios";
 import Card from "../Card";
-import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet";
-
+import { MdDone } from "react-icons/md";
 import Genres from "../../Genre.json";
 import ScrollForCastAndCrew from "../ScrollForCastAndCrew";
+import { Watch } from "../../Context";
+import { handleSuccess, handleError } from "../../utils";
+import "react-toastify/dist/ReactToastify.css";
 
 const MoreInfoComponent = ({
   closeinfo,
@@ -25,26 +25,72 @@ const MoreInfoComponent = ({
 }) => {
   const [movieData, setMovieData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [list, setList] = useState(false);
+
   const [seeTrailer, setSeeTrailer] = useState(false);
   const [trailerKey, setTrailerKey] = useState();
+  const [credits, setCredits] = useState();
+  const [creditsLoading, setCreditsLoading] = useState(true);
 
   const navigation = useNavigate();
+  const { movieAdded, setUserList, userList } = useContext(Watch);
+  const addwatch = async (e) => {
+    e.stopPropagation();
 
-  const { data, isFetching } = useQuery({
-    queryKey: ["cast"],
-    queryFn: () =>
-      fetch(
-        `${import.meta.env.VITE_BASE_URL}/api/credits?id=${
-          moreInfoData?.id || "8859"
-        }&mode=${
+    try {
+      const url = `${import.meta.env.VITE_BASE_URL}/auth/addwatch`;
+      const userId = localStorage.getItem("userId");
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          movie: moreInfoData,
+          type,
+          mode,
+          userId,
+        }),
+      });
+
+      const result = await response.json();
+      const { success, message, error, data } = result;
+      if (success) {
+        setUserList([...userList, data]);
+        handleSuccess(message);
+      } else if (error) {
+        handleError(error?.details[0].message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      url: `${import.meta.env.VITE_BASE_URL}/api/credits`,
+      params: {
+        id: moreInfoData?.id || "8859",
+        mode:
           mode ||
           type ||
           moreInfoData?.media_type ||
           moreInfoData?.mode ||
-          moreInfoData?.type
-        }`
-      ).then((res) => res.json()),
-  });
+          moreInfoData?.type,
+      },
+    };
+
+    axios
+      .request(options)
+      .then((response) => {
+        setCredits(response.data);
+        setCreditsLoading(false);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, [moreInfoData?.id]);
 
   useEffect(() => {
     const options = {
@@ -89,6 +135,19 @@ const MoreInfoComponent = ({
       });
   }, [moreInfoData?.id]);
 
+  useEffect(() => {
+    const List = userList ? userList : [];
+
+    const movieExists = Array.isArray(List)
+      ? userList.some((element) =>
+          element.id
+            ? element.id === moreInfoData.id
+            : element.title === moreInfoData.title
+        )
+      : false;
+
+    setList(movieExists);
+  }, [moreInfoData, movieAdded, userList]);
   const seeMore = (e) => {
     e.stopPropagation();
     navigation(
@@ -165,18 +224,20 @@ const MoreInfoComponent = ({
                 >
                   Play
                 </button>
-                <BsPlusCircle
-                  className="hover:scale-105 hover:text-white drop-shadow-lg"
-                  title="add"
-                />
-                <FaRegThumbsUp
-                  className="hover:scale-105 hover:text-white drop-shadow-lg"
-                  title="like"
-                />
-                <FaRegThumbsDown
-                  className="hover:scale-105 hover:text-white drop-shadow-lg"
-                  title="dislike"
-                />
+
+                {list ? (
+                  <MdDone
+                    onClick={(e) => e.stopPropagation()}
+                    className="hover:scale-105 hover:text-white cursor-pointer"
+                    title="added "
+                  />
+                ) : (
+                  <BsPlusCircle
+                    onClick={addwatch}
+                    className="hover:scale-105 hover:text-white cursor-pointer"
+                    title="add"
+                  />
+                )}
               </div>
             </div>
             <div className="text-white  w-full flex flex-wrap gap-2">
@@ -231,10 +292,10 @@ const MoreInfoComponent = ({
           </p>
         </div>
 
-        {data?.cast.length != 0 && !moreInfoData?.thumbnail ? (
+        {credits?.cast.length != 0 && !moreInfoData?.thumbnail ? (
           <ScrollForCastAndCrew
-            data={data}
-            loading={isFetching}
+            data={credits}
+            loading={creditsLoading}
             heading={"cast"}
           />
         ) : null}

@@ -1,5 +1,15 @@
 import { toast } from "react-toastify";
+import { useState, useEffect, useContext } from "react";
 
+// const {
+//   deleteWatch,
+//   setDeleteWatch,
+//   movieAdded,
+//   userList,
+//   setUserList,
+//   userlike,
+//   setUserLike,
+// } = useContext(Watch);
 export const handleSuccess = (msg) => {
   toast.success(msg, {
     position: "top-right",
@@ -39,3 +49,36 @@ export const getDeviceDetails = async () => {
     uniqueIdentifier,
   };
 };
+
+// export const addwatch = async (e, movie, type, mode) => {
+//   e.stopPropagation();
+
+//   try {
+//     const url = `${import.meta.env.VITE_BASE_URL}/auth/addwatch`;
+//     const userId = localStorage.getItem("userId");
+//     const response = await fetch(url, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         movie,
+//         type,
+//         mode,
+//         userId,
+//       }),
+//     });
+
+//     const result = await response.json();
+//     const { success, message, error, data } = result;
+//     if (success) {
+//       setUserList([...userList, data]);
+//       // console.log(userList);
+//       handleSuccess(message);
+//     } else if (error) {
+//       handleError(error?.details[0].message);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };

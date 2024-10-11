@@ -1,7 +1,6 @@
 import { BsPlusCircle } from "react-icons/bs";
-import { FaRegThumbsUp } from "react-icons/fa6";
-import { FaRegThumbsDown } from "react-icons/fa6";
 import { TfiArrowCircleDown } from "react-icons/tfi";
+// import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import Genres from "../../Genre.json";
 import { handleSuccess, handleError } from "../../utils";
@@ -23,7 +22,7 @@ import {
   WhatsappShareButton,
 } from "react-share";
 
-import { Helmet } from "react-helmet";
+// import { Helmet } from "react-helmet";
 
 const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const navigation = useNavigate();
@@ -31,10 +30,96 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { deleteWatch, setDeleteWatch, movieAdded, setMovieAdded } =
-    useContext(Watch);
+  const [like, setLike] = useState(false);
+  const {
+    deleteWatch,
+    setDeleteWatch,
+    movieAdded,
+    userList,
+    setUserList,
+    userlike,
+    setUserLike,
+  } = useContext(Watch);
   const len = movie?.vote_average;
   const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${movie.id}`;
+
+  // const addLike = async (e) => {
+  //   e.stopPropagation();
+  //   try {
+  //     const url = `${import.meta.env.VITE_BASE_URL}/auth/likedWatch`;
+  //     const userId = localStorage.getItem("userId");
+  //     const response = await fetch(url, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         movie,
+  //         type,
+  //         mode,
+  //         userId,
+  //       }),
+  //     });
+
+  //     const result = await response.json();
+  //     const { success, message, error, data } = result;
+  //     if (success) {
+  //       setUserLike([...userlike, data]);
+
+  //       handleSuccess(message);
+  //     } else if (error) {
+  //       handleError(error?.details[0].message);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const deleteLikeById = async (e) => {
+  //   e.stopPropagation();
+  //   try {
+  //     const url = `${import.meta.env.VITE_BASE_URL}/auth/deletelike`;
+  //     const response = await fetch(url, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ id: movie?._id }),
+  //     });
+
+  //     const result = await response.json();
+  //     const { success, message, error } = result;
+
+  //     if (success) {
+  //       handleSuccess(message);
+  //     } else if (error) {
+  //       handleError(error?.details[0].message);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const likes = async () => {
+  //   try {
+  //     const url = `${
+  //       import.meta.env.VITE_BASE_URL
+  //     }/auth/userlist?userId=${localStorage.getItem("userId")}`;
+  //     const headers = {
+  //       headers: {
+  //         Authorization: localStorage.getItem("token"),
+  //       },
+  //     };
+  //     const response = await fetch(url, headers);
+  //     const result = await response.json();
+
+  //     setUserLike(result.likedlist);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const addwatch = async (e) => {
     e.stopPropagation();
 
@@ -55,22 +140,9 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
       });
 
       const result = await response.json();
-      const { success, message, error } = result;
+      const { success, message, error, data } = result;
       if (success) {
-        const url = `${
-          import.meta.env.VITE_BASE_URL
-        }/auth/userlist?userId=${localStorage.getItem("userId")}`;
-        const headers = {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        };
-        const response = await fetch(url, headers);
-        const result = await response.json();
-
-        localStorage.setItem("userList", JSON.stringify(result.watchlist));
-
-        setMovieAdded(!movieAdded);
+        setUserList([...userList, data]);
         handleSuccess(message);
       } else if (error) {
         handleError(error?.details[0].message);
@@ -164,18 +236,31 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   };
 
   useEffect(() => {
-    const storedUserList = localStorage.getItem("userList");
+    const List = userList ? userList : [];
 
-    const userList = storedUserList ? JSON.parse(storedUserList) : [];
-
-    const movieExists = Array.isArray(userList)
+    const movieExists = Array.isArray(List)
       ? userList.some((element) =>
           element.id ? element.id === movie.id : element.title === movie.title
         )
       : false;
 
     setList(movieExists);
-  }, [movie, movieAdded]);
+  }, [movie, movieAdded, userList]);
+  // useEffect(() => {
+  //   likes();
+  // }, []);
+
+  // useEffect(() => {
+  //   const likeExist = Array.isArray(userlike)
+  //     ? userlike.some((element) =>
+  //         element.id ? element.id === movie.id : element.title === movie.title
+  //       )
+  //     : false;
+
+  //   setLike(likeExist);
+  // }, [userlike]);
+
+  // console.log(list);
 
   return (
     <div className="relative group h-[240px] sm:h-[265px] ">
@@ -330,15 +415,19 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   title="share"
                   onClick={share}
                 />
-
-                {/* <FaRegThumbsUp
-                  className="hover:scale-105 hover:text-white"
-                  title="like"
-                />
-                <FaRegThumbsDown
-                  className="hover:scale-105 hover:text-white"
-                  title="dislike"
-                /> */}
+                {/* {like ? (
+                  <GoHeartFill
+                    className="hover:scale-105  text-red-600"
+                    title="liked"
+                    onClick={deleteLikeById}
+                  />
+                ) : (
+                  <GoHeart
+                    className="hover:scale-105 hover:text-white"
+                    title="like"
+                    onClick={addLike}
+                  />
+                )} */}
               </div>
 
               <TfiArrowCircleDown

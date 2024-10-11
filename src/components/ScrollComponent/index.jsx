@@ -136,8 +136,8 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
         <div
           title="prev"
           onClick={() => handleScroll("prev")}
-          className={`h-[264px] flex justify-center ${
-            prevButtonVisible ? null : "hidden"
+          className={`h-[240px] sm:h-[264px] flex justify-center ${
+            prevButtonVisible ? null : null
           }  items-center cursor-pointer absolute mt-[16px] left-0 w-[50px] z-30 bg-transparent group hover:bg-[#000000b1] rounded-r-xl`}
         >
           <MdOutlineKeyboardDoubleArrowLeft className="text-[25px] invisible group-hover:visible" />
@@ -145,8 +145,8 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
         <div
           title="next"
           onClick={() => handleScroll("next")}
-          className={`h-[264px] ${
-            nextButtonVisible ? null : "hidden"
+          className={`h-[240px] sm:h-[264px] ${
+            nextButtonVisible ? null : null
           }  flex justify-center right-0 mt-[16px] items-center cursor-pointer  absolute w-[50px] z-30 bg-transparent group hover:bg-[#000000b1] rounded-l-xl`}
         >
           <MdOutlineKeyboardDoubleArrowRight className="text-[25px] invisible group-hover:visible" />

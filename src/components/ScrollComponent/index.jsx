@@ -1,5 +1,5 @@
 import { IoIosArrowForward } from "react-icons/io";
-import { useState, useRef, lazy } from "react";
+import { lazy, useContext } from "react";
 import { RxCrossCircled } from "react-icons/rx";
 import {
   MdOutlineKeyboardDoubleArrowRight,
@@ -9,69 +9,23 @@ import { LoadingComponentForScroll } from "../LoadingComponent";
 import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
 const MoreInfoComponent = lazy(() => import("../MoreInfoComponent"));
 import Card from "../Card";
+import { Watch } from "../../Context";
 
 const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [moreInfo, setMoreInfo] = useState(false);
-  const [moreInfoData, setMoreInfoData] = useState();
-  const [prevButtonVisible, setPrevButtonVisible] = useState(false);
-  const [nextButtonVisible, setNextButtonVisible] = useState(true);
-  const scrollRef = useRef(null);
-  const explore = (e) => {
-    e.stopPropagation();
-    setIsOpen(true);
-    document.body.classList.add("scroll");
-  };
+  const {
+    prevButtonVisible,
+    nextButtonVisible,
+    handleScroll,
+    isOpen,
+    moreInfo,
+    moreInfoData,
+    explore,
+    MoreInfo,
+    closeinfo,
+    closeExplore,
+    scrollRef,
+  } = useContext(Watch);
 
-  const MoreInfo = (e, movie) => {
-    e.stopPropagation();
-    setMoreInfo(true);
-    document.body.classList.add("scroll");
-    setMoreInfoData(movie);
-    setIsOpen(false);
-    document.getElementById("backdrop")?.scrollIntoView(0);
-  };
-  const closeinfo = (e) => {
-    e.stopPropagation();
-    setMoreInfo(false);
-    document.body.classList.remove("scroll");
-  };
-  const closeExplore = (e) => {
-    e.stopPropagation();
-    setIsOpen(false);
-    document.body.classList.remove("scroll");
-  };
-
-  const handleScroll = (direction) => {
-    if (scrollRef.current) {
-      const scrollAmount = 300; // Adjust this value based on your layout
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-
-      if (direction === "next") {
-        scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-
-        // Check if user has reached the end after scrolling
-        setTimeout(() => {
-          if (scrollRef.current.scrollLeft + clientWidth >= scrollWidth - 50) {
-            setNextButtonVisible(false);
-          } else {
-            setNextButtonVisible(true);
-            setPrevButtonVisible(true);
-          }
-        }, 300);
-      } else if (direction === "prev") {
-        setTimeout(() => {
-          if (scrollRef.current.scrollLeft < 20) {
-            setPrevButtonVisible(false);
-          } else {
-            setPrevButtonVisible(true);
-            setNextButtonVisible(true);
-          }
-        }, 300);
-        scrollRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-      }
-    }
-  };
   return (
     <>
       {isOpen && (
@@ -79,8 +33,11 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
           className="fixed w-full h-screen top-0 z-40 justify-center flex shadow-md shadow-[black] bg-[#000000b3]"
           onClick={closeExplore}
         >
-          <div className="w-[70%] flex flex-wrap gap-6 justify-center rounded overflow-y-auto bg-[#000000f4] p-10 mt-24 relative">
-            <RxCrossCircled className="absolute right-4 top-4 text-gray-300 cursor-pointer hover:scale-105 hover:text-white z-30 text-[30px]" />
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-[70%] flex flex-wrap gap-6 justify-center rounded overflow-y-auto bg-[#000000f4] p-10 mt-24 relative"
+          >
+            {/* <RxCrossCircled className="absolute right-4 top-4 text-gray-300 cursor-pointer hover:scale-105 hover:text-white z-30 text-[30px]" /> */}
 
             {loading ? (
               <LoadingComponentForMovieAndSeries />

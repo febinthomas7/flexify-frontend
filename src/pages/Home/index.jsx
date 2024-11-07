@@ -11,13 +11,14 @@ import { ToastContainer } from "react-toastify";
 
 const Home = () => {
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden bg-black text-white">
       <ToastContainer />
       <Helmet>
         <title>Home - Flexifyy</title>
         <meta name="description" content="Explore movies and series" />
       </Helmet>
       <Header />
+
       <Hero />
       <Trending />
       <Movies />

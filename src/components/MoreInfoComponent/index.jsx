@@ -98,8 +98,12 @@ const MoreInfoComponent = ({
       url: `${import.meta.env.VITE_BASE_URL}/api/recommendations`,
       params: {
         id: moreInfoData?.id,
-        mode: moreInfoData?.media_type || moreInfoData?.mode,
-        mode2: type || moreInfoData?.type || moreInfoData?.media_type,
+        mode:
+          mode ||
+          type ||
+          moreInfoData?.media_type ||
+          moreInfoData?.mode ||
+          moreInfoData?.type,
       },
     };
 
@@ -120,8 +124,12 @@ const MoreInfoComponent = ({
       url: `${import.meta.env.VITE_BASE_URL}/api/trailer`,
       params: {
         id: moreInfoData?.id,
-        mode: moreInfoData?.media_type || moreInfoData?.mode,
-        mode2: type || moreInfoData?.type || moreInfoData?.media_type,
+        mode:
+          mode ||
+          type ||
+          moreInfoData?.media_type ||
+          moreInfoData?.mode ||
+          moreInfoData?.type,
       },
     };
 

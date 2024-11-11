@@ -32,6 +32,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   // const [like, setLike] = useState(false);
   const { deleteWatch, setDeleteWatch, movieAdded, userList, setUserList } =
     useContext(Watch);
+
   const len = movie?.vote_average;
   const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${movie.id}`;
 

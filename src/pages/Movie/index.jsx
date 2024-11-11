@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
@@ -10,17 +10,22 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Helmet } from "react-helmet";
 import { ToastContainer } from "react-toastify";
+import Languages from "../../Languages.json";
 const Movie = () => {
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
   const [page, setPage] = useState(1);
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+
   const fetchProjects = (page = 1) =>
-    fetch(`${import.meta.env.VITE_BASE_URL}/api/movies?page=${page}`).then(
-      (res) => res.json()
-    );
+    fetch(
+      `${
+        import.meta.env.VITE_BASE_URL
+      }/api/movies?page=${page}&lang=${selectedLanguage}`
+    ).then((res) => res.json());
 
   const { data, isFetching } = useQuery({
-    queryKey: ["Movie", page],
+    queryKey: ["Movie", page, selectedLanguage],
     queryFn: () => fetchProjects(page),
     placeholderData: keepPreviousData,
   });
@@ -48,7 +53,28 @@ const Movie = () => {
         <meta name="description" content="Explore new movies" />
       </Helmet>
       <Header />
+
       <div className="bg-[#0b0b0b] w-full  flex flex-col ">
+        <header className="flex justify-between items-center p-4 bg-[#b01818b0] text-white mt-[100px]">
+          {/* <h1 className="text-2xl font-bold">Movie Browser</h1> */}
+          <div className="flex items-center">
+            <label htmlFor="language" className="mr-2 text-sm">
+              Select Language:
+            </label>
+            <select
+              id="language"
+              value={selectedLanguage}
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+              className="p-2 bg-[#0b0b0b] border border-gray-600 text-white rounded-md"
+            >
+              {Languages.map((lang) => (
+                <option key={lang.id} value={lang.iso}>
+                  {lang.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </header>
         {moreInfo && (
           <MoreInfoComponent
             closeinfo={closeinfo}

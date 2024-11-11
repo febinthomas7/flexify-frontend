@@ -1,5 +1,5 @@
 import { IoIosArrowForward } from "react-icons/io";
-import { lazy, useContext } from "react";
+import { lazy, useContext, useState, useRef } from "react";
 import { RxCrossCircled } from "react-icons/rx";
 import {
   MdOutlineKeyboardDoubleArrowRight,
@@ -12,19 +12,71 @@ import Card from "../Card";
 import { Watch } from "../../Context";
 
 const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
-  const {
-    prevButtonVisible,
-    nextButtonVisible,
-    handleScroll,
-    isOpen,
-    moreInfo,
-    moreInfoData,
-    explore,
-    MoreInfo,
-    closeinfo,
-    closeExplore,
-    scrollRef,
-  } = useContext(Watch);
+  // console.log(mode, type);
+
+  const [prevButtonVisible, setPrevButtonVisible] = useState(false);
+  const [nextButtonVisible, setNextButtonVisible] = useState(true);
+  const [moreInfo, setMoreInfo] = useState(false);
+  const [moreInfoData, setMoreInfoData] = useState();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const explore = (e) => {
+    e.stopPropagation();
+    setIsOpen(true);
+    document.body.classList.add("scroll");
+  };
+
+  const MoreInfo = (e, movie) => {
+    e.stopPropagation();
+    setMoreInfo(true);
+    document.body.classList.add("scroll");
+    setMoreInfoData(movie);
+    setIsOpen(false);
+    document.getElementById("backdrop")?.scrollIntoView(0);
+  };
+  const closeinfo = (e) => {
+    e.stopPropagation();
+    setMoreInfo(false);
+    document.body.classList.remove("scroll");
+  };
+  const closeExplore = (e) => {
+    e.stopPropagation();
+    setIsOpen(false);
+    document.body.classList.remove("scroll");
+  };
+
+  const scrollRef = useRef(null);
+
+  const handleScroll = (direction) => {
+    if (scrollRef.current) {
+      const scrollAmount = 300; // Adjust this value based on your layout
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+
+      if (direction === "next") {
+        scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+
+        // Check if user has reached the end after scrolling
+        setTimeout(() => {
+          if (scrollRef.current.scrollLeft + clientWidth >= scrollWidth - 50) {
+            setNextButtonVisible(false);
+          } else {
+            setNextButtonVisible(true);
+            setPrevButtonVisible(true);
+          }
+        }, 300);
+      } else if (direction === "prev") {
+        setTimeout(() => {
+          if (scrollRef.current.scrollLeft < 20) {
+            setPrevButtonVisible(false);
+          } else {
+            setPrevButtonVisible(true);
+            setNextButtonVisible(true);
+          }
+        }, 300);
+        scrollRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <>
@@ -61,8 +113,8 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
       {moreInfo && (
         <MoreInfoComponent
           closeinfo={closeinfo}
-          type={type || moreInfoData?.media_type}
-          mode={mode || moreInfoData?.media_type}
+          type={type || mode || moreInfoData?.media_type || moreInfoData?.type}
+          mode={type || mode || moreInfoData?.media_type || moreInfoData?.type}
           moreInfoData={moreInfoData}
           MoreInfo={MoreInfo}
         />
@@ -122,7 +174,7 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
                 key={index}
                 movie={movie}
                 type={movie?.media_type || type || movie?.type}
-                mode={mode || movie?.mode}
+                mode={mode || movie?.mode || movie?.media_type || type}
                 MoreInfo={(e) => MoreInfo(e, movie)}
                 page={page}
               />

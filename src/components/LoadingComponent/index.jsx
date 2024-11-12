@@ -6,7 +6,7 @@ export const LoadingComponentForScroll = () => {
       {Array.from({ length: 20 }, (_, i) => i)?.map((e) => (
         <div
           key={e}
-          className=" w-[160px] h-[240px] sm:h-[265px] sm:w-[192px]  text-center   bg-[#0d1015ed] rounded "
+          className=" w-[160px] h-[240px] sm:h-[265px] sm:w-[192px]  text-center animate-pulse  bg-[#0d1015ed] rounded "
         >
           <h1 className="invisible">
             LOADING......................................
@@ -23,7 +23,7 @@ export const LoadingComponentForchatUsers = () => {
       {Array.from({ length: 20 }, (_, i) => i)?.map((e) => (
         <div
           key={e}
-          className=" w-full h-[50px] text-center  p-6 bg-[#0d1015ed] rounded "
+          className=" w-full h-[50px] text-center animate-pulse  p-6 bg-[#0d1015ed] rounded "
         ></div>
       ))}
     </>
@@ -40,7 +40,7 @@ export const LoadingComponentForchatMessages = () => {
         >
           <div>
             <div
-              className={` rounded-xl text-white  inline-block bg-[#0d1015ed] px-20 py-6 relative min-w-[50px] text-left  ${
+              className={` rounded-xl text-white animate-pulse  inline-block bg-[#0d1015ed] px-20 py-6 relative min-w-[50px] text-left  ${
                 index % 2 == 0
                   ? " rounded-xl rounded-br-none"
                   : " rounded-xl rounded-bl-none"
@@ -59,7 +59,7 @@ export const LoadingComponentForCastAndCrew = () => {
       {Array.from({ length: 20 }, (_, i) => i)?.map((e) => (
         <div
           key={e}
-          className=" w-[112px] h-[112px] text-center   bg-[#0d1015ed] rounded-full "
+          className=" w-[112px] h-[112px] text-center animate-pulse   bg-[#0d1015ed] rounded-full "
         >
           <h1 className="invisible">
             LOADING......................................
@@ -76,7 +76,7 @@ export const LoadingComponentForMovieAndSeries = () => {
       {Array.from({ length: 20 }, (_, i) => i)?.map((e) => (
         <div
           key={e}
-          className=" w-[160px] h-[240px] sm:h-[265px]  sm:w-[192px]  text-center   bg-[#0d1015ed] rounded "
+          className=" w-[160px] h-[240px] sm:h-[265px] animate-pulse  sm:w-[192px]  text-center   bg-[#0d1015ed] rounded "
         ></div>
       ))}
     </>

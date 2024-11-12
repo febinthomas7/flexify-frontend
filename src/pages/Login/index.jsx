@@ -6,12 +6,14 @@ import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { getDeviceDetails } from "../../utils";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Login = () => {
   const navigate = useNavigate();
   const [isBtn, setIsBtn] = useState(false);
   const [pswd, setPswd] = useState(true);
-
+  const [Loading, setLoading] = useState(false);
+  const [isWait, setIsWait] = useState(false);
   const fetchDeviceDetails = async () => {
     const deviceDetails = await getDeviceDetails();
     const response = await fetch(
@@ -34,6 +36,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsBtn(true);
+    setLoading(true);
+
+    setTimeout(() => {
+      setIsWait(true);
+    }, 10000);
 
     try {
       const formData = new FormData(e.target);
@@ -63,8 +70,12 @@ const Login = () => {
       if (!sucess) {
         handleError(message);
         setIsBtn(false);
+        setLoading(false);
+        setIsWait(false);
       }
       if (sucess) {
+        setLoading(false);
+        setIsWait(false);
         handleSuccess("Logged in successfully");
         localStorage.setItem("token", jwtToken);
         localStorage.setItem("name", name);
@@ -152,9 +163,19 @@ const Login = () => {
                 !isBtn
                   ? "hover:scale-105 bg-red-700"
                   : "bg-red-500 cursor-not-allowed"
-              }  duration-100 ease-in text-white font-bold py-3 rounded focus:outline-none focus:ring-2 focus:ring-red-500`}
+              }  duration-100 ease-in text-white font-bold py-3 flex justify-center items-center rounded focus:outline-none focus:ring-2 focus:ring-red-500`}
             >
-              Login
+              {Loading ? (
+                <>
+                  <AiOutlineLoading3Quarters className="animate-spin" />
+
+                  {isWait && (
+                    <p className="ml-2 text-gray-400">please wait...</p>
+                  )}
+                </>
+              ) : (
+                "Login"
+              )}
             </button>
             <div>
               <p className="text-gray-400 mt-4 text-right">

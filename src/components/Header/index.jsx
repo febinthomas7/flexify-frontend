@@ -6,12 +6,12 @@ import axios from "axios";
 import SearchBox from "../SearchBox";
 import { RxCross1 } from "react-icons/rx";
 import { IoMdHome } from "react-icons/io";
-import { RiMovieLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
 import { VscThreeBars } from "react-icons/vsc";
 import { MdLocalMovies } from "react-icons/md";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { BsEmojiSunglasses } from "react-icons/bs";
+import { LuPersonStanding } from "react-icons/lu";
 
 import { FaTv } from "react-icons/fa";
 import { Watch } from "../../Context";
@@ -50,7 +50,7 @@ const Header = () => {
     {
       path: "/person",
       label: "Person",
-      icon: <BsEmojiSunglasses />,
+      icon: <LuPersonStanding />,
     },
     {
       path: "/chat",

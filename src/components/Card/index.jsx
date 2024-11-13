@@ -179,22 +179,37 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
 
           <div className="w-full absolute bottom-0    p-3">
             <div className="w-full h-8 gap-3 flex justify-between px-3 left-0  text-xs items-center  absolute top-[-20px]">
-              <div className="w-10 h-7 bg-black rounded-full flex justify-center text-white text-[10px] items-center outline outline-2 outline-offset-2 outline-[red] ">
-                <span>{len ? len?.toFixed(1) : "5.1"}%</span>
-              </div>
-              <button
-                title="play"
-                onClick={() =>
-                  navigation(
-                    `/${type || mode}/${
-                      movie.id || movie?.embed_url?.split("embed/")[1]
-                    }`
-                  )
-                }
-                className="w-full h-7 capitalize text-[13px] hover:scale-105 duration-75 outline outline-2 outline-[#292929] outline-offset-1 ease-in bg-[#000000e8] rounded text-white"
-              >
-                watch now
-              </button>
+              {movie?.media_type !== "person" && (
+                <div className="w-10 h-7 bg-black rounded-full flex justify-center text-white text-[10px] items-center outline outline-2 outline-offset-2 outline-[red] ">
+                  <span>{len ? len?.toFixed(1) : "5.1"}%</span>
+                </div>
+              )}
+
+              {movie?.media_type !== "person" && (
+                <button
+                  title="watch now"
+                  onClick={() =>
+                    navigation(
+                      `/${type || mode}/${
+                        movie.id || movie?.embed_url?.split("embed/")[1]
+                      }`
+                    )
+                  }
+                  className="w-full h-7 capitalize text-[13px] hover:scale-105 duration-75 outline outline-2 outline-[#292929] outline-offset-1 ease-in bg-[#000000e8] rounded text-white"
+                >
+                  watch now
+                </button>
+              )}
+
+              {movie?.media_type === "person" && (
+                <button
+                  title="visit"
+                  onClick={() => navigation(`/person/${movie.id}`)}
+                  className="w-full h-7 capitalize text-[13px] hover:scale-105 duration-75 outline outline-2 outline-[#292929] outline-offset-1 ease-in bg-[#000000e8] rounded text-white"
+                >
+                  Visit
+                </button>
+              )}
             </div>
 
             <h3
@@ -214,28 +229,29 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
               </h3>
             )}
 
-            <div className="flex justify-between items-center text-[20px] py-3 text-[#c0c0c0]">
-              <div className="flex items-center gap-3">
-                {list ? (
-                  <MdDone
-                    onClick={(e) => e.stopPropagation()}
-                    className="hover:scale-105 hover:text-white"
-                    title="added "
-                  />
-                ) : (
-                  <BsPlusCircle
-                    onClick={addwatch}
-                    className="hover:scale-105 hover:text-white"
-                    title="add"
-                  />
-                )}
+            {movie?.media_type !== "person" && (
+              <div className="flex justify-between items-center text-[20px] py-3 text-[#c0c0c0]">
+                <div className="flex items-center gap-3">
+                  {list ? (
+                    <MdDone
+                      onClick={(e) => e.stopPropagation()}
+                      className="hover:scale-105 hover:text-white"
+                      title="added "
+                    />
+                  ) : (
+                    <BsPlusCircle
+                      onClick={addwatch}
+                      className="hover:scale-105 hover:text-white"
+                      title="add"
+                    />
+                  )}
 
-                <IoMdShareAlt
-                  className="hover:scale-105 hover:text-white"
-                  title="share"
-                  onClick={share}
-                />
-                {/* {like ? (
+                  <IoMdShareAlt
+                    className="hover:scale-105 hover:text-white"
+                    title="share"
+                    onClick={share}
+                  />
+                  {/* {like ? (
                   <GoHeartFill
                     className="hover:scale-105  text-red-600"
                     title="liked"
@@ -248,14 +264,16 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                     onClick={addLike}
                   />
                 )} */}
-              </div>
+                </div>
 
-              <TfiArrowCircleDown
-                className="hover:scale-105 hover:text-white"
-                title="more info"
-                onClick={(e) => MoreInfo(e, movie)}
-              />
-            </div>
+                <TfiArrowCircleDown
+                  className="hover:scale-105 hover:text-white"
+                  title="more info"
+                  onClick={(e) => MoreInfo(e, movie)}
+                />
+              </div>
+            )}
+
             <div className="text-white  w-full flex flex-wrap gap-2">
               {type == "anime" ? (
                 <h1 className="before:content-['.'] text-[10px] drop-shadow-lg hover:text-[#c0c0c0]">
@@ -279,7 +297,9 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
         </div>
         {type == "anime" ? (
           <img
-            src={`${movie?.thumbnail || movie?.poster_path}`}
+            src={`${
+              movie?.thumbnail || movie?.poster_path || movie?.profile_path
+            }`}
             onError={(e) => {
               e.target.src = "/fallback_poster-removebg-preview.png";
             }}
@@ -289,7 +309,9 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
           />
         ) : (
           <img
-            src={`https://image.tmdb.org/t/p/w400/${movie?.poster_path}`}
+            src={`https://image.tmdb.org/t/p/w400/${
+              movie?.poster_path || movie?.profile_path
+            }`}
             onError={(e) => {
               e.target.src = "/fallback_poster-removebg-preview.png";
             }}
@@ -298,10 +320,11 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
             loading="lazy"
           />
         )}
-
-        <div className=" absolute top-3 right-3 cursor-pointer group-hover:invisible text-center text-white rounded bg-black px-2 py-1 ">
-          {movie.original_language || "Ja"}
-        </div>
+        {movie?.media_type !== "person" && (
+          <div className=" absolute top-3 right-3 cursor-pointer group-hover:invisible text-center text-white rounded bg-black px-2 py-1 ">
+            {movie.original_language || "Ja"}
+          </div>
+        )}
       </div>
     </div>
   );

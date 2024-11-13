@@ -86,6 +86,7 @@ const MoreInfoComponent = ({
       .then((response) => {
         setCredits(response.data);
         setCreditsLoading(false);
+        console.log(response.data);
       })
       .catch(function (error) {
         console.error(error);

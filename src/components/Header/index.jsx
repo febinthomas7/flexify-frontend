@@ -48,6 +48,11 @@ const Header = () => {
       icon: <BsEmojiSunglasses />,
     },
     {
+      path: "/person",
+      label: "Person",
+      icon: <BsEmojiSunglasses />,
+    },
+    {
       path: "/chat",
       label: "Chat",
       icon: <IoChatboxEllipsesOutline />,

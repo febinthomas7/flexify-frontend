@@ -9,6 +9,7 @@ import {
   LoadingComponentForScroll,
 } from "../LoadingComponent";
 import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
+import { Link } from "react-router-dom";
 
 const ScrollForCastAndCrew = ({ data, loading, heading }) => {
   const [prevButtonVisible, setPrevButtonVisible] = useState(false);
@@ -95,17 +96,21 @@ const ScrollForCastAndCrew = ({ data, loading, heading }) => {
                       alt={e.name}
                       loading="lazy"
                     />
-                    <div>
+
+                    <Link to={`/person/${e.id}`}>
                       <h1
                         className="text-white text-lg truncate w-28"
-                        title="character name"
+                        title={e.character || "character name"}
                       >
                         {e.character}
                       </h1>
-                      <h1 className="text-gray-400 text-sm" title="real name">
+                      <h1
+                        className="text-gray-400 text-sm truncate"
+                        title={e.name || "real name"}
+                      >
                         {e.name}
                       </h1>
-                    </div>
+                    </Link>
                   </div>
                 </div>
               ))

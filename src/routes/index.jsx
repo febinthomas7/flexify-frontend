@@ -1,7 +1,6 @@
 import { Link, createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
-import { Watch } from "../Context";
 import Anime from "../pages/Anime";
 import AnimeDetails from "../pages/AnimeDetails";
 const MainPage = lazy(() => import("../pages/MainPage"));
@@ -16,6 +15,9 @@ const TVShowsPage = lazy(() => import("../pages/TvShows"));
 const RequestReset = lazy(() => import("../pages/RequestReset"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword"));
 const MessagingPage = lazy(() => import("../pages/MessagingPage"));
+const PersonPage = lazy(() => import("../pages/Person"));
+const Actors = lazy(() => import("../pages/Actors"));
+
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("token");
   return isAuthenticated ? children : <Navigate to="/login" replace={false} />;
@@ -128,6 +130,22 @@ const router = createBrowserRouter([
     element: (
       <PrivateRoute>
         <AnimeDetails />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/person",
+    element: (
+      <PrivateRoute>
+        <Actors />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/person/:id",
+    element: (
+      <PrivateRoute>
+        <PersonPage />
       </PrivateRoute>
     ),
   },

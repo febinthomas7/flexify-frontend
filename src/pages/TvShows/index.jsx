@@ -128,23 +128,22 @@ const TvShowsPage = () => {
             MoreInfo={MoreInfo}
           />
         )}
-        {data?.results.length > 0 && (
-          <div className="w-full h-full flex-wrap flex text-sm text-white gap-4 sm:gap-8  justify-center mx-auto  items-start py-20 sm:px-2">
-            {isFetching ? (
-              <LoadingComponentForMovieAndSeries />
-            ) : (
-              data?.results?.map((movie, index) => (
-                <Card
-                  key={index}
-                  movie={movie}
-                  type={"tv"}
-                  mode={"tv"}
-                  MoreInfo={(e) => MoreInfo(e, movie)}
-                />
-              ))
-            )}
-          </div>
-        )}
+
+        <div className="w-full h-full flex-wrap flex text-sm text-white gap-4 sm:gap-8  justify-center mx-auto  items-start py-20 sm:px-2">
+          {isFetching ? (
+            <LoadingComponentForMovieAndSeries />
+          ) : (
+            data?.results?.map((movie, index) => (
+              <Card
+                key={index}
+                movie={movie}
+                type={"tv"}
+                mode={"tv"}
+                MoreInfo={(e) => MoreInfo(e, movie)}
+              />
+            ))
+          )}
+        </div>
 
         {data?.results.length <= 0 && (
           <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">

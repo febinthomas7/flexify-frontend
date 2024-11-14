@@ -43,14 +43,13 @@ const SearchBox = ({ value, onchange, searchResults, set, input }) => {
         value={value}
         onChange={onchange}
         autoFocus
-        placeholder="Search For Movies and TV Shows"
-        className="w-[95%] px-4 py-2 text-sm border fixed top-[80px] z-30  shadow-md shadow-[#7a7979] border-gray-300 rounded-md focus:outline-none focus:ring-blue-500"
+        placeholder="Search For Movies , TV Shows and Actors"
+        className="w-[95%] px-4 py-2 text-sm border text-black fixed top-[80px] z-30  shadow-md shadow-[#7a7979] border-gray-300 rounded-md focus:outline-none focus:ring-blue-500"
       />
 
       <div className="w-full h-full flex flex-wrap gap-6 overflow-x-auto justify-center rounded border-t-2 border-[red] bg-black p-10 mt-[100px]">
         {searchResults?.length > 0 &&
           searchResults?.map((movie, index) => {
-            console.log(movie);
             return (
               <Card
                 key={index}

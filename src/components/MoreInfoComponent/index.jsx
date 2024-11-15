@@ -73,11 +73,11 @@ const MoreInfoComponent = ({
       params: {
         id: moreInfoData?.id || "8859",
         mode:
-          mode ||
-          type ||
           moreInfoData?.media_type ||
           moreInfoData?.mode ||
-          moreInfoData?.type,
+          moreInfoData?.type ||
+          mode ||
+          type,
       },
     };
 
@@ -86,7 +86,6 @@ const MoreInfoComponent = ({
       .then((response) => {
         setCredits(response.data);
         setCreditsLoading(false);
-        console.log(response.data);
       })
       .catch(function (error) {
         console.error(error);
@@ -100,11 +99,11 @@ const MoreInfoComponent = ({
       params: {
         id: moreInfoData?.id,
         mode:
-          mode ||
-          type ||
           moreInfoData?.media_type ||
           moreInfoData?.mode ||
-          moreInfoData?.type,
+          moreInfoData?.type ||
+          mode ||
+          type,
       },
     };
 
@@ -126,11 +125,11 @@ const MoreInfoComponent = ({
       params: {
         id: moreInfoData?.id,
         mode:
-          mode ||
-          type ||
           moreInfoData?.media_type ||
           moreInfoData?.mode ||
-          moreInfoData?.type,
+          moreInfoData?.type ||
+          mode ||
+          type,
       },
     };
 
@@ -318,13 +317,11 @@ const MoreInfoComponent = ({
           />
         ) : null}
 
-        {(mode ||
-          type ||
-          moreInfoData?.media_type ||
+        {(moreInfoData?.media_type ||
+          moreInfoData?.mode ||
           moreInfoData?.type ||
-          moreInfoData?.mode) == "movie" && (
-          <DownloadFilesForMovies id={moreInfoData?.id} />
-        )}
+          mode ||
+          type) == "movie" && <DownloadFilesForMovies id={moreInfoData?.id} />}
 
         {!moreInfoData?.thumbnail && (
           <div className="text-white capitalize text-center">

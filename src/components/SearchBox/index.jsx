@@ -15,11 +15,6 @@ const SearchBox = ({ value, onchange, searchResults, set, input }) => {
   const closeinfo = (e) => {
     e.stopPropagation();
     setMoreInfo(false);
-    if (input == "input") {
-      document.body.classList.add("scroll");
-    } else {
-      document.body.classList.remove("scroll");
-    }
   };
 
   return (

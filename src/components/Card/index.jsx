@@ -266,11 +266,13 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                 )} */}
                 </div>
 
-                <TfiArrowCircleDown
-                  className="hover:scale-105 hover:text-white"
-                  title="more info"
-                  onClick={(e) => MoreInfo(e, movie)}
-                />
+                {type !== "anime" && (
+                  <TfiArrowCircleDown
+                    className="hover:scale-105 hover:text-white"
+                    title="more info"
+                    onClick={(e) => MoreInfo(e, movie)}
+                  />
+                )}
               </div>
             )}
 

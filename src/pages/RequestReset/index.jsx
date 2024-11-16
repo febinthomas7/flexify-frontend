@@ -22,14 +22,19 @@ const RequestReset = () => {
         }
       );
       const data = await response.json();
+      if (data.success === true) {
+        handleSuccess(data.message);
+      } else {
+        handleError("Error requesting OTP.");
+      }
 
-      handleSuccess(data.message);
-
-      setTimeout(() => {
-        navigation("/reset_password");
-      }, 2000);
+      if (data.success === true) {
+        setTimeout(() => {
+          navigation("/reset_password");
+        }, 2000);
+      }
     } catch (error) {
-      handleError("An error occurred.");
+      handleError("Error requesting OTP.");
     } finally {
       setLoading(false);
     }

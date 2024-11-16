@@ -61,8 +61,8 @@ const Hero = () => {
       {moreInfo && (
         <MoreInfoComponent
           closeinfo={closeinfo}
-          type={"movie"}
-          mode={"movie"}
+          type={"tv"}
+          mode={"tv"}
           moreInfoData={moreInfoData}
           MoreInfo={MoreInfo}
         />

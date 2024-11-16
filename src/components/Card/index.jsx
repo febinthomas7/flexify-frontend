@@ -179,7 +179,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
 
           <div className="w-full absolute bottom-0    p-3">
             <div className="w-full h-8 gap-3 flex justify-between px-3 left-0  text-xs items-center  absolute top-[-20px]">
-              {movie?.media_type !== "person" && (
+              {movie?.media_type !== "person" && type !== "anime" && (
                 <div className="w-10 h-7 bg-black rounded-full flex justify-center text-white text-[10px] items-center outline outline-2 outline-offset-2 outline-[red] ">
                   <span>{len ? len?.toFixed(1) : "5.1"}%</span>
                 </div>
@@ -322,7 +322,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
             loading="lazy"
           />
         )}
-        {movie?.media_type !== "person" && (
+        {movie?.media_type !== "person" && type !== "anime" && (
           <div className=" absolute top-3 right-3 cursor-pointer group-hover:invisible text-center text-white rounded bg-black px-2 py-1 ">
             {movie.original_language || "Ja"}
           </div>

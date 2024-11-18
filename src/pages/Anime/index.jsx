@@ -26,6 +26,8 @@ const Anime = () => {
     placeholderData: keepPreviousData,
   });
 
+  console.log(data);
+
   const MoreInfo = (e, movie) => {
     e.stopPropagation();
     setMoreInfo(true);

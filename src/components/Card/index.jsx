@@ -191,7 +191,9 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   onClick={() =>
                     navigation(
                       `/${type || mode}/${
-                        movie.id || movie?.embed_url?.split("embed/")[1]
+                        movie.id ||
+                        movie?.link_url ||
+                        movie?.embed_url?.split("embed/")[1]
                       }`
                     )
                   }
@@ -300,7 +302,10 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
         {type == "anime" ? (
           <img
             src={`${
-              movie?.thumbnail || movie?.poster_path || movie?.profile_path
+              movie?.thumbnail ||
+              movie?.poster_path ||
+              movie?.profile_path ||
+              movie?.thumbnail_url
             }`}
             onError={(e) => {
               e.target.src = "/fallback_poster-removebg-preview.png";

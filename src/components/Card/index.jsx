@@ -34,7 +34,9 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
     useContext(Watch);
 
   const len = movie?.vote_average;
-  const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${movie.id}`;
+  const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${
+    movie.id || movie?.link_url
+  }`;
 
   const addwatch = async (e) => {
     e.stopPropagation();

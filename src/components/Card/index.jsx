@@ -112,7 +112,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   className="hover:scale-105"
                   media={
                     type == "anime"
-                      ? movie?.thumbnail
+                      ? movie?.thumbnail_url
                       : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`
                   }
                 >
@@ -126,7 +126,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   className="hover:scale-105"
                   media={
                     type == "anime"
-                      ? movie?.thumbnail
+                      ? movie?.thumbnail_url
                       : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`
                   }
                 >
@@ -140,7 +140,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   className="hover:scale-105"
                   media={
                     type == "anime"
-                      ? movie?.thumbnail
+                      ? movie?.thumbnail_url
                       : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`
                   }
                 >
@@ -154,7 +154,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   className="hover:scale-105"
                   media={
                     type == "anime"
-                      ? movie?.thumbnail
+                      ? movie?.thumbnail_url
                       : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`
                   }
                 >

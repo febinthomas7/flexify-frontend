@@ -132,12 +132,12 @@ export const Message = async (userId, userName, movie, type, mode) => {
         body: JSON.stringify({
           senderId: `${localStorage.getItem("userId")}`,
           receiverId: userId,
-          message: `https://flexifyy.netlify.app/${type || mode}/${movie.id}  ${
-            movie.title || movie.name
-          }`,
+          message: `https://flexifyy.netlify.app/${type || mode}/${
+            movie.id || movie?.link_url
+          }  ${movie.title || movie.name}`,
           imageUrl:
             type == "anime"
-              ? movie?.thumbnail
+              ? movie?.thumbnail_url
               : `https://image.tmdb.org/t/p/w400/${movie?.poster_path}`,
         }),
         headers: {

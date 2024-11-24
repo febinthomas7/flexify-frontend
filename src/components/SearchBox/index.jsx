@@ -2,7 +2,7 @@ import { useState } from "react";
 import Card from "../Card";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import MoreInfoComponent from "../MoreInfoComponent";
-const SearchBox = ({ value, onchange, searchResults, set, input }) => {
+const SearchBox = ({ value, onchange, searchResults, set }) => {
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
   const MoreInfo = (e, movie) => {

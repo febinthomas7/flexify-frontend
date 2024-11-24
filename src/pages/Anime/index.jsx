@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import { debounce } from "../../debounce";
+import axios from "axios";
 import Card from "../../components/Card";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { MdKeyboardArrowLeft } from "react-icons/md";
@@ -10,9 +12,14 @@ import { LoadingComponentForMovieAndSeries } from "../../components/LoadingCompo
 import { AiOutlineLoading } from "react-icons/ai";
 import { Helmet } from "react-helmet";
 import { ToastContainer } from "react-toastify";
+import { ImSpinner6 } from "react-icons/im";
+import { Link } from "react-router-dom";
 const Anime = () => {
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
+  const [search, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
   const fetchProjects = (page = 1) =>
@@ -25,8 +32,6 @@ const Anime = () => {
     queryFn: () => fetchProjects(page),
     placeholderData: keepPreviousData,
   });
-
-  console.log(data);
 
   const MoreInfo = (e, movie) => {
     e.stopPropagation();
@@ -42,7 +47,32 @@ const Anime = () => {
     setMoreInfo(false);
     document.body.classList.remove("scroll");
   };
+  const fetchSearchResults = useCallback(
+    debounce((query) => {
+      const options = {
+        method: "GET",
+        url: `${import.meta.env.VITE_BASE_URL}/api/search/anime`,
+        params: { search: query },
+      };
 
+      axios.request(options).then((response) => {
+        setSearchResults(response);
+        setLoading(false);
+      });
+    }, 500),
+    []
+  );
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+    setLoading(true);
+    if (value === "") {
+      setSearchResults([]);
+    } else {
+      fetchSearchResults(value);
+    }
+  };
   return (
     <>
       <ToastContainer />
@@ -51,7 +81,51 @@ const Anime = () => {
         <meta name="description" content="Explore new Anime" />
       </Helmet>
       <Header />
+
       <div className="bg-[#0b0b0b] w-full  flex flex-col ">
+        <header className="flex flex-col   p-4 bg-[#b01818b0] text-white mt-[100px]">
+          <input
+            aria-label="Search for anime"
+            type="text"
+            value={search}
+            onChange={handleInputChange}
+            autoFocus
+            placeholder="Search For Anime"
+            className="w-full px-4 py-2 text-sm border text-black  z-30  shadow-md shadow-[#7a7979] border-gray-300 rounded-md focus:outline-none focus:ring-blue-500"
+          />
+        </header>
+
+        <div className="overflow-hidden">
+          {searchResults && searchResults?.data?.length > 0 ? (
+            <ul className="absolute w-full mt-2 bg-[#535353f7] border border-gray-300 rounded-md shadow-md z-10 max-h-[300px] overflow-auto">
+              {searchResults?.data.map((e, index) => (
+                <Link key={index} to={`/anime/${e?.first_link_url}`}>
+                  <li
+                    onClick={() => handleItemClick(e)} // Handle clicks
+                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 flex gap-2 items-center"
+                    tabIndex={0} // Make it focusable
+                    onKeyDown={(event) => handleKeyDown(event, e)} // Handle keyboard events
+                  >
+                    <img
+                      src={e.thumbnail_url} // Adjust the key based on your data structure
+                      alt={e.title}
+                      className="w-10 h-10 mr-4 rounded-md object-cover"
+                    />
+                    {e.title}
+                  </li>
+                </Link>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+
+        {loading && search !== "" && (
+          <div className="text-white justify-center flex py-2">
+            {" "}
+            <ImSpinner6 className="animate-spin" />
+          </div>
+        )}
+
         {moreInfo && (
           <MoreInfoComponent
             closeinfo={closeinfo}

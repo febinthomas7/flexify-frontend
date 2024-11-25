@@ -52,6 +52,27 @@ const Signin = () => {
       }
 
       if (sucess) {
+        try {
+          const emailResponse = await fetch(
+            `${import.meta.env.VITE_BASE_URL}/auth/send-welcome-email`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, name }),
+            }
+          );
+
+          const emailResult = await emailResponse.json();
+          if (emailResponse.ok) {
+            console.log("Welcome email sent:", emailResult.message);
+          } else {
+            console.error("Failed to send welcome email:", emailResult.error);
+          }
+        } catch (emailError) {
+          console.error("Error while sending email:", emailError);
+        }
         setLoading(false);
         setIsWait(false);
         handleSuccess(message);

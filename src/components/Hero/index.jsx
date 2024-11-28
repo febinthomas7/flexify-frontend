@@ -1,15 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
 import MoreInfoComponent from "../MoreInfoComponent";
 import Genres from "../../Genre.json";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Hero = () => {
   const [moreInfoData, setMoreInfoData] = useState();
   const [moreInfo, setMoreInfo] = useState(false);
   const [slideNumber, setSlideNumber] = useState(0);
   const [displayIndex, setDisplayIndex] = useState(slideNumber);
-  const navigation = useNavigate();
+
   const { data, isFetching } = useQuery({
     queryKey: ["topratedmovies"],
     queryFn: () =>
@@ -32,14 +31,12 @@ const Hero = () => {
     setMoreInfo(false);
     document.body.classList.remove("scroll");
   };
-  // useEffect(() => {
-  //   navigation(`/home`);
-  // }, []);
 
   const arr = [1, 2, 3, 4, 5, 6];
   const changeSlide = (index) => {
     setSlideNumber(index);
   };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setSlideNumber((prev) => (prev === 5 ? 0 : prev + 1));
@@ -146,7 +143,7 @@ const Hero = () => {
                     } flex flex-col gap-1 sm:gap-3 px-6 sm:pl-6 left-0 absolute bottom-0 sm:bottom-6`}
                   >
                     <h1 className="text-[20px] sm:text-[40px]  font-extrabold">
-                      {movie?.title}
+                      {movie?.title || movie?.name}
                     </h1>
                     <p className="w-[300px] sm:w-full max-[420px]:truncate text-[12px] sm:text-[16px]">
                       {movie?.overview}

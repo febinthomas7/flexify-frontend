@@ -154,79 +154,79 @@ export const Message = async (userId, userName, movie, type, mode) => {
   }
 };
 
-export const addLikeById = async (e) => {
-  e.stopPropagation();
-  try {
-    const url = `${import.meta.env.VITE_BASE_URL}/auth/likedWatch`;
-    const userId = localStorage.getItem("userId");
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        movie,
-        type,
-        mode,
-        userId,
-      }),
-    });
+// export const addLikeById = async (e) => {
+//   e.stopPropagation();
+//   try {
+//     const url = `${import.meta.env.VITE_BASE_URL}/auth/likedWatch`;
+//     const userId = localStorage.getItem("userId");
+//     const response = await fetch(url, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         movie,
+//         type,
+//         mode,
+//         userId,
+//       }),
+//     });
 
-    const result = await response.json();
-    const { success, message, error, data } = result;
-    if (success) {
-      setUserLike([...userlike, data]);
+//     const result = await response.json();
+//     const { success, message, error, data } = result;
+//     if (success) {
+//       setUserLike([...userlike, data]);
 
-      handleSuccess(message);
-    } else if (error) {
-      handleError(error?.details[0].message);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+//       handleSuccess(message);
+//     } else if (error) {
+//       handleError(error?.details[0].message);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
-export const deleteLikeById = async (e) => {
-  e.stopPropagation();
-  try {
-    const url = `${import.meta.env.VITE_BASE_URL}/auth/deletelike`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: movie?._id }),
-    });
+// export const deleteLikeById = async (e) => {
+//   e.stopPropagation();
+//   try {
+//     const url = `${import.meta.env.VITE_BASE_URL}/auth/deletelike`;
+//     const response = await fetch(url, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ id: movie?._id }),
+//     });
 
-    const result = await response.json();
-    const { success, message, error } = result;
+//     const result = await response.json();
+//     const { success, message, error } = result;
 
-    if (success) {
-      handleSuccess(message);
-    } else if (error) {
-      handleError(error?.details[0].message);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     if (success) {
+//       handleSuccess(message);
+//     } else if (error) {
+//       handleError(error?.details[0].message);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
-export const likes = async () => {
-  try {
-    const url = `${
-      import.meta.env.VITE_BASE_URL
-    }/auth/userlist?userId=${localStorage.getItem("userId")}`;
-    const headers = {
-      headers: {
-        Authorization: localStorage.getItem("token"),
-      },
-    };
-    const response = await fetch(url, headers);
-    const result = await response.json();
+// export const likes = async () => {
+//   try {
+//     const url = `${
+//       import.meta.env.VITE_BASE_URL
+//     }/auth/userlist?userId=${localStorage.getItem("userId")}`;
+//     const headers = {
+//       headers: {
+//         Authorization: localStorage.getItem("token"),
+//       },
+//     };
+//     const response = await fetch(url, headers);
+//     const result = await response.json();
 
-    setUserLike(result.likedlist);
-    setLoading(false);
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     setUserLike(result.likedlist);
+//     setLoading(false);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };

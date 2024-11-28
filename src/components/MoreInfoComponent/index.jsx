@@ -1,5 +1,5 @@
 import { BsPlusCircle } from "react-icons/bs";
-
+import { IoMdShareAlt } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import DownloadFilesForMovies from "../DownloadFilesForMovies";
@@ -11,10 +11,23 @@ import Card from "../Card";
 import { Helmet } from "react-helmet";
 import { MdDone } from "react-icons/md";
 import Genres from "../../Genre.json";
+import { LoadingComponentForchatUsers } from "../LoadingComponent";
+
 import ScrollForCastAndCrew from "../ScrollForCastAndCrew";
 import { Watch } from "../../Context";
-import { handleSuccess, handleError } from "../../utils";
 import "react-toastify/dist/ReactToastify.css";
+import { userData, handleSuccess, handleError, Message } from "../../utils";
+import { RxCross1 } from "react-icons/rx";
+import {
+  FacebookIcon,
+  TelegramIcon,
+  TwitterIcon,
+  WhatsappIcon,
+  FacebookShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from "react-share";
 
 const MoreInfoComponent = ({
   closeinfo,
@@ -26,7 +39,8 @@ const MoreInfoComponent = ({
   const [movieData, setMovieData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState(false);
-
+  const [users, setUsers] = useState([]);
+  const [open, setOpen] = useState(false);
   const [seeTrailer, setSeeTrailer] = useState(false);
   const [trailerKey, setTrailerKey] = useState();
   const [credits, setCredits] = useState();
@@ -64,6 +78,9 @@ const MoreInfoComponent = ({
     } catch (error) {
       console.log(error);
     }
+  };
+  const sendMessage = (userId, userName) => {
+    Message(userId, userName, moreInfoData, type, mode);
   };
 
   useEffect(() => {
@@ -168,6 +185,13 @@ const MoreInfoComponent = ({
     );
     document.body.classList.remove("scroll");
   };
+  const share = () => {
+    userData(setLoading, setUsers);
+    setOpen(true);
+  };
+  const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${
+    moreInfoData?.id || moreInfoData?.link_url
+  }`;
 
   return (
     <div
@@ -176,6 +200,8 @@ const MoreInfoComponent = ({
     >
       <Helmet>
         <title>{moreInfoData?.title || moreInfoData?.name}</title>
+        <meta property="og:image" content="/logo1.png" />
+        <meta property="og:type" content="website" />
         <meta name="description" content={moreInfoData?.overview} />
       </Helmet>
       <div
@@ -242,11 +268,113 @@ const MoreInfoComponent = ({
                 ) : (
                   <BsPlusCircle
                     onClick={addwatch}
-                    className="hover:scale-105 hover:text-white cursor-pointer"
+                    className={`hover:scale-105 hover:text-white cursor-pointer ${
+                      movieAdded ? "opacity-50 pointer-events-none" : ""
+                    }`}
                     title="add"
                   />
                 )}
+
+                <IoMdShareAlt
+                  className="hover:scale-105 hover:text-white cursor-pointer"
+                  title="share"
+                  onClick={share}
+                />
               </div>
+
+              {open && (
+                <div className="w-full h-full bg-white text-black z-50 top-0 right-0 absolute overflow-y-auto overflow-x-hidden  flex flex-col ">
+                  <div className="w-full h-11 bg-black text-white  ">
+                    <RxCross1
+                      onClick={() => setOpen(!open)}
+                      className=" absolute top-3 right-3 cursor-pointer "
+                    />{" "}
+                  </div>
+
+                  <div className="w-full h-16 flex justify-center gap-2 sm:gap-3 items-center bg-black p-2">
+                    <FacebookShareButton
+                      url={shareUrl}
+                      title={`${moreInfoData.title || moreInfoData.name}`}
+                      hashtag={"#Flexifyy"}
+                      className="hover:scale-105"
+                      media={
+                        type == "anime"
+                          ? moreInfoData?.thumbnail_url
+                          : `https://image.tmdb.org/t/p/w400/${moreInfoData?.poster_path}`
+                      }
+                    >
+                      <FacebookIcon size={28} round={true} />
+                    </FacebookShareButton>
+
+                    <WhatsappShareButton
+                      url={shareUrl}
+                      title={`${
+                        moreInfoData.title ||
+                        moreInfoData.name ||
+                        "Check this out on Flexifyy!"
+                      }`}
+                      quote={`${
+                        moreInfoData.title ||
+                        moreInfoData.name ||
+                        "Check this out on Flexifyy!"
+                      }`}
+                      hashtag={"#Flexifyy"}
+                      className="hover:scale-105"
+                      media={
+                        type == "anime"
+                          ? moreInfoData?.thumbnail_url
+                          : `https://image.tmdb.org/t/p/w400/${moreInfoData?.poster_path}`
+                      }
+                    >
+                      <WhatsappIcon size={28} round={true} />
+                    </WhatsappShareButton>
+
+                    <TelegramShareButton
+                      url={shareUrl}
+                      title={`${moreInfoData.title || moreInfoData.name}`}
+                      hashtag={"#Flexifyy"}
+                      className="hover:scale-105"
+                      media={
+                        type == "anime"
+                          ? moreInfoData?.thumbnail_url
+                          : `https://image.tmdb.org/t/p/w400/${moreInfoData?.poster_path}`
+                      }
+                    >
+                      <TelegramIcon size={28} round={true} />
+                    </TelegramShareButton>
+
+                    <TwitterShareButton
+                      url={shareUrl}
+                      title={`${moreInfoData.title || moreInfoData.name}`}
+                      hashtags={"#Flexifyy"}
+                      className="hover:scale-105"
+                      media={
+                        type == "anime"
+                          ? moreInfoData?.thumbnail_url
+                          : `https://image.tmdb.org/t/p/w400/${moreInfoData?.poster_path}`
+                      }
+                    >
+                      <TwitterIcon size={28} round={true} />
+                    </TwitterShareButton>
+                  </div>
+
+                  <div className="w-full h-full bg-[#0e0e0e] text-white overflow-y-auto pt-2 pb-5 px-2 flex flex-col gap-3 overflow-x-hidden">
+                    {loading && <LoadingComponentForchatUsers />}
+                    {users?.map((e, index) => {
+                      return (
+                        <div
+                          key={index}
+                          onClick={() => sendMessage(e._id, e.name)}
+                          title={e.name}
+                          className={`w-full rounded p-3 flex gap-2 truncate bg-[#c4c4c475] items-center cursor-pointer sm:hover:scale-105`}
+                        >
+                          {e?.name}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="text-white  w-full flex flex-wrap gap-2">
               {moreInfoData?.genre_ids?.map((e, index) => {

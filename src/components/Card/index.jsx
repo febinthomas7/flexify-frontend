@@ -30,12 +30,11 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   // const [like, setLike] = useState(false);
-  const { deleteWatch, setDeleteWatch, movieAdded, userList, setUserList } =
-    useContext(Watch);
+  const { movieAdded, userList, setUserList } = useContext(Watch);
 
   const len = movie?.vote_average;
   const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${
-    movie.id || movie?.link_url
+    movie?.id || movie?.link_url
   }`;
 
   const addwatch = async (e) => {
@@ -61,7 +60,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
     const List = userList ? userList : [];
 
     const movieExists = Array.isArray(List)
-      ? userList.some((element) =>
+      ? userList?.some((element) =>
           element.id ? element.id === movie.id : element.title === movie.title
         )
       : false;
@@ -245,7 +244,9 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                   ) : (
                     <BsPlusCircle
                       onClick={addwatch}
-                      className="hover:scale-105 hover:text-white"
+                      className={`hover:scale-105 hover:text-white ${
+                        movieAdded ? "opacity-50 pointer-events-none" : ""
+                      }`}
                       title="add"
                     />
                   )}

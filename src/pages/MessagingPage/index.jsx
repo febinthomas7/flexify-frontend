@@ -3,6 +3,7 @@ import { RiArrowLeftSLine } from "react-icons/ri";
 import Header from "../../components/Header";
 import { PiCamera } from "react-icons/pi";
 import { Helmet } from "react-helmet";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 import io from "socket.io-client";
 import {
@@ -23,6 +24,7 @@ const MessagingPage = () => {
   const [flags, setFlags] = useState(false);
   const [hide, setHide] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [sendLoader, setSendLoader] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
   const [online, setOnline] = useState("");
   const [consversationId, setConversationId] = useState("");
@@ -52,7 +54,7 @@ const MessagingPage = () => {
 
   useEffect(() => {
     userData();
-  }, []);
+  }, [flags, socket, messages, setMessages]);
 
   const selectUser = async (userId) => {
     try {
@@ -84,8 +86,9 @@ const MessagingPage = () => {
   };
   const sendMessage = async (e) => {
     e.preventDefault();
-    // console.log(e.target.image.files[0], message);
+    setSendLoader(true);
     if (message == "" && !e.target.image.files[0]) {
+      setSendLoader(false);
       return;
     }
 
@@ -113,6 +116,7 @@ const MessagingPage = () => {
 
         if (success) {
           setMessages([...messages, result?.newMessage]);
+          setSendLoader(false);
         }
 
         setFlags(!flags);
@@ -120,7 +124,7 @@ const MessagingPage = () => {
       })
       .catch((error) => {
         console.error("Error:", error);
-        // setLoading(false);
+        setSendLoader(false);
       });
   };
 
@@ -182,6 +186,7 @@ const MessagingPage = () => {
       return () => socket?.off("newMessage");
     });
   }, [socket, messages, setMessages]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <>
@@ -197,7 +202,23 @@ const MessagingPage = () => {
           }  relative px-2 h-[calc(100%-5rem)] sm:h-[calc(100%-6rem)] p-2 mt-[5rem] sm:mt-[6rem] `}
         >
           {loading && <LoadingComponentForchatUsers />}
-
+          <div>
+            <input
+              type="text"
+              placeholder="Search chats..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="mt-2 w-full p-2 rounded-lg bg-white text-gray-700 outline-none"
+            />
+            {/* <ul>
+              {filteredChats.map((chat) => (
+                <li key={chat.id}>
+                  <h4>{chat.name}</h4>
+                  <p>{chat.lastMessage}</p>
+                </li>
+              ))}
+            </ul> */}
+          </div>
           {users?.map((e, index) => {
             return (
               <div
@@ -226,13 +247,43 @@ const MessagingPage = () => {
                 <div className="flex flex-col p-1 w-full text-white">
                   <div className="w-full flex justify-between items-center">
                     <h1 className="text-sm">{e?.name}</h1>{" "}
-                    {/* <span className="text-xs">11:30 pm</span> */}
                   </div>
-                  <div className="w-full flex justify-between items-center">
-                    {/* <p className="text-xs"></p> */}
-                    {/* <span className="text-xs w-5 h-5  flex justify-center items-center rounded-full bg-green-600">
-                      1
-                    </span> */}
+                  <div className="w-full flex justify-between items-center text-sm">
+                    {e.newMessage
+                      ?.filter(
+                        (usr) =>
+                          usr.participants?.includes(
+                            localStorage.getItem("userId")
+                          ) && usr.participants?.includes(e?._id) // Check if senderId is in participants and there are other users
+                      )
+                      .map((filteredMessage, index) => {
+                        const dateObject = new Date(filteredMessage?.updatedAt);
+
+                        // Get hours and minutes
+                        let hours = dateObject.getHours();
+                        const minutes = dateObject
+                          .getMinutes()
+                          .toString()
+                          .padStart(2, "0");
+
+                        // Determine AM or PM
+                        const ampm = hours >= 12 ? "PM" : "AM";
+
+                        // Convert hours to 12-hour format and remove leading zero
+                        hours = hours % 12 || 12;
+
+                        const formattedTime = `${hours}:${minutes} ${ampm}`;
+                        return (
+                          <div
+                            key={index}
+                            className="w-full flex justify-between items-center"
+                          >
+                            <h1>{filteredMessage?.latestMessage}</h1>
+                            <span className="text-xs">{formattedTime}</span>
+                          </div>
+                          // Display the filtered message
+                        );
+                      })}
                   </div>
                 </div>
               </div>
@@ -386,7 +437,11 @@ const MessagingPage = () => {
                     : "bg-red-700"
                 } text-white px-4 py-2 rounded`}
               >
-                Send
+                {sendLoader ? (
+                  <AiOutlineLoading3Quarters className="animate-spin" />
+                ) : (
+                  "Send"
+                )}
               </button>
             </form>
           )}

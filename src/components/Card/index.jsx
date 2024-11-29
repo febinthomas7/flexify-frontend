@@ -30,7 +30,8 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   // const [like, setLike] = useState(false);
-  const { movieAdded, userList, setUserList } = useContext(Watch);
+  const { movieAdded, setMovieAdded, userList, setUserList } =
+    useContext(Watch);
 
   const len = movie?.vote_average;
   const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${
@@ -39,12 +40,12 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
 
   const addwatch = async (e) => {
     e.stopPropagation();
+    setMovieAdded(true);
     add(movie, type, mode, userList, setUserList);
   };
 
   const deleteMovieById = async (e) => {
     e.stopPropagation();
-    console.log(userList);
     deleteMovie(movie, userList, setUserList);
   };
   const share = () => {
@@ -66,6 +67,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
       : false;
 
     setList(movieExists);
+    setMovieAdded(false);
   }, [movie, movieAdded, userList]);
   // useEffect(() => {
   //   likes();

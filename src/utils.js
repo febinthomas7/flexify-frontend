@@ -40,7 +40,15 @@ export const getDeviceDetails = async () => {
   };
 };
 
-export const add = async (movie, type, mode, userList, setUserList) => {
+export const add = async (
+  movie,
+  type,
+  mode,
+  userList,
+  setUserList,
+  setAdded
+) => {
+  setAdded(true);
   try {
     const url = `${import.meta.env.VITE_BASE_URL}/auth/addwatch`;
     const userId = localStorage.getItem("userId");
@@ -62,10 +70,15 @@ export const add = async (movie, type, mode, userList, setUserList) => {
     if (success) {
       setUserList([...userList, data]);
       handleSuccess(message);
+      setTimeout(() => {
+        setAdded(false);
+      }, 1000);
     } else if (error) {
       handleError(error?.details[0].message);
+      setAdded(false);
     }
   } catch (error) {
+    setAdded(false);
     console.log(error);
   }
 };

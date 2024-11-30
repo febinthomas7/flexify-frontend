@@ -27,8 +27,8 @@ const MessagingPage = () => {
   const [sendLoader, setSendLoader] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
   const [online, setOnline] = useState("");
-  const [consversationId, setConversationId] = useState("");
   const [selectedFile, setSelectedFile] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const userData = async () => {
     setLoading(true);
@@ -147,7 +147,6 @@ const MessagingPage = () => {
       const { success, message, chatId } = result;
       if (success) {
         setMessages(message);
-        setConversationId(chatId);
         setChatLoading(false);
       }
       if (!success) {
@@ -186,7 +185,10 @@ const MessagingPage = () => {
       return () => socket?.off("newMessage");
     });
   }, [socket, messages, setMessages]);
-  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredChats = users?.filter((chat) =>
+    chat?.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <>
@@ -197,98 +199,136 @@ const MessagingPage = () => {
       <Header />
       <div className=" bg-black w-full  h-screen flex overflow-hidden ">
         <div
-          className={`w-[400px] bg-black flex flex-col gap-2 overflow-auto ${
+          className={`w-[400px] bg-[#8b000047] flex flex-col gap-2 overflow-auto ${
             !hide ? "flex" : "hidden sm:flex"
           }  relative px-2 h-[calc(100%-5rem)] sm:h-[calc(100%-6rem)] p-2 mt-[5rem] sm:mt-[6rem] `}
         >
           {loading && <LoadingComponentForchatUsers />}
-          <div>
+          <div className="gap-2 flex flex-col ">
             <input
               type="text"
-              placeholder="Search chats..."
+              placeholder="Username"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="mt-2 w-full p-2 rounded-lg bg-white text-gray-700 outline-none"
+              className="mt-2  p-2 rounded-lg bg-white text-gray-700 outline-none sticky "
             />
-            {/* <ul>
-              {filteredChats.map((chat) => (
-                <li key={chat.id}>
-                  <h4>{chat.name}</h4>
-                  <p>{chat.lastMessage}</p>
-                </li>
-              ))}
-            </ul> */}
-          </div>
-          {users?.map((e, index) => {
-            return (
+
+            {filteredChats?.map((chat, index) => (
               <div
                 key={index}
-                onClick={() => selectUser(e._id)}
+                onClick={() => selectUser(chat._id)}
                 className={`w-full rounded p-2 flex gap-2 ${
-                  e._id == localStorage.getItem("receiverId")
+                  chat._id == localStorage.getItem("receiverId")
                     ? "bg-[#c4c4c475]"
                     : "bg-[#6f6f6f75]"
+                } ${
+                  searchTerm === "" || searchTerm === null ? "hidden" : ""
                 } items-center cursor-pointer sm:hover:scale-105`}
               >
-                <div className="relative">
+                <div className="relative gap-1">
                   <img
-                    src={e.dp || "/no_image.jpg"}
+                    src={chat.dp || "/no_image.jpg"}
                     onError={(e) => {
                       e.target.src = "/no_image.jpg";
                     }}
                     alt="/no_image.jpg"
                     className="rounded-full w-9 h-9 object-contain bg-black"
                   />
-                  {online.includes(e?._id) && (
+                  {online.includes(chat?._id) && (
                     <span className="p-1 rounded-full w-3 h-3  border-black border -right-1 t-0 absolute top-0   bg-green-500"></span>
                   )}
                 </div>
 
                 <div className="flex flex-col p-1 w-full text-white">
                   <div className="w-full flex justify-between items-center">
-                    <h1 className="text-sm">{e?.name}</h1>{" "}
-                  </div>
-                  <div className="w-full flex justify-between items-center text-sm">
-                    {e.newMessage
-                      ?.filter(
-                        (usr) =>
-                          usr.participants?.includes(
-                            localStorage.getItem("userId")
-                          ) && usr.participants?.includes(e?._id) // Check if senderId is in participants and there are other users
-                      )
-                      .map((filteredMessage, index) => {
-                        const dateObject = new Date(filteredMessage?.updatedAt);
-
-                        // Get hours and minutes
-                        let hours = dateObject.getHours();
-                        const minutes = dateObject
-                          .getMinutes()
-                          .toString()
-                          .padStart(2, "0");
-
-                        // Determine AM or PM
-                        const ampm = hours >= 12 ? "PM" : "AM";
-
-                        // Convert hours to 12-hour format and remove leading zero
-                        hours = hours % 12 || 12;
-
-                        const formattedTime = `${hours}:${minutes} ${ampm}`;
-                        return (
-                          <div
-                            key={index}
-                            className="w-full flex justify-between items-center"
-                          >
-                            <h1>{filteredMessage?.latestMessage}</h1>
-                            <span className="text-xs">{formattedTime}</span>
-                          </div>
-                          // Display the filtered message
-                        );
-                      })}
+                    <h1 className="text-sm">{chat?.name}</h1>{" "}
                   </div>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
+          {users
+            ?.filter((usr, i) =>
+              usr.friends?.includes(localStorage.getItem("userId"))
+            )
+            ?.map((e, index) => {
+              return (
+                <div
+                  key={index}
+                  onClick={() => selectUser(e._id)}
+                  className={`w-full rounded p-2 flex gap-2 ${
+                    e._id == localStorage.getItem("receiverId")
+                      ? "bg-[#c4c4c475]"
+                      : "bg-[#6f6f6f75]"
+                  }  ${
+                    searchTerm === "" ||
+                    searchTerm === null ||
+                    searchTerm === undefined
+                      ? ""
+                      : "hidden"
+                  }  items-center cursor-pointer sm:hover:scale-105`}
+                >
+                  <div className="relative">
+                    <img
+                      src={e.dp || "/no_image.jpg"}
+                      onError={(e) => {
+                        e.target.src = "/no_image.jpg";
+                      }}
+                      alt="/no_image.jpg"
+                      className="rounded-full w-9 h-9 object-contain bg-black"
+                    />
+                    {online.includes(e?._id) && (
+                      <span className="p-1 rounded-full w-3 h-3  border-black border -right-1 t-0 absolute top-0   bg-green-500"></span>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col p-1 w-full text-white">
+                    <div className="w-full flex justify-between items-center">
+                      <h1 className="text-sm">{e?.name}</h1>{" "}
+                    </div>
+                    <div className="w-full flex justify-between items-center text-sm">
+                      {e.newMessage
+                        ?.filter(
+                          (usr) =>
+                            usr.participants?.includes(
+                              localStorage.getItem("userId")
+                            ) && usr.participants?.includes(e?._id) // Check if senderId is in participants and there are other users
+                        )
+                        .map((filteredMessage, index) => {
+                          const dateObject = new Date(
+                            filteredMessage?.updatedAt
+                          );
+
+                          // Get hours and minutes
+                          let hours = dateObject.getHours();
+                          const minutes = dateObject
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0");
+
+                          // Determine AM or PM
+                          const ampm = hours >= 12 ? "PM" : "AM";
+
+                          // Convert hours to 12-hour format and remove leading zero
+                          hours = hours % 12 || 12;
+
+                          const formattedTime = `${hours}:${minutes} ${ampm}`;
+                          return (
+                            <div
+                              key={index}
+                              className="w-full flex justify-between items-center"
+                            >
+                              <h1>{filteredMessage?.latestMessage}</h1>
+                              <span className="text-xs">{formattedTime}</span>
+                            </div>
+                            // Display the filtered message
+                          );
+                        })}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
         </div>
         <div
           className={`w-full h-[calc(100%-5rem)] sm:h-[calc(100%-6rem)] bg-black relative mt-[5rem] sm:mt-[6rem] ${

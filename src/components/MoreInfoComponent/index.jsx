@@ -16,7 +16,7 @@ import { LoadingComponentForchatUsers } from "../LoadingComponent";
 import ScrollForCastAndCrew from "../ScrollForCastAndCrew";
 import { Watch } from "../../Context";
 import "react-toastify/dist/ReactToastify.css";
-import { userData, handleSuccess, handleError, Message } from "../../utils";
+import { userData, add, Message } from "../../utils";
 import { RxCross1 } from "react-icons/rx";
 import {
   FacebookIcon,
@@ -45,39 +45,14 @@ const MoreInfoComponent = ({
   const [trailerKey, setTrailerKey] = useState();
   const [credits, setCredits] = useState();
   const [creditsLoading, setCreditsLoading] = useState(true);
+  const [added, setAdded] = useState(false);
 
   const navigation = useNavigate();
   const { movieAdded, setUserList, userList } = useContext(Watch);
   const addwatch = async (e) => {
     e.stopPropagation();
-
-    try {
-      const url = `${import.meta.env.VITE_BASE_URL}/auth/addwatch`;
-      const userId = localStorage.getItem("userId");
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          movie: moreInfoData,
-          type,
-          mode,
-          userId,
-        }),
-      });
-
-      const result = await response.json();
-      const { success, message, error, data } = result;
-      if (success) {
-        setUserList([...userList, data]);
-        handleSuccess(message);
-      } else if (error) {
-        handleError(error?.details[0].message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    setAdded(true);
+    add(moreInfoData, type, mode, userList, setUserList, setAdded);
   };
   const sendMessage = (userId, userName) => {
     Message(userId, userName, moreInfoData, type, mode);
@@ -269,7 +244,7 @@ const MoreInfoComponent = ({
                   <BsPlusCircle
                     onClick={addwatch}
                     className={`hover:scale-105 hover:text-white cursor-pointer ${
-                      movieAdded ? "opacity-50 pointer-events-none" : ""
+                      added === true ? "opacity-50 pointer-events-none" : ""
                     }`}
                     title="add"
                   />

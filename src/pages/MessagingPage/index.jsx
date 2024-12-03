@@ -1,23 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext, useMemo } from "react";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import Header from "../../components/Header";
 import { PiCamera } from "react-icons/pi";
 import { Helmet } from "react-helmet";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-
-import io from "socket.io-client";
+import { MessagingContext } from "../../../MessageContext";
 import {
   LoadingComponentForchatUsers,
   LoadingComponentForchatMessages,
 } from "../../components/LoadingComponent";
-const socket = io(import.meta.env.VITE_BASE_URL, {
-  query: {
-    userId: localStorage.getItem("userId"),
-  },
-});
+import "react-toastify/dist/ReactToastify.css";
+
 const MessagingPage = () => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState("");
   const [receiverId, setReceiverId] = useState("");
@@ -26,9 +21,11 @@ const MessagingPage = () => {
   const [loading, setLoading] = useState(false);
   const [sendLoader, setSendLoader] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
-  const [online, setOnline] = useState("");
   const [selectedFile, setSelectedFile] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const { messages, setMessages, socket, online } =
+    useContext(MessagingContext);
 
   const userData = async () => {
     setLoading(true);
@@ -171,23 +168,27 @@ const MessagingPage = () => {
     getMessage();
   }, [receiverId]);
 
-  useEffect(() => {
-    socket.on("getOnlineUser", (message) => {
-      setOnline(message);
-    });
-    return () => socket.off();
-  }, [socket, localStorage.getItem("userId")]);
-  useEffect(() => {
-    socket?.on("newMessage", (newMessage) => {
-      setMessages([...messages, newMessage]);
-      scrollToBottom();
+  // useEffect(() => {
+  //   socket.on("getOnlineUser", (message) => {
+  //     setOnline(message);
+  //   });
+  //   return () => socket.off("getOnlineUser");
+  // }, [socket, localStorage.getItem("userId")]);
+  // useEffect(() => {
+  //   socket?.on("newMessage", (newMessage) => {
+  //     setMessages([...messages, newMessage]);
+  //     scrollToBottom();
 
-      return () => socket?.off("newMessage");
-    });
-  }, [socket, messages, setMessages]);
+  //     return () => socket?.off("newMessage");
+  //   });
+  // }, [socket, messages, setMessages]);
 
-  const filteredChats = users?.filter((chat) =>
-    chat?.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredChats = useMemo(
+    () =>
+      users?.filter((chat) =>
+        chat?.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [users, searchTerm]
   );
 
   return (

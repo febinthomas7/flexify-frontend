@@ -6,14 +6,17 @@ import FallBack from "./components/FallBack";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Context from "./Context";
+import { MessagingProvider } from "../MessageContext";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Suspense fallback={<FallBack />}>
     <QueryClientProvider client={queryClient}>
-      <Context>
-        <RouterProvider router={router} />
-      </Context>
+      <MessagingProvider>
+        <Context>
+          <RouterProvider router={router} />
+        </Context>
+      </MessagingProvider>
     </QueryClientProvider>
   </Suspense>
 );

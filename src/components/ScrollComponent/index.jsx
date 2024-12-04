@@ -129,16 +129,20 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
               className="flex items-baseline cursor-pointer group/item"
               onClick={explore}
             >
-              <h2 className="text-2xl  font-bold text-white group-hover/item:underline decoration-2 duration-150 ease-in underline-offset-2  ">
-                {heading}
-              </h2>
-              <span className="flex items-center text-[12px] invisible font-semibold  group-hover:visible text-[#b01818]">
-                <h1 className="group-hover:translate-x-4 duration-200 ease-in">
-                  Explore All
-                </h1>
+              {data?.length > 0 && (
+                <>
+                  <h2 className="text-2xl  font-bold text-white group-hover/item:underline decoration-2 duration-150 ease-in underline-offset-2  ">
+                    {heading}
+                  </h2>
+                  <span className="flex items-center text-[12px] invisible font-semibold  group-hover:visible text-[#b01818]">
+                    <h1 className="group-hover:translate-x-4 duration-200 ease-in">
+                      Explore All
+                    </h1>
 
-                <IoIosArrowForward className="translate-x-1 group-hover:translate-x-4 duration-75 ease-in text-[14px]" />
-              </span>
+                    <IoIosArrowForward className="translate-x-1 group-hover:translate-x-4 duration-75 ease-in text-[14px]" />
+                  </span>
+                </>
+              )}
             </div>
           )}
         </div>

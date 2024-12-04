@@ -112,13 +112,13 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
           {page == "mylist" && (
             <RxCross1
               onClick={deleteMovieById}
-              className=" absolute top-3 right-3 cursor-pointer "
+              className=" absolute top-3 right-3 cursor-pointer hover:scale-105 "
             />
           )}
           {page == "continue" && (
             <RxCross1
               onClick={deleteContinueById}
-              className=" absolute top-3 right-3 cursor-pointer "
+              className=" absolute top-3 right-3 cursor-pointer hover:scale-105 "
             />
           )}
 

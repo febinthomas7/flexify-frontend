@@ -1,9 +1,8 @@
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { Helmet } from "react-helmet";
-import { IoReorderThreeOutline } from "react-icons/io5";
-import { RxCross2 } from "react-icons/rx";
-import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 const AnimeDetails = () => {
@@ -37,6 +36,8 @@ const AnimeDetails = () => {
         <title>Flexifyy</title>
         <meta name="description" content="watch anime" />
       </Helmet>
+      <ToastContainer />
+
       <HiOutlineArrowSmallLeft
         onClick={goBack}
         className="text-white absolute left-5 sm:left-10 top-10 text-[35px] sm:text-[40px] cursor-pointer"

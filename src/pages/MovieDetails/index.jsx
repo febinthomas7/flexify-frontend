@@ -1,6 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { HiOutlineArrowSmallLeft } from "react-icons/hi2";
 import { Helmet } from "react-helmet";
+import { ToastContainer } from "react-toastify";
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ const MovieDetails = () => {
         <title>Flexifyy</title>
         <meta name="description" content="watch movie" />
       </Helmet>
+      <ToastContainer />
       <HiOutlineArrowSmallLeft
         onClick={goBack}
         className="text-white absolute left-5 sm:left-10 top-10 text-[35px] sm:text-[40px] cursor-pointer"

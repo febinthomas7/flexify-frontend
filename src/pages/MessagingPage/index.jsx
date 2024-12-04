@@ -168,21 +168,6 @@ const MessagingPage = () => {
     getMessage();
   }, [receiverId]);
 
-  // useEffect(() => {
-  //   socket.on("getOnlineUser", (message) => {
-  //     setOnline(message);
-  //   });
-  //   return () => socket.off("getOnlineUser");
-  // }, [socket, localStorage.getItem("userId")]);
-  // useEffect(() => {
-  //   socket?.on("newMessage", (newMessage) => {
-  //     setMessages([...messages, newMessage]);
-  //     scrollToBottom();
-
-  //     return () => socket?.off("newMessage");
-  //   });
-  // }, [socket, messages, setMessages]);
-
   const filteredChats = useMemo(
     () =>
       users?.filter((chat) =>

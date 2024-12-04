@@ -3,14 +3,20 @@ import { TfiArrowCircleDown } from "react-icons/tfi";
 // import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import Genres from "../../Genre.json";
-// import { handleSuccess, handleError } from "../../utils";
 import "react-toastify/dist/ReactToastify.css";
 import { RxCross1 } from "react-icons/rx";
 import { MdDone } from "react-icons/md";
 import { useState, useEffect, useContext } from "react";
 import { IoMdShareAlt } from "react-icons/io";
 import { LoadingComponentForchatUsers } from "../LoadingComponent";
-import { add, deleteMovie, userData, Message } from "../../utils";
+import {
+  add,
+  deleteMovie,
+  userData,
+  Message,
+  Watching,
+  deleteContinue,
+} from "../../utils";
 import { Watch } from "../../Context";
 import {
   FacebookIcon,
@@ -31,8 +37,14 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const [loading, setLoading] = useState(false);
   const [added, setAdded] = useState(false);
   // const [like, setLike] = useState(false);
-  const { movieAdded, setMovieAdded, userList, setUserList } =
-    useContext(Watch);
+  const {
+    movieAdded,
+    setMovieAdded,
+    userList,
+    setUserList,
+    userContinueList,
+    setUserContinueList,
+  } = useContext(Watch);
   const len = movie?.vote_average;
   const shareUrl = `https://flexifyy.netlify.app/${type || mode}/${
     movie?.id || movie?.link_url
@@ -47,6 +59,10 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   const deleteMovieById = async (e) => {
     e.stopPropagation();
     deleteMovie(movie, userList, setUserList);
+  };
+  const deleteContinueById = async (e) => {
+    e.stopPropagation();
+    deleteContinue(movie, userContinueList, setUserContinueList);
   };
   const share = () => {
     userData(setLoading, setUsers);
@@ -85,6 +101,10 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
 
   // console.log(list);
 
+  const watch = (m1, m2, m3, m4, m5) => {
+    Watching(movie, type, mode, userList, setUserList);
+    navigation(`/${m1 || m2}/${m3 || m4 || m5}`);
+  };
   return (
     <div className="relative group h-[240px] sm:h-[265px] ">
       <div className="w-40 md:w-44  cursor-pointer group shadow-md shadow-[black] ">
@@ -92,6 +112,12 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
           {page == "mylist" && (
             <RxCross1
               onClick={deleteMovieById}
+              className=" absolute top-3 right-3 cursor-pointer "
+            />
+          )}
+          {page == "continue" && (
+            <RxCross1
+              onClick={deleteContinueById}
               className=" absolute top-3 right-3 cursor-pointer "
             />
           )}
@@ -192,12 +218,12 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                 <button
                   title="watch now"
                   onClick={() =>
-                    navigation(
-                      `/${type || mode}/${
-                        movie.id ||
-                        movie?.link_url ||
-                        movie?.embed_url?.split("embed/")[1]
-                      }`
+                    watch(
+                      type,
+                      mode,
+                      movie.id,
+                      movie?.link_url,
+                      movie?.embed_url?.split("embed/")[1]
                     )
                   }
                   className="w-full h-7 capitalize text-[13px] hover:scale-105 duration-75 outline outline-2 outline-[#292929] outline-offset-1 ease-in bg-[#000000e8] rounded text-white"

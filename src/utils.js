@@ -83,6 +83,34 @@ export const add = async (
   }
 };
 
+export const Watching = async (movie, type, mode, userList, setUserList) => {
+  try {
+    const url = `${import.meta.env.VITE_BASE_URL}/auth/continue`;
+    const userId = localStorage.getItem("userId");
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        movie,
+        type,
+        mode,
+        userId,
+      }),
+    });
+
+    const result = await response.json();
+    const { success, message, error, data } = result;
+    if (success) {
+      setUserList([...userList, data]);
+    } else if (error) {
+      console.log(error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const deleteMovie = async (movie, userList, setUserList) => {
   try {
     const url = `${import.meta.env.VITE_BASE_URL}/auth/deletewatch`;
@@ -104,6 +132,41 @@ export const deleteMovie = async (movie, userList, setUserList) => {
         setUserList(updatedUserList);
       } else {
         console.error("userList is not an array:", userList);
+      }
+      handleSuccess(message);
+    } else if (error) {
+      handleError(error?.details[0].message);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteContinue = async (
+  movie,
+  userContinueList,
+  setUserContinueList
+) => {
+  try {
+    const url = `${import.meta.env.VITE_BASE_URL}/auth/deleteContinue`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: movie?._id }),
+    });
+
+    const result = await response.json();
+    const { success, message, error } = result;
+    if (success) {
+      if (Array.isArray(userContinueList)) {
+        const updatedUserList = userContinueList.filter(
+          (item) => item._id !== movie._id
+        );
+        setUserContinueList(updatedUserList);
+      } else {
+        console.error("userList is not an array:", userContinueList);
       }
       handleSuccess(message);
     } else if (error) {

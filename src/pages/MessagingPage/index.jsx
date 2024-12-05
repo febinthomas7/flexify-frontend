@@ -4,7 +4,7 @@ import Header from "../../components/Header";
 import { PiCamera } from "react-icons/pi";
 import { Helmet } from "react-helmet";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { MessagingContext } from "../../../MessageContext";
+import { MessagingContext } from "../../MessageContext";
 import {
   LoadingComponentForchatUsers,
   LoadingComponentForchatMessages,

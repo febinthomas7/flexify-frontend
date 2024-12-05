@@ -28,23 +28,14 @@ const Continue = () => {
 
       if (result.continue == undefined) {
         localStorage.setItem("userContinueList", JSON.stringify([]));
-        if (result.success === false) {
-          window.localStorage.clear();
-          navigation("/login");
-        }
       } else {
         localStorage.setItem(
           "userContinueList",
           JSON.stringify(result.continue)
         );
-        if (result.success === false) {
-          window.localStorage.clear();
-          navigation("/login");
-        }
       }
 
       setError(false);
-      setTokenExpired(result.success || true);
     } catch (error) {
       localStorage.setItem("userList", JSON.stringify([]));
       setError(true);

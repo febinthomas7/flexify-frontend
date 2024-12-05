@@ -127,12 +127,29 @@ const Profile = () => {
 
     setUserEmail(localStorage.getItem("email"));
   }, []);
-  const userLogOut = () => {
-    window.localStorage.clear();
-    handleSuccess("Logged out successfully!");
-    setTimeout(() => {
-      navigate("/");
-    }, 1000);
+  const userLogOut = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL}/auth/device-logout`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      await response.json();
+      window.localStorage.clear();
+      handleSuccess("Logged out successfully!");
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
 
   const option = () => {

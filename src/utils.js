@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-
 export const handleSuccess = (msg) => {
   toast.success(msg, {
     position: "top-right",
@@ -31,12 +30,12 @@ export const getDeviceDetails = async () => {
     device = "Desktop";
   }
 
-  const uniqueIdentifier = btoa(`${userAgent}-${screenSize}-${device}`);
+  // const uniqueIdentifier = btoa(`${userAgent}-${screenSize}-${device}`);
 
   return {
     device,
     userid: localStorage.getItem("userId"),
-    uniqueIdentifier,
+    // uniqueIdentifier,
   };
 };
 
@@ -69,6 +68,7 @@ export const add = async (
     const { success, message, error, data } = result;
     if (success) {
       setUserList([...userList, data]);
+      localStorage.setItem("userList", JSON.stringify([...userList, data]));
       handleSuccess(message);
       setTimeout(() => {
         setAdded(false);
@@ -83,7 +83,13 @@ export const add = async (
   }
 };
 
-export const Watching = async (movie, type, mode, userList, setUserList) => {
+export const Watching = async (
+  movie,
+  type,
+  mode,
+  userContinueList,
+  setUserContinueList
+) => {
   try {
     const url = `${import.meta.env.VITE_BASE_URL}/auth/continue`;
     const userId = localStorage.getItem("userId");
@@ -103,7 +109,7 @@ export const Watching = async (movie, type, mode, userList, setUserList) => {
     const result = await response.json();
     const { success, message, error, data } = result;
     if (success) {
-      setUserList([...userList, data]);
+      setUserContinueList([...userContinueList, data]);
     } else if (error) {
       console.log(error);
     }
@@ -130,6 +136,7 @@ export const deleteMovie = async (movie, userList, setUserList) => {
           (item) => item._id !== movie._id
         );
         setUserList(updatedUserList);
+        localStorage.setItem("userList", JSON.stringify(updatedUserList));
       } else {
         console.error("userList is not an array:", userList);
       }
@@ -147,6 +154,7 @@ export const deleteContinue = async (
   userContinueList,
   setUserContinueList
 ) => {
+  console.log(movie);
   try {
     const url = `${import.meta.env.VITE_BASE_URL}/auth/deleteContinue`;
     const response = await fetch(url, {

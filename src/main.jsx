@@ -6,7 +6,7 @@ import FallBack from "./components/FallBack";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Context from "./Context";
-import { MessagingProvider } from "../MessageContext";
+import { MessagingProvider } from "./MessageContext";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(

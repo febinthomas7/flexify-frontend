@@ -1,8 +1,10 @@
 import { Link, createBrowserRouter } from "react-router-dom";
-import { lazy } from "react";
+import { lazy, useState, useEffect, useContext } from "react";
 import { Navigate } from "react-router-dom";
-import Anime from "../pages/Anime";
-import AnimeDetails from "../pages/AnimeDetails";
+import { useLocation } from "react-router-dom";
+import { MessagingContext } from "../MessageContext";
+const Anime = lazy(() => import("../pages/Anime"));
+const AnimeDetails = lazy(() => import("../pages/AnimeDetails"));
 const MainPage = lazy(() => import("../pages/MainPage"));
 const MovieDetails = lazy(() => import("../pages/MovieDetails"));
 const SeriesDetails = lazy(() => import("../pages/SeriesDetails"));
@@ -19,14 +21,22 @@ const PersonPage = lazy(() => import("../pages/Person"));
 const Actors = lazy(() => import("../pages/Actors"));
 
 const PrivateRoute = ({ children }) => {
+  const location = useLocation();
+  const { setAuth, auth } = useContext(MessagingContext);
+  useEffect(() => {
+    setAuth(!auth);
+    console.log("setAuth");
+  }, [location.pathname]);
+
   const isAuthenticated = localStorage.getItem("token");
-  return isAuthenticated ? children : <Navigate to="/login" replace={false} />;
+  return isAuthenticated ? children : <Navigate to="/login" replace={true} />;
 };
 
 const RefreshHandler = ({ children }) => {
   const isAuthenticated = localStorage.getItem("token");
-  return !isAuthenticated ? children : <Navigate to="/home" replace={false} />;
+  return !isAuthenticated ? children : <Navigate to="/home" replace={true} />;
 };
+
 const router = createBrowserRouter([
   {
     path: "/",

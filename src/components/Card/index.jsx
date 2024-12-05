@@ -74,17 +74,17 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   };
 
   useEffect(() => {
-    const List = userList ? userList : [];
+    let arr = JSON.parse(localStorage.getItem("userList"));
 
-    const movieExists = Array.isArray(List)
-      ? userList?.some((element) =>
+    const movieExists = Array.isArray(arr)
+      ? arr?.some((element) =>
           element.id ? element.id === movie.id : element.title === movie.title
         )
       : false;
 
     setList(movieExists);
     setMovieAdded(false);
-  }, [movie, movieAdded, userList]);
+  }, [movie, movieAdded, userList, userContinueList]);
   // useEffect(() => {
   //   likes();
   // }, []);
@@ -102,7 +102,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
   // console.log(list);
 
   const watch = (m1, m2, m3, m4, m5) => {
-    Watching(movie, type, mode, userList, setUserList);
+    Watching(movie, type, mode, userContinueList, setUserContinueList);
     navigation(`/${m1 || m2}/${m3 || m4 || m5}`);
   };
   return (

@@ -95,5 +95,3 @@ export const MessagingProvider = ({ children }) => {
     </MessagingContext.Provider>
   );
 };
-
-// export const UseMessaging = () => useContext(MessagingContext);

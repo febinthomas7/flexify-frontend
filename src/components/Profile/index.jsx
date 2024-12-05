@@ -55,7 +55,7 @@ const Profile = () => {
     try {
       const url = `${
         import.meta.env.VITE_BASE_URL
-      }/auth/deleteuserprofileinfo?userId=${localStorage.getItem(
+      }/auth/deleteuserprofileinfo?userid=${localStorage.getItem(
         "userId"
       )}&item=${e}`;
       const headers = {
@@ -130,7 +130,9 @@ const Profile = () => {
   const userLogOut = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/auth/device-logout`,
+        `${
+          import.meta.env.VITE_BASE_URL
+        }/auth/device-logout?userid=${localStorage.getItem("userId")}`,
         {
           method: "POST",
           headers: {

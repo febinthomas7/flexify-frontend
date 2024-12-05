@@ -17,7 +17,9 @@ const Login = () => {
   const fetchDeviceDetails = async () => {
     const deviceDetails = await getDeviceDetails();
     const response = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/auth/user/device`,
+      `${
+        import.meta.env.VITE_BASE_URL
+      }/auth/user/device?userid=${localStorage.getItem("userId")}`,
       {
         method: "POST",
         headers: {

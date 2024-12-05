@@ -16,7 +16,7 @@ import { LoadingComponentForchatUsers } from "../LoadingComponent";
 import ScrollForCastAndCrew from "../ScrollForCastAndCrew";
 import { Watch } from "../../Context";
 import "react-toastify/dist/ReactToastify.css";
-import { userData, add, Message } from "../../utils";
+import { userData, add, Message, Watching } from "../../utils";
 import { RxCross1 } from "react-icons/rx";
 import {
   FacebookIcon,
@@ -48,7 +48,13 @@ const MoreInfoComponent = ({
   const [added, setAdded] = useState(false);
 
   const navigation = useNavigate();
-  const { movieAdded, setUserList, userList } = useContext(Watch);
+  const {
+    movieAdded,
+    setUserList,
+    userList,
+    userContinueList,
+    setUserContinueList,
+  } = useContext(Watch);
   const addwatch = async (e) => {
     e.stopPropagation();
     setAdded(true);
@@ -168,6 +174,11 @@ const MoreInfoComponent = ({
     moreInfoData?.id || moreInfoData?.link_url
   }`;
 
+  const watch = (m1, m2, m3, m4, m5) => {
+    Watching(moreInfoData, type, mode, userContinueList, setUserContinueList);
+    navigation(`/${m1 || m2 || m3 || m4}/${m5}`);
+  };
+
   return (
     <div
       className="fixed w-full h-screen top-0 z-40 justify-center  flex shadow-md shadow-[black] bg-[#000000b3]"
@@ -219,13 +230,12 @@ const MoreInfoComponent = ({
               <div className="flex items-center gap-3">
                 <button
                   onClick={() =>
-                    navigation(
-                      `/${
-                        moreInfoData?.media_type ||
-                        type ||
-                        moreInfoData?.type ||
-                        moreInfoData?.mode
-                      }/${moreInfoData?.id}`
+                    watch(
+                      moreInfoData?.media_type,
+                      type,
+                      moreInfoData?.type,
+                      moreInfoData?.mode,
+                      moreInfoData?.id
                     )
                   }
                   type="button"

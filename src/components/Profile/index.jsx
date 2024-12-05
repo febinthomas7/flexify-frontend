@@ -128,11 +128,28 @@ const Profile = () => {
     setUserEmail(localStorage.getItem("email"));
   }, []);
   const userLogOut = async () => {
+    const userAgent = navigator.userAgent;
+    let device = "Unknown Device";
+
+    if (/mobile/i.test(userAgent)) {
+      device = "Mobile";
+    } else if (/iPad|Tablet/i.test(userAgent)) {
+      device = "Tablet";
+    } else if (/iPhone/i.test(userAgent)) {
+      device = "iPhone";
+    } else if (/android/i.test(userAgent)) {
+      device = "Android Device";
+    } else {
+      device = "Desktop";
+    }
+
     try {
       const response = await fetch(
         `${
           import.meta.env.VITE_BASE_URL
-        }/auth/device-logout?userid=${localStorage.getItem("userId")}`,
+        }/auth/device-logout?userid=${localStorage.getItem(
+          "userId"
+        )}&device=${device}`,
         {
           method: "POST",
           headers: {

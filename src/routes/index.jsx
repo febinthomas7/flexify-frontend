@@ -25,7 +25,6 @@ const PrivateRoute = ({ children }) => {
   const { setAuth, auth } = useContext(MessagingContext);
   useEffect(() => {
     setAuth(!auth);
-    console.log("setAuth");
   }, [location.pathname]);
 
   const isAuthenticated = localStorage.getItem("token");

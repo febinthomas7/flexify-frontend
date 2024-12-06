@@ -37,10 +37,9 @@ const LoggedInDevices = () => {
           <div className="pt-3  w-full">
             <ul className="flex flex-col gap-2 text-sm">
               <li>
-                {/* Device: {session.device}, Time: {formattedTime} , */}
                 active:
-                {deviceDetail.users > 0 ? "🟢" : "🔴"}, users:{" "}
-                {deviceDetail.users}
+                {deviceDetail?.users > 0 ? "🟢" : "🔴"}, users:{" "}
+                {deviceDetail?.users}
               </li>
               {/* {deviceDetail?.map((session, index) => {
                 // const dateObject = new Date(session?.updatedAt);

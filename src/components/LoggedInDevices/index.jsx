@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const LoggedInDevices = () => {
   const [loading, setLoading] = useState(true);
-  const [deviceDetail, setDeviceDetail] = useState([]);
+  const [deviceDetail, setDeviceDetail] = useState();
   const logged = async () => {
     setLoading(true);
     try {
@@ -36,33 +36,39 @@ const LoggedInDevices = () => {
         ) : (
           <div className="pt-3  w-full">
             <ul className="flex flex-col gap-2 text-sm">
-              {deviceDetail?.map((session, index) => {
-                const dateObject = new Date(session?.updatedAt);
+              <li>
+                {/* Device: {session.device}, Time: {formattedTime} , */}
+                active:
+                {deviceDetail.users > 0 ? "🟢" : "🔴"}, users:{" "}
+                {deviceDetail.users}
+              </li>
+              {/* {deviceDetail?.map((session, index) => {
+                // const dateObject = new Date(session?.updatedAt);
 
-                let hours = dateObject.getHours();
-                let month = dateObject.getMonth();
+                // let hours = dateObject.getHours();
+                // let month = dateObject.getMonth();
 
-                let day = dateObject.getDay();
-                let year = dateObject.getFullYear();
-                const minutes = dateObject
-                  .getMinutes()
-                  .toString()
-                  .padStart(2, "0");
+                // let day = dateObject.getDay();
+                // let year = dateObject.getFullYear();
+                // const minutes = dateObject
+                //   .getMinutes()
+                //   .toString()
+                //   .padStart(2, "0");
 
                 // Determine AM or PM
-                const ampm = hours >= 12 ? "PM" : "AM";
+                // const ampm = hours >= 12 ? "PM" : "AM";
 
                 // Convert hours to 12-hour format and remove leading zero
-                hours = hours % 12 || 12;
+                // hours = hours % 12 || 12;
 
-                const formattedTime = `${day}/${month}/${year} (${hours}:${minutes} ${ampm})`;
+                // const formattedTime = `${day}/${month}/${year} (${hours}:${minutes} ${ampm})`;
                 return (
                   <li key={index}>
-                    Device: {session.device}, Time: {formattedTime} ,active:
-                    {session.active ? "🟢" : "🔴"}
+                    {/* Device: {session.device}, Time: {formattedTime} , */}
+              {/* active:{session.active ? "🟢" : "🔴"}, users: 1
                   </li>
                 );
-              })}
+              })} */}
             </ul>
           </div>
         )}

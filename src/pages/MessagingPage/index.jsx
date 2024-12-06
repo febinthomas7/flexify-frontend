@@ -220,9 +220,6 @@ const MessagingPage = () => {
                     alt="/no_image.jpg"
                     className="rounded-full w-9 h-9 object-contain bg-black"
                   />
-                  {online.includes(chat?._id) && (
-                    <span className="p-1 rounded-full w-3 h-3  border-black border -right-1 t-0 absolute top-0   bg-green-500"></span>
-                  )}
                 </div>
 
                 <div className="flex flex-col p-1 w-full text-white">
@@ -263,8 +260,15 @@ const MessagingPage = () => {
                       alt="/no_image.jpg"
                       className="rounded-full w-9 h-9 object-contain bg-black"
                     />
+                    {!online.includes(e?._id) && (
+                      <span className="text-[13px]  -right-2 absolute -top-2 ">
+                        🔴
+                      </span>
+                    )}
                     {online.includes(e?._id) && (
-                      <span className="p-1 rounded-full w-3 h-3  border-black border -right-1 t-0 absolute top-0   bg-green-500"></span>
+                      <span className="text-[13px]  -right-2 absolute -top-2 animate-pulse ">
+                        🟢
+                      </span>
                     )}
                   </div>
 

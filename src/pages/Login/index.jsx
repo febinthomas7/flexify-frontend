@@ -29,10 +29,6 @@ const Login = () => {
       }
     );
     const data = await response.json();
-    localStorage.setItem(
-      "deviceDetails",
-      JSON.stringify(data?.user.devicedetails)
-    );
   };
 
   const handleSubmit = async (e) => {

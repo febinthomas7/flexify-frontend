@@ -8,10 +8,24 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { AiOutlineLoading } from "react-icons/ai";
 import { Helmet } from "react-helmet";
 import { ToastContainer } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const Actors = () => {
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Get initial values from searchParams or set defaults
+  const page = Number(searchParams.get("page")) || 1;
+
+  const updateSearchParams = (key, value) => {
+    setSearchParams((prevParams) => {
+      const updatedParams = new URLSearchParams(prevParams);
+      updatedParams.set(key, value);
+      return updatedParams;
+    });
+  };
+
+  // Example event handlers
+  const handlePageChange = (newPage) => updateSearchParams("page", newPage);
 
   const fetchMovies = (page = 1) =>
     fetch(`${import.meta.env.VITE_BASE_URL}/api/actors?page=${page}`).then(
@@ -90,7 +104,7 @@ const Actors = () => {
                   ? "bg-red-400 hidden cursor-not-allowed"
                   : "bg-red-600"
               }  rounded`}
-              onClick={() => setPage((old) => old - 1)}
+              onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
             >
               <MdKeyboardArrowLeft />
@@ -105,7 +119,7 @@ const Actors = () => {
                   : "bg-red-600"
               }  rounded`}
               onClick={() => {
-                setPage((old) => old + 1);
+                handlePageChange(page + 1);
               }}
             >
               <MdKeyboardArrowRight />

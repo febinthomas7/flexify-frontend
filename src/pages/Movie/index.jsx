@@ -12,17 +12,35 @@ import { Helmet } from "react-helmet";
 import { ToastContainer } from "react-toastify";
 import Languages from "../../Languages.json";
 import Country from "../../Country.json";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Genres from "../../Genre.json";
 
 const Movie = () => {
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
-  const [page, setPage] = useState(1);
-  const [selectedLanguage, setSelectedLanguage] = useState("en");
-  const [selectedCountry, setSelectedCountry] = useState("US");
-  const [selectedGenre, setSelectedGenre] = useState("18");
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = Number(searchParams.get("page")) || 1;
+  const selectedLanguage = searchParams.get("language") || "en";
+  const selectedCountry = searchParams.get("country") || "US";
+  const selectedGenre = searchParams.get("genre") || "18";
+
+  const updateSearchParams = (key, value) => {
+    setSearchParams((prevParams) => {
+      const updatedParams = new URLSearchParams(prevParams);
+      updatedParams.set(key, value);
+      return updatedParams;
+    });
+  };
+
+  // Example event handlers
+  const handlePageChange = (newPage) => updateSearchParams("page", newPage);
+  const handleLanguageChange = (newLanguage) =>
+    updateSearchParams("language", newLanguage);
+  const handleCountryChange = (newCountry) =>
+    updateSearchParams("country", newCountry);
+  const handleGenreChange = (newGenre) => updateSearchParams("genre", newGenre);
   const fetchMovies = (page = 1) =>
     fetch(
       `${
@@ -69,7 +87,7 @@ const Movie = () => {
             <select
               id="language"
               value={selectedLanguage}
-              onChange={(e) => setSelectedLanguage(e.target.value)}
+              onChange={(e) => handleLanguageChange(e.target.value)}
               className="p-2 h-12 bg-[#0b0b0b] border border-gray-600 text-white rounded-md"
             >
               {Languages.map((lang) => (
@@ -86,7 +104,7 @@ const Movie = () => {
             <select
               id="country"
               value={selectedCountry}
-              onChange={(e) => setSelectedCountry(e.target.value)}
+              onChange={(e) => handleCountryChange(e.target.value)}
               className="p-2 bg-[#0b0b0b] border border-gray-600 text-white rounded-md"
             >
               {Country.map((count) => (
@@ -103,7 +121,7 @@ const Movie = () => {
             <select
               id="genre"
               value={selectedGenre}
-              onChange={(e) => setSelectedGenre(e.target.value)}
+              onChange={(e) => handleGenreChange(e.target.value)}
               className="p-2 h-12  bg-[#0b0b0b] border border-gray-600 text-white rounded-md"
             >
               {Genres.map((count, index) => (
@@ -164,7 +182,7 @@ const Movie = () => {
                   ? "bg-red-400 hidden cursor-not-allowed"
                   : "bg-red-600"
               }  rounded`}
-              onClick={() => setPage((old) => old - 1)}
+              onClick={() => handlePageChange(page - 1)}
               disabled={page === 1}
             >
               <MdKeyboardArrowLeft />
@@ -178,9 +196,7 @@ const Movie = () => {
                   ? "bg-red-400 hidden cursor-not-allowed"
                   : "bg-red-600"
               }  rounded`}
-              onClick={() => {
-                setPage((old) => old + 1);
-              }}
+              onClick={() => handlePageChange(page + 1)}
             >
               <MdKeyboardArrowRight />
             </button>

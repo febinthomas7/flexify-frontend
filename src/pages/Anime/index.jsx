@@ -13,7 +13,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { Helmet } from "react-helmet";
 import { ToastContainer } from "react-toastify";
 import { ImSpinner6 } from "react-icons/im";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 const Anime = () => {
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
@@ -21,7 +21,22 @@ const Anime = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Get initial values from searchParams or set defaults
+  const page = Number(searchParams.get("page")) || 1;
+
+  const updateSearchParams = (key, value) => {
+    setSearchParams((prevParams) => {
+      const updatedParams = new URLSearchParams(prevParams);
+      updatedParams.set(key, value);
+      return updatedParams;
+    });
+  };
+
+  // Example event handlers
+  const handlePageChange = (newPage) => updateSearchParams("page", newPage);
+
   const fetchProjects = (page = 1) =>
     fetch(`${import.meta.env.VITE_BASE_URL}/api/anime?page=${page}`).then(
       (res) => res.json()
@@ -157,7 +172,7 @@ const Anime = () => {
             className={`text-white w-auto p-2 ${
               page === 1 ? "bg-red-400 hidden cursor-not-allowed" : "bg-red-600"
             }  rounded`}
-            onClick={() => setPage((old) => old - 1)}
+            onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}
           >
             <MdKeyboardArrowLeft />
@@ -172,7 +187,7 @@ const Anime = () => {
                 : "bg-red-600"
             }  rounded`}
             onClick={() => {
-              setPage((old) => old + 1);
+              handlePageChange(page + 1);
             }}
           >
             <MdKeyboardArrowRight />

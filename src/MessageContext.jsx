@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { io } from "socket.io-client";
-import { handleSuccess, handleError } from "./utils";
+import { handleSuccess } from "./utils";
 
 export const MessagingContext = createContext();
 
@@ -9,6 +9,7 @@ export const MessagingProvider = ({ children }) => {
   const [online, setOnline] = useState([]);
   const [messages, setMessages] = useState([]);
   const [auth, setAuth] = useState(true);
+  const [users, setUsers] = useState();
   useEffect(() => {
     if (localStorage.getItem("userId")) {
       const newSocket = io(import.meta.env.VITE_BASE_URL, {
@@ -66,20 +67,47 @@ export const MessagingProvider = ({ children }) => {
 
     // Handle incoming messages
     const handleNewMessage = (newMessage) => {
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      handleSuccess(
-        `message : ${newMessage.message ? newMessage.message : "📷"}`
-      );
-      console.log(newMessage);
+      if (
+        newMessage.senderId === localStorage.getItem("receiverId") &&
+        newMessage.receiverId === localStorage.getItem("userId")
+      ) {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      }
+
+      const audio = new Audio("/notification.mp3"); // Add the path to your notification sound file
+      audio.play();
+
+      handleSuccess(`message from ${newMessage.senderName}`);
+    };
+    const handleNewChat = (newMessage) => {
+      updateUserMessages(newMessage);
     };
 
     socket.on("newMessage", handleNewMessage);
+    socket.on("newChat", handleNewChat);
 
     // Cleanup listener on dependency change
     return () => {
       socket.off("newMessage", handleNewMessage);
+      socket.off("newChat", handleNewChat);
     };
   }, [socket]);
+
+  const updateUserMessages = (newMessage) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) => {
+        return {
+          ...user,
+          newMessage: [
+            ...user.newMessage.filter(
+              (msg) => msg._id !== newMessage._id // Prevent duplicate messages
+            ),
+            newMessage,
+          ],
+        };
+      })
+    );
+  };
   return (
     <MessagingContext.Provider
       value={{
@@ -89,6 +117,8 @@ export const MessagingProvider = ({ children }) => {
         setMessages,
         auth,
         setAuth,
+        users,
+        setUsers,
       }}
     >
       {children}

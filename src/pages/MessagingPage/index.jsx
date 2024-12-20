@@ -10,10 +10,9 @@ import {
   LoadingComponentForchatMessages,
 } from "../../components/LoadingComponent";
 import "react-toastify/dist/ReactToastify.css";
-
+import { ToastContainer } from "react-toastify";
 const MessagingPage = () => {
   const [message, setMessage] = useState("");
-  const [users, setUsers] = useState([]);
   const [user, setUser] = useState("");
   const [receiverId, setReceiverId] = useState("");
   const [flags, setFlags] = useState(false);
@@ -23,8 +22,9 @@ const MessagingPage = () => {
   const [chatLoading, setChatLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [updateFriend, setUpdateFriend] = useState(false);
 
-  const { messages, setMessages, socket, online } =
+  const { messages, setMessages, online, users, setUsers } =
     useContext(MessagingContext);
 
   const userData = async () => {
@@ -51,7 +51,24 @@ const MessagingPage = () => {
 
   useEffect(() => {
     userData();
-  }, [flags, socket, messages, setMessages]);
+  }, [updateFriend]);
+  const updateUserMessages = (userId, newMessage) => {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) => {
+        return user._id === userId
+          ? {
+              ...user,
+              newMessage: [
+                ...user.newMessage.filter(
+                  (msg) => msg._id !== newMessage._id // Prevent duplicate messages
+                ),
+                newMessage,
+              ],
+            }
+          : user;
+      })
+    );
+  };
 
   const selectUser = async (userId) => {
     try {
@@ -93,6 +110,8 @@ const MessagingPage = () => {
     formData.append("image", e.target.image.files[0]);
     formData.append("message", message);
     formData.append("senderId", localStorage.getItem("userId"));
+    formData.append("senderName", localStorage.getItem("name"));
+
     formData.append(
       "receiverId",
       receiverId || localStorage.getItem("receiverId")
@@ -117,7 +136,11 @@ const MessagingPage = () => {
         }
 
         setFlags(!flags);
-        setUser(result.data);
+        if (result?.newFriend) {
+          setUpdateFriend(result?.newFriend);
+        }
+
+        updateUserMessages(localStorage.getItem("receiverId"), result?.newChat);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -170,10 +193,12 @@ const MessagingPage = () => {
 
   const filteredChats = useMemo(
     () =>
-      users?.filter((chat) =>
-        chat?.name.toLowerCase().includes(searchTerm.toLowerCase())
-      ),
-    [users, searchTerm]
+      users
+        ?.filter((chat) =>
+          chat?.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        ?.slice(0, 5),
+    [searchTerm]
   );
 
   return (
@@ -182,6 +207,7 @@ const MessagingPage = () => {
         <title>Chat - Flexifyy</title>
         <meta name="description" content="user chat" />
       </Helmet>
+      <ToastContainer />
       <Header />
       <div className=" bg-black w-full  h-screen flex overflow-hidden ">
         <div

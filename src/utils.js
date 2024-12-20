@@ -230,7 +230,7 @@ export const Message = async (userId, userName, movie, type, mode) => {
       }
     );
 
-    // const result = await response.json();
+    const result = await response.json();
 
     handleSuccess(`Message sent to ${userName}`);
   } catch (error) {

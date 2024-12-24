@@ -211,19 +211,28 @@ const MessagingPage = () => {
       <Header />
       <div className=" bg-black w-full  h-screen flex overflow-hidden ">
         <div
-          className={`w-[400px] bg-[#8b000047] flex flex-col gap-2 overflow-auto ${
+          className={`w-[400px] bg-[#020202] flex flex-col gap-2 overflow-auto ${
             !hide ? "flex" : "hidden sm:flex"
-          }  relative px-2 h-[calc(100%-5rem)] sm:h-[calc(100%-6rem)] p-2 mt-[5rem] sm:mt-[6rem] `}
+          }  relative pb-2 h-[calc(100%-5rem)] sm:h-[calc(100%-6rem)] px-2 mt-[5rem] sm:mt-[6rem] `}
         >
-          {loading && <LoadingComponentForchatUsers />}
           <div className="gap-2 flex flex-col ">
             <input
               type="text"
               placeholder="Username"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="mt-2  p-2 rounded-lg bg-white text-gray-700 outline-none sticky "
+              className="  p-2 rounded-lg bg-white text-gray-700 outline-none sticky "
             />
+
+            {filteredChats?.length === 0 && (
+              <div className="text-gray-400 text-center">No users found.</div>
+            )}
+
+            {users?.length === 0 && (
+              <div className="text-gray-400 text-center">
+                You don't have any friends yet.
+              </div>
+            )}
 
             {filteredChats?.map((chat, index) => (
               <div
@@ -256,6 +265,7 @@ const MessagingPage = () => {
               </div>
             ))}
           </div>
+          {loading && <LoadingComponentForchatUsers />}
           {users
             ?.filter((usr, i) =>
               usr.friends?.includes(localStorage.getItem("userId"))
@@ -268,7 +278,7 @@ const MessagingPage = () => {
                   className={`w-full rounded p-2 flex gap-2 ${
                     e._id == localStorage.getItem("receiverId")
                       ? "bg-[#c4c4c475]"
-                      : "bg-[#6f6f6f75]"
+                      : "bg-[#3939397d]"
                   }  ${
                     searchTerm === "" ||
                     searchTerm === null ||
@@ -372,12 +382,20 @@ const MessagingPage = () => {
           )}
 
           <div
-            className="mb-4 w-full h-full overflow-auto hide py-16"
+            className=" w-full h-full overflow-auto hide py-16  bg-[url('/bgforchat.png')] bg-cover bg-center bg-no-repeat flex flex-col-reverse"
             id="scroll-container"
           >
             {chatLoading && <LoadingComponentForchatMessages />}
-            {messages.length <= 0 && !chatLoading && (
-              <div className="text-center text-white">No messages yet.</div>
+            {messages.length <= 0 &&
+              !chatLoading &&
+              localStorage.getItem("receiverId") && (
+                <div className="text-center text-white">No messages yet.</div>
+              )}
+
+            {!localStorage.getItem("receiverId") && (
+              <div className="text-center text-black  text-xl">
+                Chat and share moments with your friends!
+              </div>
             )}
             {messages?.map((msg, index) => {
               const dateObject = new Date(msg?.updatedAt);
@@ -413,7 +431,7 @@ const MessagingPage = () => {
                 >
                   <div>
                     <div
-                      className={` rounded-xl text-white px-2 pt-3 pb-4 inline-block relative min-w-[50px] max-w-[300px] sm:max-w-[310px] text-left ${
+                      className={` rounded-xl text-white px-2 pt-3 pb-4 inline-block relative min-w-[50px] max-w-[200px] sm:max-w-[250px] text-left overflow-hidden ${
                         msg?.senderId === localStorage.getItem("userId")
                           ? "bg-[#181818af] rounded-xl rounded-br-none"
                           : " bg-[#3d3d3daf] rounded-xl rounded-bl-none"
@@ -460,11 +478,11 @@ const MessagingPage = () => {
           {(receiverId || localStorage.getItem("receiverId")) && (
             <form
               onSubmit={sendMessage}
-              className="flex gap-2  p-3 absolute  bottom-0 left-0 w-full bg-black"
+              className="flex gap-2  p-3 absolute  bottom-0 left-0 w-full bg-[#00000096]"
             >
               <input
                 type="text"
-                className="border p-2 flex-1"
+                className="border p-2 flex-1 rounded-md"
                 value={message}
                 name="message"
                 onChange={(e) => setMessage(e.target.value)}

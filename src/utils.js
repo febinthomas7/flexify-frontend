@@ -108,6 +108,7 @@ export const Watching = async (
 
     const result = await response.json();
     const { success, message, error, data } = result;
+    console.log(result);
     if (success) {
       setUserContinueList([...userContinueList, data]);
     } else if (error) {

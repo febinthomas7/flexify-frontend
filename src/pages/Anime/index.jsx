@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { debounce } from "../../debounce";
@@ -13,13 +13,17 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { Helmet } from "react-helmet";
 import { ToastContainer } from "react-toastify";
 import { ImSpinner6 } from "react-icons/im";
-import { Link, useSearchParams } from "react-router-dom";
+import { Watching } from "../../utils";
+import { Watch } from "../../Context";
+import { useSearchParams, useNavigate } from "react-router-dom";
 const Anime = () => {
   const [moreInfo, setMoreInfo] = useState(false);
   const [moreInfoData, setMoreInfoData] = useState();
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigate();
+  const { userContinueList, setUserContinueList } = useContext(Watch);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -88,6 +92,17 @@ const Anime = () => {
       fetchSearchResults(value);
     }
   };
+
+  const handleItemClick = (e) => {
+    Watching(e, "anime", "anime", userContinueList, setUserContinueList);
+    navigation(`/anime/${e?.link_url}`);
+  };
+
+  const handleKeyDown = (e) => {
+    Watching(e, "anime", "anime", userContinueList, setUserContinueList);
+    navigation(`/anime/${e?.link_url}`);
+  };
+
   return (
     <>
       <ToastContainer />
@@ -114,21 +129,20 @@ const Anime = () => {
           {searchResults && searchResults?.data?.length > 0 ? (
             <ul className="absolute w-full mt-2 bg-[#535353f7] border border-gray-300 rounded-md shadow-md z-10 max-h-[300px] overflow-auto">
               {searchResults?.data.map((e, index) => (
-                <Link key={index} to={`/anime/${e?.first_link_url}`}>
-                  <li
-                    onClick={() => handleItemClick(e)} // Handle clicks
-                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 flex gap-2 items-center"
-                    tabIndex={0} // Make it focusable
-                    onKeyDown={(event) => handleKeyDown(event, e)} // Handle keyboard events
-                  >
-                    <img
-                      src={e.thumbnail_url} // Adjust the key based on your data structure
-                      alt={e.title}
-                      className="w-10 h-10 mr-4 rounded-md object-cover"
-                    />
-                    {e.title}
-                  </li>
-                </Link>
+                <li
+                  key={index}
+                  onClick={() => handleItemClick(e)} // Handle clicks
+                  className="px-4 py-2 cursor-pointer hover:bg-gray-100 flex gap-2 items-center"
+                  tabIndex={0} // Make it focusable
+                  onKeyDown={(event) => handleKeyDown(event, e)} // Handle keyboard events
+                >
+                  <img
+                    src={e.thumbnail_url} // Adjust the key based on your data structure
+                    alt={e.title}
+                    className="w-10 h-10 mr-4 rounded-md object-cover"
+                  />
+                  {e.title}
+                </li>
               ))}
             </ul>
           ) : null}

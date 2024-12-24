@@ -382,7 +382,7 @@ const MessagingPage = () => {
           )}
 
           <div
-            className=" w-full h-full overflow-auto hide py-16  bg-[url('/bgforchat.png')] bg-cover bg-center bg-no-repeat flex flex-col-reverse"
+            className=" w-full h-full overflow-auto hide py-16  bg-[url('/bgforchat.png')] bg-cover bg-center bg-no-repeat "
             id="scroll-container"
           >
             {chatLoading && <LoadingComponentForchatMessages />}

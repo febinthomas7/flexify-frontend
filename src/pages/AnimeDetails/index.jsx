@@ -7,7 +7,6 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 const AnimeDetails = () => {
   const { id } = useParams();
-  console.log(id);
   const fetchProjects = (id) =>
     fetch(`${import.meta.env.VITE_BASE_URL}/api/episode?id=${id}`).then((res) =>
       res.json()

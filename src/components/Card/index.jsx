@@ -284,19 +284,6 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                     title="share"
                     onClick={share}
                   />
-                  {/* {like ? (
-                  <GoHeartFill
-                    className="hover:scale-105  text-red-600"
-                    title="liked"
-                    onClick={deleteLikeById}
-                  />
-                ) : (
-                  <GoHeart
-                    className="hover:scale-105 hover:text-white"
-                    title="like"
-                    onClick={addLike}
-                  />
-                )} */}
                 </div>
 
                 {type !== "anime" && (
@@ -311,15 +298,25 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
 
             <div className="text-white  w-full flex flex-wrap gap-2">
               {type == "anime" ? (
-                <h1 className="before:content-['.'] text-[10px] drop-shadow-lg hover:text-[#c0c0c0]">
+                <>
+                  {/* <h1 className="before:content-['.'] text-[10px] drop-shadow-lg hover:text-[#c0c0c0]">
                   {movie?.genres || movie?.genre_ids}
-                </h1>
+                </h1> */}
+                </>
               ) : (
                 movie?.genre_ids?.map((e, index) => {
                   const genreName = Genres.find((g) => g.id === e)?.name || "";
                   return (
                     <h1
                       key={index}
+                      title={genreName}
+                      onClick={() =>
+                        navigation(
+                          `/${movie?.media_type || type}?genre=${e}&language=${
+                            movie?.original_language
+                          }`
+                        )
+                      }
                       className="before:content-['.'] text-[10px] drop-shadow-lg hover:text-[#c0c0c0]"
                     >
                       {genreName}

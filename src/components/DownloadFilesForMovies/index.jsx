@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import axios from "axios";
 
 const DownloadFilesForMovies = ({ id }) => {
@@ -7,21 +6,25 @@ const DownloadFilesForMovies = ({ id }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const options = {
-      method: "GET",
-      url: `${import.meta.env.VITE_BASE_URL}/api/download/movie`,
-      params: {
-        id: id,
-      },
+    const fetchFiles = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/api/download/movie`,
+          { params: { id } }
+        );
+        setFiles(response.data);
+      } catch (err) {
+        console.error("Error fetching files:", err);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    axios.request(options).then((response) => {
-      setFiles(response.data);
-      setIsLoading(false);
-    });
+    fetchFiles();
   }, [id]);
 
   if (files === null || typeof files === "undefined") {
+    setIsLoading(false);
     return;
   } else {
     return (

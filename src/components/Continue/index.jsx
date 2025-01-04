@@ -1,17 +1,12 @@
 import ScrollComponent from "../ScrollComponent";
-import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect, useContext } from "react";
 import { Watch } from "../../Context";
 
 const Continue = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const {
-    deleteContinueWatch,
-
-    userContinueList,
-    setUserContinueList,
-  } = useContext(Watch);
+  const { deleteContinueWatch, userContinueList, setUserContinueList } =
+    useContext(Watch);
 
   const userWatched = async () => {
     setLoading(true);

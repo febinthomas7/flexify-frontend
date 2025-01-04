@@ -67,8 +67,8 @@ export const add = async (
     const result = await response.json();
     const { success, message, error, data } = result;
     if (success) {
-      setUserList([...userList, data]);
-      localStorage.setItem("userList", JSON.stringify([...userList, data]));
+      setUserList([data, ...userList]);
+      localStorage.setItem("userList", JSON.stringify([data, ...userList]));
       handleSuccess(message);
       setTimeout(() => {
         setAdded(false);
@@ -109,7 +109,7 @@ export const Watching = async (
     const result = await response.json();
     const { success, message, error, data } = result;
     if (success) {
-      setUserContinueList([...userContinueList, data]);
+      setUserContinueList([data, ...userContinueList]);
     } else if (error) {
       console.log(error);
     }

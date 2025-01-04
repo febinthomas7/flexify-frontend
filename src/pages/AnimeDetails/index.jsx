@@ -8,9 +8,11 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 const AnimeDetails = () => {
   const { id } = useParams();
   const fetchProjects = (id) =>
-    fetch(`${import.meta.env.VITE_BASE_URL}/api/episode?id=${id}`).then((res) =>
-      res.json()
-    );
+    fetch(
+      `${import.meta.env.VITE_BASE_URL}/api/episode?id=${
+        id?.split("-episode")[0]
+      }`
+    ).then((res) => res.json());
 
   const { data, isFetching } = useQuery({
     queryKey: ["episodes", id],
@@ -45,7 +47,7 @@ const AnimeDetails = () => {
 
       <div className="w-full h-[500px] md:h-[700px] sm:w-[80%] sm:h-[600px]  shadow-2xl  rounded-md overflow-hidden bg-[#17171784]">
         <iframe
-          src={`https://2anime.xyz/embed/${id}`}
+          src={`https://vidapi.xyz/embed/anime/${id}`}
           className="w-full h-full   rounded-md"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

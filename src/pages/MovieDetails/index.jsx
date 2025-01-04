@@ -20,6 +20,10 @@ const MovieDetails = () => {
       name: "Server 2",
       url: `https://www.2embed.cc/embed/${id}`,
     },
+    {
+      name: "Server 3",
+      url: `https://vidapi.xyz/embedmulti/movie/${id}`,
+    },
   ];
 
   const [server, setServer] = useState(servers[0]?.url);

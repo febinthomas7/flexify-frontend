@@ -95,12 +95,12 @@ const Anime = () => {
 
   const handleItemClick = (e) => {
     Watching(e, "anime", "anime", userContinueList, setUserContinueList);
-    navigation(`/anime/${e?.link_url}`);
+    navigation(`/anime/${e?.embed_url?.split("anime/")[1]}`);
   };
 
   const handleKeyDown = (e) => {
     Watching(e, "anime", "anime", userContinueList, setUserContinueList);
-    navigation(`/anime/${e?.link_url}`);
+    navigation(`/anime/${e?.embed_url?.split("anime/")[1]}`);
   };
 
   return (

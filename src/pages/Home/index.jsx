@@ -9,6 +9,7 @@ import UpcomingSeries from "../../components/UpcomingSeries";
 import Continue from "../../components/Continue";
 import { Helmet } from "react-helmet";
 import { ToastContainer } from "react-toastify";
+import Anime from "../../components/Anime";
 
 const Home = () => {
   return (
@@ -25,6 +26,7 @@ const Home = () => {
       <Trending />
       <Movies />
       <Series />
+      <Anime />
       <UpcomingMovies />
       <UpcomingSeries />
       <Footer />

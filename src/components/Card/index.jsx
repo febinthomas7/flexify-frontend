@@ -222,8 +222,7 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
                       type,
                       mode,
                       movie.id,
-                      movie?.link_url,
-                      movie?.embed_url?.split("embed/")[1]
+                      movie?.embed_url?.split("anime/")[1]
                     )
                   }
                   className="w-full h-7 capitalize text-[13px] hover:scale-105 duration-75 outline outline-2 outline-[#292929] outline-offset-1 ease-in bg-[#000000e8] rounded text-white"
@@ -299,9 +298,13 @@ const Card = ({ movie, type, MoreInfo, mode, page }) => {
             <div className="text-white  w-full flex flex-wrap gap-2">
               {type == "anime" ? (
                 <>
-                  {/* <h1 className="before:content-['.'] text-[10px] drop-shadow-lg hover:text-[#c0c0c0]">
-                  {movie?.genres || movie?.genre_ids}
-                </h1> */}
+                  <h1
+                    className={`${
+                      movie?.genres ? "before:content-['.']" : null
+                    } text-[10px] drop-shadow-lg hover:text-[#c0c0c0]`}
+                  >
+                    {movie?.genres || movie?.genre_ids}
+                  </h1>
                 </>
               ) : (
                 movie?.genre_ids?.map((e, index) => {

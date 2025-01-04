@@ -9,7 +9,6 @@ import { LoadingComponentForScroll } from "../LoadingComponent";
 import { LoadingComponentForMovieAndSeries } from "../LoadingComponent";
 const MoreInfoComponent = lazy(() => import("../MoreInfoComponent"));
 import Card from "../Card";
-import { Watch } from "../../Context";
 
 const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
   // console.log(mode, type);

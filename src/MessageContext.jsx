@@ -8,77 +8,96 @@ export const MessagingProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [online, setOnline] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [auth, setAuth] = useState(true);
+  const [auth, setAuth] = useState(false); // Default to not authenticated
   const [users, setUsers] = useState();
-  useEffect(() => {
-    if (localStorage.getItem("userId")) {
-      const newSocket = io(import.meta.env.VITE_BASE_URL, {
-        query: {
-          userId: localStorage.getItem("userId"),
-        },
-      });
-      setSocket(newSocket);
 
-      newSocket.on("getOnlineUser", (onlineUsers) => {
-        setOnline(onlineUsers);
-      });
-
-      return () => {
-        newSocket.disconnect();
-      };
-    }
-  }, []);
-
+  // Authenticate user
   useEffect(() => {
     const authenticate = async () => {
+      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
+      if (!userId || !token) return; // Skip if no user is logged in
+
       try {
         const url = `${
           import.meta.env.VITE_BASE_URL
-        }/auth/check-auth?userId=${localStorage.getItem("userId")}`;
+        }/auth/check-auth?userId=${userId}`;
         const headers = {
-          Authorization: localStorage.getItem("token"),
+          Authorization: token,
         };
         const response = await fetch(url, { headers });
 
         const result = await response.json();
-        if (result.success === false) {
-          const response = await fetch(
-            `${import.meta.env.VITE_BASE_URL}/auth/device-logout`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          await response.json();
-          window.localStorage.clear();
+        if (result.success) {
+          setAuth(true); // User is authenticated
+        } else {
+          // If authentication fails, clear localStorage and handle socket cleanup
+          await fetch(`${import.meta.env.VITE_BASE_URL}/auth/device-logout`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          localStorage.clear();
+          setAuth(false); // User is no longer authenticated
+
+          // Cleanup socket if it exists
+          if (socket) {
+            socket.disconnect();
+            setSocket(null); // Reset socket state
+          }
         }
       } catch (error) {
-        console.log(error);
+        console.error("Authentication error:", error);
+
+        // Handle socket cleanup on error as well
+        if (socket) {
+          socket.disconnect();
+          setSocket(null);
+        }
       }
     };
 
     authenticate();
   }, [socket, auth]);
 
+  // Initialize socket connection
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+    if (!auth || !userId) return; // Initialize only if authenticated and userId is present
+
+    const newSocket = io(import.meta.env.VITE_BASE_URL, {
+      query: { userId },
+    });
+    setSocket(newSocket);
+
+    newSocket.on("getOnlineUser", (onlineUsers) => {
+      setOnline(onlineUsers);
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [auth]);
+
+  // Handle incoming messages
   useEffect(() => {
     if (!socket) return;
 
-    // Handle incoming messages
     const handleNewMessage = (newMessage) => {
       if (
-        newMessage.senderId === localStorage.getItem("receiverId") &&
-        newMessage.receiverId === localStorage.getItem("userId")
+        newMessage?.senderId === localStorage.getItem("receiverId") &&
+        newMessage?.receiverId === localStorage.getItem("userId")
       ) {
         setMessages((prevMessages) => [...prevMessages, newMessage]);
       }
 
-      const audio = new Audio("/notification.mp3"); // Add the path to your notification sound file
+      const audio = new Audio("/notification.mp3");
       audio.play();
 
       handleSuccess(`message from ${newMessage.senderName}`);
     };
+
     const handleNewChat = (newMessage) => {
       updateUserMessages(newMessage);
     };
@@ -86,7 +105,6 @@ export const MessagingProvider = ({ children }) => {
     socket.on("newMessage", handleNewMessage);
     socket.on("newChat", handleNewChat);
 
-    // Cleanup listener on dependency change
     return () => {
       socket.off("newMessage", handleNewMessage);
       socket.off("newChat", handleNewChat);
@@ -95,23 +113,23 @@ export const MessagingProvider = ({ children }) => {
 
   const updateUserMessages = (newMessage) => {
     setUsers((prevUsers) =>
-      prevUsers.map((user) => {
-        return {
-          ...user,
-          newMessage: [
-            ...user.newMessage.filter(
-              (msg) => msg._id !== newMessage._id // Prevent duplicate messages
-            ),
-            newMessage,
-          ],
-        };
-      })
+      prevUsers?.map((user) => ({
+        ...user,
+        newMessage: [
+          ...user?.newMessage?.filter(
+            (msg) => msg?._id !== newMessage?._id // Prevent duplicate messages
+          ),
+          newMessage,
+        ],
+      }))
     );
   };
+
   return (
     <MessagingContext.Provider
       value={{
         socket,
+        setSocket,
         online,
         messages,
         setMessages,

@@ -58,7 +58,6 @@ const TvShowsPage = () => {
     queryFn: () => fetchSeries(page),
     placeholderData: keepPreviousData,
   });
-
   const MoreInfo = (e, movie) => {
     e.stopPropagation();
     setMoreInfo(true);

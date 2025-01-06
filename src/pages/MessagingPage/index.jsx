@@ -54,12 +54,12 @@ const MessagingPage = () => {
   }, [updateFriend]);
   const updateUserMessages = (userId, newMessage) => {
     setUsers((prevUsers) =>
-      prevUsers.map((user) => {
+      prevUsers?.map((user) => {
         return user._id === userId
           ? {
               ...user,
               newMessage: [
-                ...user.newMessage.filter(
+                ...user?.newMessage?.filter(
                   (msg) => msg._id !== newMessage._id // Prevent duplicate messages
                 ),
                 newMessage,
@@ -138,6 +138,7 @@ const MessagingPage = () => {
         setFlags(!flags);
         if (result?.newFriend) {
           setUpdateFriend(result?.newFriend);
+          console.log(result?.newFriend);
         }
 
         updateUserMessages(localStorage.getItem("receiverId"), result?.newChat);
@@ -149,6 +150,9 @@ const MessagingPage = () => {
   };
 
   const getMessage = async () => {
+    if (!receiverId || !localStorage.getItem("receiverId")) {
+      return;
+    }
     setChatLoading(true);
     try {
       const url = `${
@@ -201,6 +205,8 @@ const MessagingPage = () => {
     [searchTerm]
   );
 
+  const handleInputChange = (e) => setMessage(e.target.value);
+  const handleFileChange = (e) => setSelectedFile(e.target.files[0]);
   return (
     <>
       <Helmet>
@@ -289,7 +295,7 @@ const MessagingPage = () => {
                 >
                   <div className="relative">
                     <img
-                      src={e.dp || "/no_image.jpg"}
+                      src={e?.dp || "/no_image.jpg"}
                       onError={(e) => {
                         e.target.src = "/no_image.jpg";
                       }}
@@ -313,14 +319,14 @@ const MessagingPage = () => {
                       <h1 className="text-sm">{e?.name}</h1>{" "}
                     </div>
                     <div className="w-full flex justify-between items-center text-sm">
-                      {e.newMessage
+                      {e?.newMessage
                         ?.filter(
                           (usr) =>
                             usr.participants?.includes(
                               localStorage.getItem("userId")
                             ) && usr.participants?.includes(e?._id) // Check if senderId is in participants and there are other users
                         )
-                        .map((filteredMessage, index) => {
+                        ?.map((filteredMessage, index) => {
                           const dateObject = new Date(
                             filteredMessage?.updatedAt
                           );
@@ -485,7 +491,7 @@ const MessagingPage = () => {
                 className="border p-2 flex-1 rounded-md"
                 value={message}
                 name="message"
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={handleInputChange}
                 placeholder="Type a message..."
               />
               <input
@@ -493,7 +499,7 @@ const MessagingPage = () => {
                 className="hidden"
                 id="fileInput"
                 name="image"
-                onChange={(e) => setSelectedFile(e.target.files[0])} // handle file selection
+                onChange={handleFileChange} // handle file selection
               />
               <label
                 htmlFor="fileInput"

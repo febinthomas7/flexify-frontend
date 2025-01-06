@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleSuccess, handleError } from "../../utils";
-import { ToastContainer } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
 import { IoPencilSharp } from "react-icons/io5";
 import "react-toastify/dist/ReactToastify.css";
 import { MdDeleteForever } from "react-icons/md";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
 import { Watch } from "../../Context";
+import { MessagingContext } from "../../MessageContext";
 const Profile = () => {
   const [userEmail, setUserEmail] = useState("");
 
@@ -25,6 +25,7 @@ const Profile = () => {
     profileDelete,
     setProfileDelete,
   } = useContext(Watch);
+  const { auth, socket, setAuth, setSocket } = useContext(MessagingContext);
   const navigate = useNavigate("");
 
   const handleInputChange = async (e) => {
@@ -158,7 +159,20 @@ const Profile = () => {
         }
       );
       await response.json();
-      window.localStorage.clear();
+      await fetch(`${import.meta.env.VITE_BASE_URL}/auth/device-logout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      localStorage.clear();
+      setAuth(false); // User is no longer authenticated
+
+      // Cleanup socket if it exists
+      if (socket) {
+        socket.disconnect();
+        setSocket(null); // Reset socket state
+      }
       handleSuccess("Logged out successfully!");
       setTimeout(() => {
         navigate("/");
@@ -166,6 +180,10 @@ const Profile = () => {
 
       setLoading(false);
     } catch (error) {
+      if (socket) {
+        socket.disconnect();
+        setSocket(null);
+      }
       setLoading(false);
       console.log(error);
     }

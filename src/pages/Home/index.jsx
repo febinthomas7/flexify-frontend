@@ -13,7 +13,7 @@ import Anime from "../../components/Anime";
 
 const Home = () => {
   return (
-    <div className="overflow-hidden bg-black text-white">
+    <div className="overflow-hidden bg-black text-white ">
       <ToastContainer />
       <Helmet>
         <title>Home - Flexifyy</title>

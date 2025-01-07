@@ -165,17 +165,18 @@ const Profile = () => {
           "Content-Type": "application/json",
         },
       });
-      localStorage.clear();
-      setAuth(false); // User is no longer authenticated
 
+      handleSuccess("Logged out successfully!");
+      setAuth(false); // User is no longer authenticated
+      window.localStorage.clear();
       // Cleanup socket if it exists
       if (socket) {
         socket.disconnect();
         setSocket(null); // Reset socket state
       }
-      handleSuccess("Logged out successfully!");
+
       setTimeout(() => {
-        navigate("/");
+        navigate("/login");
       }, 1000);
 
       setLoading(false);
@@ -198,7 +199,10 @@ const Profile = () => {
       className={` justify-center bg-[#0b0b0b] text-white p-4 pt-24 md:py-20 md:px-8   bg-cover bg-center`}
       style={{
         backgroundImage: `url(${
-          backgroundImage || localStorage.getItem("background")
+          backgroundImage ||
+          (localStorage.getItem("background") !== "null" &&
+            localStorage.getItem("background")?.trim()) ||
+          "/bgImage.svg"
         })`,
       }}
     >

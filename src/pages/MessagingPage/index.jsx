@@ -5,6 +5,7 @@ import { PiCamera } from "react-icons/pi";
 import { Helmet } from "react-helmet";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { MessagingContext } from "../../MessageContext";
+import { RxCross1 } from "react-icons/rx";
 import {
   LoadingComponentForchatUsers,
   LoadingComponentForchatMessages,
@@ -23,6 +24,7 @@ const MessagingPage = () => {
   const [selectedFile, setSelectedFile] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [updateFriend, setUpdateFriend] = useState(false);
+  const [photo, setPhoto] = useState("");
 
   const { messages, setMessages, online, users, setUsers } =
     useContext(MessagingContext);
@@ -207,6 +209,15 @@ const MessagingPage = () => {
 
   const handleInputChange = (e) => setMessage(e.target.value);
   const handleFileChange = (e) => setSelectedFile(e.target.files[0]);
+
+  const zoomIn = (pic) => {
+    console.log(pic);
+    setPhoto(pic);
+  };
+
+  const zoomOut = () => {
+    setPhoto("");
+  };
   return (
     <>
       <Helmet>
@@ -252,20 +263,26 @@ const MessagingPage = () => {
                   searchTerm === "" || searchTerm === null ? "hidden" : ""
                 } items-center cursor-pointer sm:hover:scale-105`}
               >
-                <div className="relative gap-1">
+                <div className=" max-w-[20%]">
                   <img
                     src={chat.dp || "/no_image.jpg"}
                     onError={(e) => {
                       e.target.src = "/no_image.jpg";
                     }}
                     alt="/no_image.jpg"
-                    className="rounded-full w-9 h-9 object-contain bg-black"
+                    className={`rounded-full w-9 h-9 object-contain bg-black outline outline-2 outline-offset-2  ${
+                      online.includes(chat?._id)
+                        ? "outline-[green]"
+                        : "outline-[red]"
+                    }`}
                   />
                 </div>
 
-                <div className="flex flex-col p-1 w-full text-white">
+                <div className="flex flex-col p-1 w-full text-white max-w-[80%]">
                   <div className="w-full flex justify-between items-center">
-                    <h1 className="text-sm">{chat?.name}</h1>{" "}
+                    <h1 title={chat?.name} className="text-sm">
+                      {chat?.name}
+                    </h1>{" "}
                   </div>
                 </div>
               </div>
@@ -293,29 +310,23 @@ const MessagingPage = () => {
                       : "hidden"
                   }  items-center cursor-pointer sm:hover:scale-105`}
                 >
-                  <div className="relative">
+                  <div className="max-w-[20%]">
                     <img
                       src={e?.dp || "/no_image.jpg"}
                       onError={(e) => {
                         e.target.src = "/no_image.jpg";
                       }}
                       alt="/no_image.jpg"
-                      className="rounded-full w-9 h-9 object-contain bg-black"
+                      className={`rounded-full w-9 h-9 object-contain outline outline-2 outline-offset-2 ${
+                        online.includes(e?._id)
+                          ? "outline-[green]"
+                          : "outline-[red]"
+                      } bg-black`}
                     />
-                    {!online.includes(e?._id) && (
-                      <span className="text-[13px]  -right-2 absolute -top-2 ">
-                        🔴
-                      </span>
-                    )}
-                    {online.includes(e?._id) && (
-                      <span className="text-[13px]  -right-2 absolute -top-2 animate-pulse ">
-                        🟢
-                      </span>
-                    )}
                   </div>
 
-                  <div className="flex flex-col p-1 w-full text-white">
-                    <div className="w-full flex justify-between items-center">
+                  <div className="flex flex-col p-1 min-w-[80%] max-w-[80%] text-white">
+                    <div className="w-full min-w-[100%] max-w-[100%] flex justify-between items-center">
                       <h1 className="text-sm">{e?.name}</h1>{" "}
                     </div>
                     <div className="w-full flex justify-between items-center text-sm">
@@ -350,8 +361,12 @@ const MessagingPage = () => {
                               key={index}
                               className="w-full flex justify-between items-center"
                             >
-                              <h1>{filteredMessage?.latestMessage}</h1>
-                              <span className="text-xs">{formattedTime}</span>
+                              <h1 className="truncate min-w-[76%] max-w-[76%]">
+                                {filteredMessage?.latestMessage}
+                              </h1>
+                              <span className="text-xs max-w-[24%]">
+                                {formattedTime}
+                              </span>
                             </div>
                             // Display the filtered message
                           );
@@ -391,6 +406,19 @@ const MessagingPage = () => {
             className=" w-full h-full overflow-auto hide py-16  bg-[url('/bgforchat.png')] bg-cover bg-center bg-no-repeat "
             id="scroll-container"
           >
+            {!photo == "" && (
+              <div className="w-full h-full flex justify-center items-center bg-[#000000b0] z-[8] absolute top-0">
+                <RxCross1
+                  onClick={zoomOut}
+                  className="right-6 top-[80px] absolute text-white cursor-pointer "
+                />
+                <img
+                  src={photo}
+                  alt="chat photo"
+                  className="w-[250px] sm:w-[300px] h-auto object-cover rounded-lg"
+                />
+              </div>
+            )}
             {chatLoading && <LoadingComponentForchatMessages />}
             {messages.length <= 0 &&
               !chatLoading &&
@@ -437,7 +465,7 @@ const MessagingPage = () => {
                 >
                   <div>
                     <div
-                      className={` rounded-xl text-white px-2 pt-3 pb-4 inline-block relative min-w-[50px] max-w-[200px] sm:max-w-[250px] text-left overflow-hidden ${
+                      className={` rounded-xl break-words text-white px-2 pt-3 pb-4 inline-block relative min-w-[50px] max-w-[200px] sm:max-w-[250px] text-left overflow-hidden ${
                         msg?.senderId === localStorage.getItem("userId")
                           ? "bg-[#181818af] rounded-xl rounded-br-none"
                           : " bg-[#3d3d3daf] rounded-xl rounded-bl-none"
@@ -445,8 +473,9 @@ const MessagingPage = () => {
                     >
                       {msg?.imageUrl && (
                         <img
-                          className="w-full "
+                          className="w-full cursor-pointer"
                           src={msg?.imageUrl}
+                          onClick={() => zoomIn(msg?.imageUrl)}
                           onError={(e) => {
                             e.target.src = "/no_image.jpg";
                           }}
@@ -469,7 +498,11 @@ const MessagingPage = () => {
                           );
                         } else {
                           // Render plain text
-                          return <span key={idx}>{part}</span>;
+                          return (
+                            <span key={idx} className="">
+                              {part}
+                            </span>
+                          );
                         }
                       })}
                       <span className="text-[10px] absolute text-gray-400  bottom-0 right-1">

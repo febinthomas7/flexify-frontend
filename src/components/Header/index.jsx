@@ -130,7 +130,7 @@ const Header = () => {
 
       <header
         className={` text-white p-2 sm:p-4 z-40 flex justify-between fixed w-full ${
-          bgcolor ? "bg-[#000000b1]" : null
+          bgcolor ? "bg-[#000000db]" : "bg-[#000000b1]"
         } items-center duration-75 ease-in`}
       >
         <Link to="/home">
@@ -140,25 +140,29 @@ const Header = () => {
         </Link>
 
         <nav className="hidden md:flex space-x-4">
-          {nav.map((item, index) => (
-            <Link
-              key={index}
-              to={item.path}
-              className={`hover:text-[#b01818] font-semibold ${
-                navigation.pathname == item.path
-                  ? "text-[#b01818]"
-                  : "text-[#c5c5c5c1]"
-              } `}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {nav
+            ?.filter((e) => e.path !== "/myprofile")
+            .map((item, index) => (
+              <Link
+                key={index}
+                to={item.path}
+                className={`hover:text-[#b01818] font-semibold ${
+                  navigation.pathname == item.path
+                    ? "text-[#b01818]"
+                    : "text-[#c5c5c5c1]"
+                } `}
+              >
+                {item.label}
+              </Link>
+            ))}
         </nav>
 
         <div className="flex items-center space-x-4">
           <div
             onClick={openSearch}
-            className="w-[34px]  h-[34px] flex justify-center items-center cursor-pointer outline outline-2 outline-offset-2 outline-[red] bg-black group   rounded-full"
+            className={`w-[34px]  h-[34px] flex justify-center items-center cursor-pointer outline outline-2 outline-offset-2 ${
+              isOpen ? "outline-[red]" : "outline-[#c5c5c5c1]"
+            }  bg-black group   rounded-full`}
           >
             <IoIosSearch className="text-[20px] text-[#ededed] group-hover:text-white group-hover:scale-105" />
           </div>
@@ -169,7 +173,11 @@ const Header = () => {
               onError={(e) => {
                 e.target.src = "/no_image.jpg";
               }}
-              className="w-9 h-9  object-contain rounded-full bg-white cursor-pointer"
+              className={`w-9 h-9  object-contain rounded-full outline outline-2 outline-offset-2 ${
+                navigation.pathname === "/myprofile"
+                  ? "outline-[red]"
+                  : "outline-[#c5c5c5c1] "
+              } bg-white cursor-pointer`}
             />
           </Link>
           <nav className="flex flex-col justify-center items-center  md:hidden relative">

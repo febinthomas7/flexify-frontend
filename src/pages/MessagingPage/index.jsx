@@ -265,9 +265,9 @@ const MessagingPage = () => {
               >
                 <div className=" max-w-[20%]">
                   <img
-                    src={chat.dp || "/no_image.jpg"}
+                    src={chat.dp || "/no_image.svg"}
                     onError={(e) => {
-                      e.target.src = "/no_image.jpg";
+                      e.target.src = "/no_image.svg";
                     }}
                     alt="/no_image.jpg"
                     className={`rounded-full w-9 h-9 object-contain bg-black outline outline-2 outline-offset-2  ${
@@ -312,9 +312,9 @@ const MessagingPage = () => {
                 >
                   <div className="max-w-[20%]">
                     <img
-                      src={e?.dp || "/no_image.jpg"}
+                      src={e?.dp || "/no_image.svg"}
                       onError={(e) => {
-                        e.target.src = "/no_image.jpg";
+                        e.target.src = "/no_image.svg";
                       }}
                       alt="/no_image.jpg"
                       className={`rounded-full w-9 h-9 object-contain outline outline-2 outline-offset-2 ${
@@ -392,7 +392,7 @@ const MessagingPage = () => {
                 <img
                   src={user?.dp || localStorage.getItem("receiverDp")}
                   onError={(e) => {
-                    e.target.src = "/no_image.jpg";
+                    e.target.src = "/no_image.svg";
                   }}
                   alt=""
                   className="w-6 h-6 bg-white rounded-full object-contain"
@@ -477,7 +477,7 @@ const MessagingPage = () => {
                           src={msg?.imageUrl}
                           onClick={() => zoomIn(msg?.imageUrl)}
                           onError={(e) => {
-                            e.target.src = "/no_image.jpg";
+                            e.target.src = "/no_image.svg";
                           }}
                           alt=""
                         />

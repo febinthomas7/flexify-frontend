@@ -245,7 +245,7 @@ const Profile = () => {
                     <img
                       src={avatarUrl || localStorage.getItem("avatar")}
                       onError={(e) => {
-                        e.target.src = "/no_image.jpg";
+                        e.target.src = "/no_image.svg";
                       }}
                       alt="Current Avatar"
                       className="w-16 h-16 object-contain bg-white rounded-full cursor-pointer"

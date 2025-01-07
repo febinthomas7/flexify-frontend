@@ -169,9 +169,9 @@ const Header = () => {
           <Link to="/myprofile" className="max-[490px]:hidden">
             <img
               alt="Profile"
-              src={avatarUrl || "/no_image.jpg"}
+              src={avatarUrl || localStorage.getItem("avatar")}
               onError={(e) => {
-                e.target.src = "/no_image.jpg";
+                e.target.src = "/no_image.svg";
               }}
               className={`w-9 h-9  object-contain rounded-full outline outline-2 outline-offset-2 ${
                 navigation.pathname === "/myprofile"

@@ -28,7 +28,7 @@ const MessagingPage = () => {
 
   const { messages, setMessages, online, users, setUsers } =
     useContext(MessagingContext);
-
+  const no_image = "/no_image.svg";
   const userData = async () => {
     setLoading(true);
     try {
@@ -265,9 +265,9 @@ const MessagingPage = () => {
               >
                 <div className=" max-w-[20%]">
                   <img
-                    src={chat.dp || "/no_image.svg"}
+                    src={chat.dp || no_image}
                     onError={(e) => {
-                      e.target.src = "/no_image.svg";
+                      e.target.src = no_image;
                     }}
                     alt="/no_image.jpg"
                     className={`rounded-full w-9 h-9 object-contain bg-black outline outline-2 outline-offset-2  ${
@@ -312,9 +312,9 @@ const MessagingPage = () => {
                 >
                   <div className="max-w-[20%]">
                     <img
-                      src={e?.dp || "/no_image.svg"}
+                      src={e?.dp || no_image}
                       onError={(e) => {
-                        e.target.src = "/no_image.svg";
+                        e.target.src = no_image;
                       }}
                       alt="/no_image.jpg"
                       className={`rounded-full w-9 h-9 object-contain outline outline-2 outline-offset-2 ${
@@ -392,7 +392,7 @@ const MessagingPage = () => {
                 <img
                   src={user?.dp || localStorage.getItem("receiverDp")}
                   onError={(e) => {
-                    e.target.src = "/no_image.svg";
+                    e.target.src = no_image;
                   }}
                   alt=""
                   className="w-6 h-6 bg-white rounded-full object-contain"
@@ -477,9 +477,9 @@ const MessagingPage = () => {
                           src={msg?.imageUrl}
                           onClick={() => zoomIn(msg?.imageUrl)}
                           onError={(e) => {
-                            e.target.src = "/no_image.svg";
+                            e.target.src = "/fallback_poster.png";
                           }}
-                          alt=""
+                          alt={msg?.imageUrl}
                         />
                       )}
 

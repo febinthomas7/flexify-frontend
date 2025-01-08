@@ -10,7 +10,6 @@ import { Watch } from "../../Context";
 import { MessagingContext } from "../../MessageContext";
 const Profile = () => {
   const [userEmail, setUserEmail] = useState("");
-
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const {
@@ -25,9 +24,10 @@ const Profile = () => {
     profileDelete,
     setProfileDelete,
   } = useContext(Watch);
-  const { auth, socket, setAuth, setSocket } = useContext(MessagingContext);
+  const { socket, setAuth, setSocket } = useContext(MessagingContext);
   const navigate = useNavigate("");
 
+  const no_image = "/no_image.svg";
   const handleInputChange = async (e) => {
     try {
       const url = `${
@@ -201,7 +201,7 @@ const Profile = () => {
         backgroundImage: `url(${
           backgroundImage ||
           (localStorage.getItem("background") !== "null" &&
-            localStorage.getItem("background")?.trim()) ||
+            localStorage.getItem("background") !== "undefined") ||
           "/bgImage.svg"
         })`,
       }}
@@ -245,7 +245,7 @@ const Profile = () => {
                     <img
                       src={avatarUrl || localStorage.getItem("avatar")}
                       onError={(e) => {
-                        e.target.src = "/no_image.svg";
+                        e.target.src = no_image;
                       }}
                       alt="Current Avatar"
                       className="w-16 h-16 object-contain bg-white rounded-full cursor-pointer"
@@ -318,7 +318,7 @@ const Profile = () => {
             src={avatarUrl || localStorage.getItem("avatar")}
             alt={avatarUrl}
             onError={(e) => {
-              e.target.src = "/no_image.jpg";
+              e.target.src = no_image;
             }}
             className="w-24 h-24 object-contain bg-white md:w-32 md:h-32 rounded-full"
           />

@@ -130,7 +130,7 @@ const Header = () => {
 
       <header
         className={` text-white p-2 sm:p-4 z-40 flex justify-between fixed w-full ${
-          bgcolor ? "bg-[#000000db]" : "bg-[#000000b1]"
+          bgcolor ? "bg-[#000000db]" : "bg-[#00000000]"
         } items-center duration-75 ease-in`}
       >
         <Link to="/home">

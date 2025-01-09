@@ -11,7 +11,7 @@ const Trending = () => {
   });
   return (
     <ScrollComponent
-      data={data}
+      data={data || []}
       heading={"Trending Movies/Shows"}
       loading={isFetching}
     />

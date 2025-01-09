@@ -11,7 +11,7 @@ const UpcomingMovies = () => {
   });
   return (
     <ScrollComponent
-      data={data}
+      data={data || []}
       heading={"New Movies"}
       type={"movie"}
       mode={"movie"}

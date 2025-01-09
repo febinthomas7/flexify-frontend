@@ -37,7 +37,7 @@ const Mylist = () => {
   return (
     <section className="my-list  bg-black  text-white p-4 md:p-8">
       <ScrollComponent
-        data={userList}
+        data={userList || []}
         heading={"Added PlayList"}
         loading={loading}
         page={"mylist"}

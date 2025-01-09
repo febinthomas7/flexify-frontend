@@ -154,7 +154,6 @@ export const deleteContinue = async (
   userContinueList,
   setUserContinueList
 ) => {
-  console.log(movie);
   try {
     const url = `${import.meta.env.VITE_BASE_URL}/auth/deleteContinue`;
     const response = await fetch(url, {

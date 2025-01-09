@@ -11,7 +11,7 @@ const UpcomingSeries = () => {
   });
   return (
     <ScrollComponent
-      data={data}
+      data={data || []}
       heading={"New Series"}
       type={"tv"}
       mode={"tv"}

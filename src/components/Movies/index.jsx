@@ -11,7 +11,7 @@ const Movies = () => {
 
   return (
     <ScrollComponent
-      data={data?.results}
+      data={data?.results || []}
       heading={"Movies"}
       type={"movie"}
       mode={"movie"}

@@ -6,6 +6,7 @@ import Movies from "../../components/Movies";
 import Series from "../../components/Series";
 import UpcomingMovies from "../../components/UpcomingMovies";
 import UpcomingSeries from "../../components/UpcomingSeries";
+import Recommendation from "../../components/Recommendation";
 import Continue from "../../components/Continue";
 import { Helmet } from "react-helmet";
 import { ToastContainer } from "react-toastify";
@@ -22,6 +23,7 @@ const Home = () => {
       <Header />
 
       <Hero />
+      <Recommendation />
       <Continue />
       <Trending />
       <Movies />

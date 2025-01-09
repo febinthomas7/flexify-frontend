@@ -11,7 +11,7 @@ const Series = () => {
   });
   return (
     <ScrollComponent
-      data={data?.results}
+      data={data?.results || []}
       heading={"Series"}
       type={"tv"}
       mode={"tv"}

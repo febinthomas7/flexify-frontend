@@ -164,11 +164,11 @@ const Anime = () => {
             MoreInfo={MoreInfo}
           />
         )}
-        <div className="w-full h-full flex-wrap flex text-sm text-white gap-4 sm:gap-8  justify-center mx-auto  items-start py-20 sm:px-2">
+        <div className="w-full h-full flex-wrap flex text-sm text-white gap-4 sm:gap-8 justify-center mx-auto items-start py-20 sm:px-2">
           {isFetching ? (
             <LoadingComponentForMovieAndSeries />
-          ) : (
-            data?.map((anime, index) => {
+          ) : Array.isArray(data) && data.length > 0 ? (
+            data.map((anime, index) => {
               return (
                 <Card
                   key={index}
@@ -179,6 +179,8 @@ const Anime = () => {
                 />
               );
             })
+          ) : (
+            <div>No valid data available.</div> // Display a fallback message if data is empty or not an array
           )}
         </div>
         <div className="flex justify-center items-center gap-3 py-3">

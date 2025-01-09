@@ -11,7 +11,7 @@ const Anime = () => {
 
   return (
     <ScrollComponent
-      data={data}
+      data={Array.isArray(data) ? data : []}
       heading={"Anime"}
       type={"anime"}
       mode={"anime"}

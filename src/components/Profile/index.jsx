@@ -167,7 +167,7 @@ const Profile = () => {
       });
 
       handleSuccess("Logged out successfully!");
-      setAuth(false); // User is no longer authenticated
+
       window.localStorage.clear();
       // Cleanup socket if it exists
       if (socket) {

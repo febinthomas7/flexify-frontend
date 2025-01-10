@@ -42,7 +42,7 @@ const LoggedInDevices = () => {
                 let hours = dateObject.getHours();
                 let month = dateObject.getMonth();
 
-                let day = dateObject.getDay();
+                let day = dateObject.getDate();
                 let year = dateObject.getFullYear();
                 const minutes = dateObject
                   .getMinutes()
@@ -56,7 +56,7 @@ const LoggedInDevices = () => {
                 hours = hours % 12 || 12;
 
                 const time = `${hours}:${minutes} ${ampm}`;
-                const date = `${day}/${month}/${year}`;
+                const date = `${day}/${month + 1}/${year}`;
                 return (
                   <li key={index}>
                     Device: {`${session.device}/${session.browser}`}, Time:{" "}

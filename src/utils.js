@@ -15,9 +15,10 @@ export const handleError = (msg) => {
 
 export const getDeviceDetails = async () => {
   const userAgent = navigator.userAgent;
-  let device = "Unknown Device";
   const screenSize = `${window.screen.width}x${window.screen.height}`;
+  let device = "Unknown Device";
 
+  // Determine device type based on user agent
   if (/mobile/i.test(userAgent)) {
     device = "Mobile";
   } else if (/iPad|Tablet/i.test(userAgent)) {
@@ -30,12 +31,72 @@ export const getDeviceDetails = async () => {
     device = "Desktop";
   }
 
-  // const uniqueIdentifier = btoa(`${userAgent}-${screenSize}-${device}`);
+  // Function to get or create a unique device ID stored in localStorage
+  const getOrCreateDeviceID = () => {
+    const key = "deviceID";
+    let deviceID = localStorage.getItem(key);
+    if (!deviceID) {
+      deviceID = crypto.randomUUID(); // Generate a unique UUID
+      localStorage.setItem(key, deviceID);
+    }
+    return deviceID;
+  };
+
+  // Fetch the user's state and country using an IP geolocation API
+  const getLocation = async () => {
+    try {
+      const response = await fetch("https://ipapi.co/json/"); // Free geolocation API
+      if (!response.ok) throw new Error("Failed to fetch location");
+      const data = await response.json();
+
+      const state = data.region.replace(
+        /(National Capital Territory of|State of|Union Territory of)\s*/,
+        ""
+      );
+      return {
+        state: state || "Unknown State",
+        country: data.country_name || "Unknown Country",
+      };
+    } catch (error) {
+      console.error("Error fetching location:", error.message);
+      return {
+        state: "Unknown State",
+        country: "Unknown Country",
+      };
+    }
+  };
+
+  const getBrowserName = () => {
+    const userAgent = navigator.userAgent;
+    let browserName = "Unknown Browser";
+
+    if (userAgent.includes("Chrome")) {
+      browserName = "Chrome";
+    } else if (userAgent.includes("Firefox")) {
+      browserName = "Firefox";
+    } else if (userAgent.includes("Safari")) {
+      browserName = "Safari";
+    } else if (userAgent.includes("Edge")) {
+      browserName = "Edge";
+    } else if (userAgent.includes("MSIE") || userAgent.includes("Trident")) {
+      browserName = "Internet Explorer";
+    }
+
+    return browserName;
+  };
+
+  const deviceID = getOrCreateDeviceID();
+  const location = await getLocation();
+  const browserName = getBrowserName();
 
   return {
     device,
-    userid: localStorage.getItem("userId"),
-    // uniqueIdentifier,
+    screenSize,
+    deviceID, // Device-specific unique identifier
+    userId: localStorage.getItem("userId"), // Retrieve user ID from localStorage if available
+    state: location.state, // Simplified state name
+    country: location.country, // User's country
+    browser: browserName,
   };
 };
 

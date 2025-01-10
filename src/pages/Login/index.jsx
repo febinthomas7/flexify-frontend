@@ -17,9 +17,7 @@ const Login = () => {
   const fetchDeviceDetails = async () => {
     const deviceDetails = await getDeviceDetails();
     const response = await fetch(
-      `${
-        import.meta.env.VITE_BASE_URL
-      }/auth/user/device?userid=${localStorage.getItem("userId")}`,
+      `${import.meta.env.VITE_BASE_URL}/auth/user/device`,
       {
         method: "POST",
         headers: {
@@ -28,7 +26,7 @@ const Login = () => {
         body: JSON.stringify(deviceDetails),
       }
     );
-    const data = await response.json();
+    // const data = await response.json();
   };
 
   const handleSubmit = async (e) => {
@@ -74,11 +72,12 @@ const Login = () => {
       if (sucess) {
         setLoading(false);
         setIsWait(false);
-        handleSuccess("Logged in successfully");
+        handleSuccess(message);
         localStorage.setItem("token", jwtToken);
         localStorage.setItem("name", name);
         localStorage.setItem("email", email);
         localStorage.setItem("userId", _id);
+
         fetchDeviceDetails();
 
         if (!dp === undefined || "undefined" || "") {

@@ -11,7 +11,7 @@ const LoggedInDevices = () => {
 
       const response = await fetch(url);
       const result = await response.json();
-      setDeviceDetail(result?.user);
+      setDeviceDetail(result?.user.devicedetails);
 
       setLoading(false);
     } catch (error) {
@@ -35,40 +35,42 @@ const LoggedInDevices = () => {
           </div>
         ) : (
           <div className="pt-3  w-full">
-            <ul className="flex flex-col gap-2 text-sm">
-              <li>
-                active:
-                {deviceDetail?.users > 0 ? "🟢" : "🔴"}, users:{" "}
-                {deviceDetail?.users}
-              </li>
-              {/* {deviceDetail?.map((session, index) => {
-                // const dateObject = new Date(session?.updatedAt);
+            <ul className="flex flex-col gap-2 text-sm divide-y divide-gray-300">
+              {deviceDetail?.map((session, index) => {
+                const dateObject = new Date(session?.updatedAt);
 
-                // let hours = dateObject.getHours();
-                // let month = dateObject.getMonth();
+                let hours = dateObject.getHours();
+                let month = dateObject.getMonth();
 
-                // let day = dateObject.getDay();
-                // let year = dateObject.getFullYear();
-                // const minutes = dateObject
-                //   .getMinutes()
-                //   .toString()
-                //   .padStart(2, "0");
+                let day = dateObject.getDay();
+                let year = dateObject.getFullYear();
+                const minutes = dateObject
+                  .getMinutes()
+                  .toString()
+                  .padStart(2, "0");
 
                 // Determine AM or PM
-                // const ampm = hours >= 12 ? "PM" : "AM";
+                const ampm = hours >= 12 ? "pm" : "am";
 
                 // Convert hours to 12-hour format and remove leading zero
-                // hours = hours % 12 || 12;
+                hours = hours % 12 || 12;
 
-                // const formattedTime = `${day}/${month}/${year} (${hours}:${minutes} ${ampm})`;
+                const time = `${hours}:${minutes} ${ampm}`;
+                const date = `${day}/${month}/${year}`;
                 return (
                   <li key={index}>
-                    {/* Device: {session.device}, Time: {formattedTime} , */}
-              {/* active:{session.active ? "🟢" : "🔴"}, users: 1
+                    Device: {`${session.device}/${session.browser}`}, Time:{" "}
+                    {time} , Date: {date}
+                    ,Location: {`${session.state}/${session.country}`}
                   </li>
                 );
-              })} */}
+              })}
             </ul>
+            {deviceDetail?.length <= 0 && (
+              <div className="text-center text-sm">
+                sign in again to update session
+              </div>
+            )}
           </div>
         )}
       </div>

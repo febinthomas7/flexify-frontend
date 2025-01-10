@@ -1,6 +1,53 @@
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
+  const nav = [
+    {
+      path: "/home",
+      name: "Home",
+    },
+    {
+      path: "/tv",
+      name: "TV Shows",
+    },
+    {
+      path: "/movie",
+      name: "Movies",
+    },
+    {
+      path: "/myprofile",
+      name: "Profile",
+    },
+    {
+      path: "/anime",
+      name: "Anime",
+    },
+  ];
+
+  const socialMedia = [
+    {
+      path: "#",
+      icon: <FaFacebookF />,
+      name: "Facebook",
+    },
+    {
+      path: "#",
+      icon: <FaTwitter />,
+      name: "Twitter",
+    },
+    {
+      path: "#",
+      icon: <FaYoutube />,
+      name: "Youtube",
+    },
+    {
+      path: "#",
+      icon: <FaInstagram />,
+      name: "Instagram",
+    },
+  ];
+
   return (
     <footer className="bg-black text-white py-8">
       <div className="container mx-auto px-4">
@@ -16,21 +63,13 @@ const Footer = () => {
 
           {/* Navigation Links */}
           <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-8 md:w-1/2 text-sm">
-            <a href="/home" className="hover:text-gray-400">
-              Home
-            </a>
-            <a href="/tv" className="hover:text-gray-400">
-              TV Shows
-            </a>
-            <a href="/movie" className="hover:text-gray-400">
-              Movies
-            </a>
-            <a href="/myprofile" className="hover:text-gray-400">
-              Profile
-            </a>
-            <a href="/#" className="hover:text-gray-400">
-              Contact Us
-            </a>
+            {nav.map((item, index) => (
+              <Link key={index} to={item.path}>
+                <div className="hover:text-gray-400" title={item.name}>
+                  <span>{item.name}</span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
 
@@ -39,18 +78,13 @@ const Footer = () => {
 
         {/* Social Media Links */}
         <div className="flex flex-wrap justify-center space-x-6 text-gray-400">
-          <a href="#" className="hover:text-white">
-            <FaFacebookF />
-          </a>
-          <a href="#" className="hover:text-white">
-            <FaTwitter />
-          </a>
-          <a href="#" className="hover:text-white">
-            <FaInstagram />
-          </a>
-          <a href="#" className="hover:text-white">
-            <FaYoutube />
-          </a>
+          {socialMedia.map((item, index) => (
+            <Link key={index} to={item.path}>
+              <div className="hover:text-gray-400" title={item.name}>
+                {item.icon}
+              </div>
+            </Link>
+          ))}
         </div>
 
         {/* Bottom Section */}
@@ -58,13 +92,6 @@ const Footer = () => {
           <p>
             &copy; {new Date().getFullYear()} flexifyy. All Rights Reserved.
           </p>
-          {/* Uncomment if needed */}
-          {/* <p>
-          Made with ❤️ by{" "}
-          <a href="#" className="text-blue-400 hover:underline">
-            Your Name
-          </a>
-        </p> */}
         </div>
       </div>
     </footer>

@@ -132,6 +132,11 @@ const Profile = () => {
     const userAgent = navigator.userAgent;
     let device = "Unknown Device";
 
+    const deviceDetails = {
+      deviceID: localStorage.getItem("deviceID"), // Device-specific unique identifier
+      userId: localStorage.getItem("userId"), // Retrieve user ID from localStorage if available
+    };
+
     if (/mobile/i.test(userAgent)) {
       device = "Mobile";
     } else if (/iPad|Tablet/i.test(userAgent)) {
@@ -146,36 +151,32 @@ const Profile = () => {
 
     try {
       const response = await fetch(
-        `${
-          import.meta.env.VITE_BASE_URL
-        }/auth/device-logout?userid=${localStorage.getItem(
-          "userId"
-        )}&device=${device}`,
+        `${import.meta.env.VITE_BASE_URL}/auth/device-logout`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify(deviceDetails),
         }
       );
-      await response.json();
-      await fetch(`${import.meta.env.VITE_BASE_URL}/auth/device-logout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const result = await response.json();
+
+      if (result?.success === false) {
+        handleError("error");
+        return;
+      }
 
       handleSuccess("Logged out successfully!");
 
-      window.localStorage.clear();
-      // Cleanup socket if it exists
+      // window.localStorage.clear();
       if (socket) {
         socket.disconnect();
         setSocket(null); // Reset socket state
       }
 
       setTimeout(() => {
+        window.localStorage.clear();
         navigate("/login");
       }, 1000);
 

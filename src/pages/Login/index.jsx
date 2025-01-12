@@ -100,7 +100,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="z-10 w-full h-svh flex justify-center items-center fixed bg-black bg-[url('/mainpage_bg.jpg')]">
+    <div className="z-10 w-full h-svh flex justify-center items-center  bg-black  bg-no-repeat bg-center bg-cover bg-[url('/mainpage_bg.jpg')] aspect-video">
       <Helmet>
         <title>Login - Flexifyy</title>
         <meta name="description" content="user login page" />

@@ -86,7 +86,7 @@ const ScrollComponent = ({ data, heading, type, mode, loading, page }) => {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-[70%] flex flex-wrap gap-6 justify-center rounded overflow-y-auto bg-[#000000f4] p-10 mt-24 relative"
+            className="w-[80%] flex flex-wrap gap-6 justify-center rounded overflow-x-hidden overflow-y-auto bg-[#000000f4] p-10 mt-24 relative"
           >
             {/* <RxCrossCircled className="absolute right-4 top-4 text-gray-300 cursor-pointer hover:scale-105 hover:text-white z-30 text-[30px]" /> */}
 

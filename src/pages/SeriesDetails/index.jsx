@@ -17,7 +17,7 @@ const SeriesDetails = () => {
     },
     {
       name: "Server 2",
-      url: `https://www.2embed.cc/embedtv/${id}`,
+      url: `https://www.2embed.cc/embedtvfull/${id}`,
     },
   ];
 

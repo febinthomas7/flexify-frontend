@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { MessagingContext } from "../../MessageContext";
 const LoggedInDevices = () => {
   const [loading, setLoading] = useState(true);
   const [deviceDetail, setDeviceDetail] = useState();
+  const { socket, online } = useContext(MessagingContext);
   const logged = async () => {
     setLoading(true);
     try {
@@ -21,7 +23,7 @@ const LoggedInDevices = () => {
   };
   useEffect(() => {
     logged();
-  }, []);
+  }, [online]);
 
   return (
     <section className={`my-list  bg-black  text-white p-4 md:p-8`}>

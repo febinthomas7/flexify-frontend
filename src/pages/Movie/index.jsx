@@ -52,6 +52,7 @@ const Movie = () => {
     queryKey: ["Movie", page, selectedLanguage, selectedCountry, selectedGenre],
     queryFn: () => fetchMovies(page),
     placeholderData: keepPreviousData,
+    staleTime: 300000,
   });
 
   const MoreInfo = (e, movie) => {

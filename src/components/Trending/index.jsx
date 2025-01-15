@@ -8,6 +8,7 @@ const Trending = () => {
       fetch(`${import.meta.env.VITE_BASE_URL}/api/trending`).then((res) =>
         res.json()
       ),
+    staleTime: 300000,
   });
   return (
     <ScrollComponent

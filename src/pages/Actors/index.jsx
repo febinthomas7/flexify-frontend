@@ -36,6 +36,7 @@ const Actors = () => {
     queryKey: ["person", page],
     queryFn: () => fetchMovies(page),
     placeholderData: keepPreviousData,
+    staleTime: 300000,
   });
 
   return (

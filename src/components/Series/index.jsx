@@ -8,6 +8,7 @@ const Series = () => {
       fetch(`${import.meta.env.VITE_BASE_URL}/api/series`).then((res) =>
         res.json()
       ),
+    staleTime: 300000,
   });
   return (
     <ScrollComponent

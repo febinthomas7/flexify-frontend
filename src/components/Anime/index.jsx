@@ -7,6 +7,7 @@ const Anime = () => {
       fetch(`${import.meta.env.VITE_BASE_URL}/api/trendinganime`).then((res) =>
         res.json()
       ),
+    staleTime: 300000,
   });
 
   return (

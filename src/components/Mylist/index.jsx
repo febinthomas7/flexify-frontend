@@ -1,54 +1,70 @@
-import { useContext, useEffect, useState } from "react";
 import ScrollComponent from "../ScrollComponent";
+import { useContext, useEffect } from "react";
 import { Watch } from "../../Context";
-import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchUserWatchlist = async () => {
+  const url = `${
+    import.meta.env.VITE_BASE_URL
+  }/auth/userlist?userId=${localStorage.getItem("userId")}`;
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch watchlist");
+  }
+
+  const result = await response.json();
+  const watchlist = result.watchlist || [];
+  localStorage.setItem("userList", JSON.stringify(watchlist));
+  return watchlist;
+};
+
 const Mylist = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const { deleteWatch, userList, setUserList } = useContext(Watch);
 
-  const userWatched = async () => {
-    setLoading(true);
-    try {
-      const url = `${
-        import.meta.env.VITE_BASE_URL
-      }/auth/userlist?userId=${localStorage.getItem("userId")}`;
+  const {
+    data: watchlist = [],
+    isFetching,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["userWatchlist"],
+    queryFn: fetchUserWatchlist,
+    staleTime: 300000, // Cache data for 5 minutes
+  });
 
-      const response = await fetch(url);
-      const result = await response.json();
-
-      setUserList(result.watchlist);
-      setLoading(false);
-
-      if (result.watchlist == undefined) {
-        localStorage.setItem("userList", JSON.stringify([]));
-      } else {
-        localStorage.setItem("userList", JSON.stringify(result.watchlist));
-      }
-    } catch (error) {
-      localStorage.setItem("userList", JSON.stringify([]));
-
-      setLoading(false);
-    }
-  };
+  // Sync fetched data with context
   useEffect(() => {
-    userWatched();
+    if (watchlist.length) {
+      setUserList(watchlist);
+    }
+  }, [watchlist, setUserList]);
+
+  // Refetch when `deleteWatch` changes
+  useEffect(() => {
+    refetch();
   }, [deleteWatch]);
+
   return (
-    <section className="my-list  bg-black  text-white p-4 md:p-8">
+    <section className="my-list bg-black text-white p-4 md:p-8">
       <ScrollComponent
         data={userList || []}
         heading={"Added PlayList"}
-        loading={loading}
+        loading={isFetching}
         page={"mylist"}
       />
 
-      {!loading && userList?.length === 0 && !error ? (
+      {!isFetching && userList?.length === 0 && !isError ? (
         <div className="text-white w-full h-[361px] flex flex-col justify-center items-center bg-[#0b0b0b] rounded">
-          <img src="userNotLogggedIn.webp" alt="" />
+          <img src="userNotLogggedIn.webp" alt="No Items" />
           <h1 className="capitalize">nothing added yet</h1>
         </div>
       ) : null}
+      {isError && (
+        <div className="text-red-500">
+          Error loading your playlist. Please try again later.
+        </div>
+      )}
     </section>
   );
 };

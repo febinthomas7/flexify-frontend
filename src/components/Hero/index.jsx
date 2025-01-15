@@ -15,6 +15,7 @@ const Hero = () => {
       fetch(`${import.meta.env.VITE_BASE_URL}/api/topratedmovies`).then((res) =>
         res.json()
       ),
+    staleTime: 300000,
   });
 
   const MoreInfo = (e, movie) => {

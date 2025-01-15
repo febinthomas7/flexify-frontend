@@ -7,6 +7,7 @@ const Movies = () => {
       fetch(`${import.meta.env.VITE_BASE_URL}/api/movies`).then((res) =>
         res.json()
       ),
+    staleTime: 300000,
   });
 
   return (

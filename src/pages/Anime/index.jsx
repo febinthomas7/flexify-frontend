@@ -50,6 +50,7 @@ const Anime = () => {
     queryKey: ["Anime", page],
     queryFn: () => fetchProjects(page),
     placeholderData: keepPreviousData,
+    staleTime: 300000,
   });
 
   const MoreInfo = (e, movie) => {

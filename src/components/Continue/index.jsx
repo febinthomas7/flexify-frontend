@@ -1,51 +1,56 @@
 import ScrollComponent from "../ScrollComponent";
-import { useState, useEffect, useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Watch } from "../../Context";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchUserContinueList = async () => {
+  const url = `${
+    import.meta.env.VITE_BASE_URL
+  }/auth/continueList?userId=${localStorage.getItem("userId")}`;
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch continue watching list");
+  }
+
+  const result = await response.json();
+  const continueList = result.continue || [];
+  localStorage.setItem("userContinueList", JSON.stringify(continueList));
+  return continueList;
+};
 
 const Continue = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const { deleteContinueWatch, userContinueList, setUserContinueList } =
     useContext(Watch);
 
-  const userWatched = async () => {
-    setLoading(true);
-    try {
-      const url = `${
-        import.meta.env.VITE_BASE_URL
-      }/auth/continueList?userId=${localStorage.getItem("userId")}`;
+  const {
+    data: continueList = [],
+    isFetching,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["userContinueList"],
+    queryFn: fetchUserContinueList,
+    staleTime: 300000, // Cache data for 5 minutes
+  });
 
-      const response = await fetch(url);
-      const result = await response.json();
-
-      setUserContinueList(result.continue);
-      setLoading(false);
-
-      if (result.continue == undefined) {
-        localStorage.setItem("userContinueList", JSON.stringify([]));
-      } else {
-        localStorage.setItem(
-          "userContinueList",
-          JSON.stringify(result.continue)
-        );
-      }
-
-      setError(false);
-    } catch (error) {
-      localStorage.setItem("userList", JSON.stringify([]));
-      setError(true);
-      setLoading(false);
-    }
-  };
+  // Sync fetched data with context
   useEffect(() => {
-    userWatched();
+    if (continueList.length) {
+      setUserContinueList(continueList);
+    }
+  }, [continueList, setUserContinueList]);
+
+  // Refetch when `deleteContinueWatch` changes
+  useEffect(() => {
+    refetch();
   }, [deleteContinueWatch]);
 
   return (
     <ScrollComponent
-      data={userContinueList}
+      data={userContinueList || []}
       heading={"Continue Watching"}
-      loading={loading}
+      loading={isFetching}
       page={"continue"}
     />
   );

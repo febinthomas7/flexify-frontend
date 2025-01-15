@@ -1,40 +1,47 @@
 import ScrollComponent from "../ScrollComponent";
-import { useState, useEffect, useCallback, useContext } from "react";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
+
+const fetchRecommendations = async () => {
+  const url = `${
+    import.meta.env.VITE_BASE_URL
+  }/auth/user-recommendation?id=${localStorage.getItem("userId")}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch recommendations");
+  }
+
+  const data = await response.json();
+  return data.recommendations;
+};
+
 const Recommendation = () => {
-  const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const fetchRecommendations = async () => {
-    setLoading(true);
-    try {
-      const url = `${
-        import.meta.env.VITE_BASE_URL
-      }/auth/user-recommendation?id=${localStorage.getItem("userId")}`;
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+  const {
+    data: recommendations = [],
+    isFetching,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["userRecommendations"],
+    queryFn: () => fetchRecommendations(),
+    staleTime: 300000,
+  });
 
-      const data = await response.json();
-      setRecommendations(data.recommendations);
-
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchRecommendations();
-  }, []);
+  if (isError) {
+    console.log("Error fetching recommendations:", error.message);
+    return <div>Error loading recommendations</div>;
+  }
 
   return (
     <ScrollComponent
-      data={recommendations || []}
+      data={recommendations}
       heading={"Recommendation"}
-      loading={loading}
+      loading={isFetching}
     />
   );
 };

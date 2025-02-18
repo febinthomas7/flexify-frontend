@@ -10,7 +10,6 @@ import {
   LoadingComponentForchatUsers,
   LoadingComponentForchatMessages,
 } from "../../components/LoadingComponent";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 const MessagingPage = () => {
   const [message, setMessage] = useState("");
@@ -26,7 +25,7 @@ const MessagingPage = () => {
   const [updateFriend, setUpdateFriend] = useState(false);
   const [photo, setPhoto] = useState("");
 
-  const { messages, setMessages, online, users, setUsers } =
+  const { messages, setMessages, online, users, setUsers, socket } =
     useContext(MessagingContext);
   const no_image = "/no_image.svg";
   const userData = async () => {
@@ -136,6 +135,8 @@ const MessagingPage = () => {
           setMessages([...messages, result?.newMessage]);
           setSendLoader(false);
         }
+
+        socket.emit("newMessage", result?.newMessage);
 
         setFlags(!flags);
         if (result?.newFriend) {

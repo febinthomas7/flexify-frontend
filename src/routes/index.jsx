@@ -22,11 +22,13 @@ const Actors = lazy(() => import("../pages/Actors"));
 const PageNotFound = lazy(() => import("../components/PageNotFound"));
 
 const PrivateRoute = ({ children }) => {
-  const location = useLocation();
+  const Location = useLocation();
+
   const { setAuth, auth } = useContext(MessagingContext);
+
   useEffect(() => {
     setAuth(!auth);
-  }, [location.pathname]);
+  }, [Location.pathname]);
 
   const isAuthenticated = localStorage.getItem("token");
   return isAuthenticated ? children : <Navigate to="/login" replace={true} />;

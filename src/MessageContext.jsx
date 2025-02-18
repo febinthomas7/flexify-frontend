@@ -10,6 +10,7 @@ export const MessagingProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   const [auth, setAuth] = useState(false); // Default to not authenticated
   const [users, setUsers] = useState();
+  const userId = localStorage.getItem("userId");
 
   // Authenticate user
   useEffect(() => {
@@ -59,30 +60,42 @@ export const MessagingProvider = ({ children }) => {
     };
 
     authenticate();
-  }, [socket, auth]);
+  }, [auth]);
 
   // Initialize socket connection
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    if (!auth || !userId) return; // Initialize only if authenticated and userId is present
+    if (!auth || !userId) return;
 
-    const newSocket = io(import.meta.env.VITE_BASE_URL, {
-      query: { userId },
-    });
-    setSocket(newSocket);
+    if (!socket) {
+      const newSocket = io(import.meta.env.VITE_BASE_URL, {
+        query: { userId },
+      });
 
-    newSocket.on("getOnlineUser", (onlineUsers) => {
-      setOnline(onlineUsers);
-    });
+      setSocket(newSocket);
 
+      newSocket.on("getOnlineUser", (onlineUsers) => {
+        setOnline(onlineUsers);
+      });
+
+      return () => {
+        newSocket.disconnect();
+        setSocket(null); // Reset the socket state on unmount
+      };
+    }
+
+    // If socket already exists, no new connection is created
     return () => {
-      newSocket.disconnect();
+      if (!auth || !userId) {
+        socket?.disconnect();
+        setSocket(null);
+      }
     };
   }, [auth]);
 
   // Handle incoming messages
   useEffect(() => {
     if (!socket) return;
+    // console.log(socket);
 
     const handleNewMessage = (newMessage) => {
       if (
@@ -102,12 +115,19 @@ export const MessagingProvider = ({ children }) => {
       updateUserMessages(newMessage);
     };
 
+    const handleChat = (newMessage) => {
+      updateUserMessages(newMessage);
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    };
+
     socket.on("newMessage", handleNewMessage);
     socket.on("newChat", handleNewChat);
+    socket.on("newMessageReceived", handleChat);
 
     return () => {
       socket.off("newMessage", handleNewMessage);
       socket.off("newChat", handleNewChat);
+      socket.off("newMessageReceived", handleChat);
     };
   }, [socket]);
 

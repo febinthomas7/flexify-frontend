@@ -3,7 +3,6 @@ import { GoEye, GoEyeClosed } from "react-icons/go";
 import { Link, useNavigate } from "react-router-dom";
 import { handleError, handleSuccess } from "../../utils";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 function ResetPassword() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");

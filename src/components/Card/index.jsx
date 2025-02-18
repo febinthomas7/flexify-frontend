@@ -3,7 +3,6 @@ import { TfiArrowCircleDown } from "react-icons/tfi";
 // import { GoHeart, GoHeartFill } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import Genres from "../../Genre.json";
-import "react-toastify/dist/ReactToastify.css";
 import { RxCross1 } from "react-icons/rx";
 import { MdDone } from "react-icons/md";
 import { useState, useEffect, useContext } from "react";

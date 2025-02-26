@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleSuccess, handleError } from "../../utils";
 import { RxCross1 } from "react-icons/rx";
@@ -8,6 +8,9 @@ import { MdDeleteForever } from "react-icons/md";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
 import { Watch } from "../../Context";
 import { MessagingContext } from "../../MessageContext";
+import { Animation } from "../Animation";
+import BIRDS from "vanta/dist/vanta.birds.min";
+
 const Profile = () => {
   const [userEmail, setUserEmail] = useState("");
   const [open, setOpen] = useState(false);
@@ -24,6 +27,28 @@ const Profile = () => {
     profileDelete,
     setProfileDelete,
   } = useContext(Watch);
+  const [vantaEffect, setVantaEffect] = useState(null);
+  const myRef = useRef(null);
+  useEffect(() => {
+    if (!vantaEffect) {
+      setVantaEffect(
+        BIRDS({
+          el: myRef.current,
+          backgroundColor: 0x0,
+          color2: 0x2c0225,
+          wingSpan: 10.0,
+          alignment: 1.0,
+          cohesion: 90.0,
+          minHeight: 200.0,
+          minWidth: 200.0,
+          gyroControls: true,
+        })
+      );
+    }
+    return () => {
+      if (vantaEffect) vantaEffect.destroy();
+    };
+  }, [vantaEffect]);
   const { socket, setAuth, setSocket } = useContext(MessagingContext);
   const navigate = useNavigate("");
 
@@ -197,6 +222,7 @@ const Profile = () => {
   };
   return (
     <section
+      ref={myRef}
       className={` justify-center bg-[#0b0b0b] text-white p-4 pt-24 md:py-20 md:px-8   bg-cover bg-center`}
       style={{
         backgroundImage: `url(${
@@ -276,7 +302,7 @@ const Profile = () => {
                     className=" w-full bg-transparent outline-none"
                   />
                 </div>
-                <div className=" flex gap-1 justify-center items-end text-white">
+                {/* <div className=" flex gap-1 justify-center items-end text-white">
                   <input
                     type="file"
                     id="background"
@@ -284,7 +310,7 @@ const Profile = () => {
                     className="text-white w-fit bg-blue-800 cursor-pointer"
                     placeholder="Upload Background"
                   />
-                </div>
+                </div> */}
                 <button
                   className={` text-white font-bold rounded px-2 py-1 w-fit  ${
                     loading
@@ -304,7 +330,7 @@ const Profile = () => {
           {open ? (
             <RxCross1
               onClick={option}
-              className="text-white absolute top-2 -right-2 sm:right-1  z-20 cursor-pointer hover:scale-105"
+              className="text-white absolute top-2 right-6 sm:right-10 z-20 cursor-pointer hover:scale-105"
               title="close"
             />
           ) : (

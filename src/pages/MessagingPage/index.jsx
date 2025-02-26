@@ -132,7 +132,7 @@ const MessagingPage = () => {
         setSelectedFile("");
 
         if (success) {
-          setMessages([...messages, result?.newMessage]);
+          // setMessages([...messages, result?.newMessage]);
           setSendLoader(false);
         }
 

@@ -16,8 +16,8 @@ const Footer = () => {
       name: "Movies",
     },
     {
-      path: "/myprofile",
-      name: "Profile",
+      path: "/person",
+      name: "Person",
     },
     {
       path: "/anime",

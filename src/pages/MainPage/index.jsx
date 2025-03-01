@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { Helmet } from "react-helmet";
+import FallBack2 from "../../components/FallBack2";
 
 const MainPage = () => {
   return (
-    <div className=" w-full h-svh flex justify-center items-center bg-black bg-cover bg-no-repeat bg-[url('/mainpage_bg.jpg')]">
+    <div className=" w-full h-svh flex justify-center items-center bg-black bg-cover bg-no-repeat bg-[url('/mainpage_bg.jpg')] backdrop-blur-sm">
       <Helmet>
         <title>Flexifyy</title>
         <meta
@@ -18,11 +19,12 @@ const MainPage = () => {
       </Helmet>
       <div className=" w-full h-svh flex justify-center items-center fixed bg-gradient-to-b from-[#000000ee] via-[#1c1c1c7f] to-black z-10"></div>
       <header
-        className={` text-white sm:px-10 px-4 py-4 sm:py-2 z-40 flex top-0 justify-between fixed w-full  items-center duration-75 ease-in`}
+        className={` text-white sm:px-10 px-4 py-4 sm:py-2 z-50 flex top-0 justify-between  fixed w-full  items-center duration-75 ease-in`}
       >
         <Link to="/">
           <div className="logo   flex justify-center items-center">
-            <img src="/logo.png" alt="" className="w-[110px] sm:w-[180px] " />
+            {/* <img src="/logo.png" alt="" className="w-[110px] sm:w-[180px] " /> */}
+            <FallBack2 />
           </div>
         </Link>
 
@@ -32,7 +34,7 @@ const MainPage = () => {
           </div>
         </Link>
       </header>
-      <div className="flex justify-center items-center w-full z-40 ">
+      <div className="flex justify-center items-center h-full w-full z-40 backdrop-blur-sm">
         <div className=" p-8 rounded-lg shadow-lg w-full flex flex-col gap-3 sm:gap-6 text-white justify-center items-center relative">
           <h2 className="text-2xl sm:text-5xl font-extrabold text-center ">
             Unlimited movies, TV shows and more

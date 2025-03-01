@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import FallBack2 from "../../components/FallBack2";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -90,7 +91,7 @@ const Signin = () => {
     }
   };
   return (
-    <div className=" z-10 w-full h-svh flex justify-center items-center  bg-black  bg-no-repeat bg-center bg-cover bg-[url('/mainpage_bg.jpg')] aspect-video">
+    <div className=" z-10 w-full h-svh flex justify-center items-center  bg-black  bg-no-repeat bg-center bg-cover bg-[url('/mainpage_bg.jpg')] aspect-video ">
       <Helmet>
         <title>SignIn - Flexifyy</title>
         <meta name="description" content="user sign in page" />
@@ -100,11 +101,12 @@ const Signin = () => {
         className={` text-white  sm:px-10 sm:py-2 z-40 flex top-0 justify-between fixed w-full  items-center duration-75 ease-in`}
       ></header>
       <ToastContainer />
-      <div className="flex justify-center items-center w-full z-40 ">
-        <div className="bg-[#000000a7] p-8 rounded-lg shadow-lg w-full max-w-md relative mx-5 ">
+      <div className="flex justify-center h-full items-center w-full z-40 backdrop-blur-sm">
+        <div className="bg-[#000000c0] p-8 rounded-lg shadow-lg w-full max-w-md relative mx-5 ">
           <Link to="/">
             <div className="logo   flex justify-center items-center">
-              <img src="/logo.png" alt="" className="w-[120px] sm:w-[180px] " />
+              {/* <img src="/logo.png" alt="" className="w-[120px] sm:w-[180px] " /> */}
+              <FallBack2 />
             </div>
           </Link>
           <form onSubmit={handleSubmit}>

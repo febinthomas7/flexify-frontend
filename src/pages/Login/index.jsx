@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { getDeviceDetails } from "../../utils";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import FallBack2 from "../../components/FallBack2";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -109,11 +110,12 @@ const Login = () => {
         className={` text-white sm:px-10 sm:py-2 z-40 flex top-0 justify-between fixed w-full  items-center duration-75 ease-in`}
       ></header>
       <ToastContainer />
-      <div className="flex justify-center items-center w-full z-40  ">
-        <div className="bg-[#000000a7] p-8 rounded-lg shadow-lg w-full max-w-md relative mx-5 ">
+      <div className="flex justify-center items-center w-full h-full z-40  backdrop-blur-sm">
+        <div className="bg-[#000000c0] p-8 rounded-lg shadow-lg w-full  max-w-md relative mx-5 ">
           <Link to="/">
             <div className="logo   flex justify-center items-center">
-              <img src="/logo.png" alt="" className="w-[120px] sm:w-[180px] " />
+              {/* <img src="/logo.png" alt="" className="w-[120px] sm:w-[180px] " /> */}
+              <FallBack2 />
             </div>
           </Link>
           <form onSubmit={handleSubmit}>

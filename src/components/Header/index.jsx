@@ -15,6 +15,7 @@ import { LuPersonStanding } from "react-icons/lu";
 
 import { FaTv } from "react-icons/fa";
 import { Watch } from "../../Context";
+import FallBack2 from "../FallBack2";
 
 const Header = () => {
   const [bgcolor, setBgColor] = useState(false);
@@ -129,13 +130,14 @@ const Header = () => {
       )}
 
       <header
-        className={` text-white p-2 sm:p-4 z-40 flex justify-between fixed w-full ${
+        className={` text-white px-2 sm:px-4 z-40 flex justify-between fixed w-full ${
           bgcolor ? "bg-[#000000db]" : "bg-[#00000000]"
         } items-center duration-75 ease-in`}
       >
         <Link to="/home">
           <div className="logo   flex justify-center items-center text-[15px]">
-            <img src="/logo.png" alt="" className="w-[100px] " />
+            {/* <img src="/logo.png" alt="" className="w-[100px] " /> */}
+            <FallBack2 />
           </div>
         </Link>
 

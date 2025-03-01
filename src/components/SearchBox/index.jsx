@@ -34,7 +34,7 @@ const SearchBox = ({ value, onchange, searchResults, set }) => {
       )}
 
       <input
-        type="text"
+        type="search"
         value={value}
         onChange={onchange}
         autoFocus

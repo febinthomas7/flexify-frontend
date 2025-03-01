@@ -6,10 +6,13 @@ import { IoPencilSharp } from "react-icons/io5";
 import "react-toastify/dist/ReactToastify.css";
 import { MdDeleteForever } from "react-icons/md";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
+import { renderToStaticMarkup } from "react-dom/server";
+
 import { Watch } from "../../Context";
 import { MessagingContext } from "../../MessageContext";
 import { Animation } from "../Animation";
 import BIRDS from "vanta/dist/vanta.birds.min";
+import FallBack2 from "../FallBack2";
 
 const Profile = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -34,8 +37,10 @@ const Profile = () => {
       setVantaEffect(
         BIRDS({
           el: myRef.current,
-          backgroundColor: 0x0,
+          // backgroundColor: 0x0,
+          backgroundColor: 0xff000000,
           color2: 0x2c0225,
+          quantity: 2,
           wingSpan: 10.0,
           alignment: 1.0,
           cohesion: 90.0,
@@ -220,20 +225,21 @@ const Profile = () => {
     setOpen(!open);
     setProfileDelete(false);
   };
+  const FallBackSVG = encodeURIComponent(renderToStaticMarkup(<FallBack2 />));
   return (
     <section
       ref={myRef}
-      className={` justify-center bg-[#0b0b0b] text-white p-4 pt-24 md:py-20 md:px-8   bg-cover bg-center`}
-      style={{
-        backgroundImage: `url(${
-          backgroundImage ||
-          (localStorage.getItem("background") !== "null" &&
-            localStorage.getItem("background") !== "undefined") ||
-          "/bgImage.svg"
-        })`,
-      }}
+      className={` justify-center bg-[#0b0b0b] text-white p-4 pt-24 md:py-22 md:px-8   bg-cover bg-center overflow-hidden `}
+      // style={{
+      //   backgroundImage: `url(${
+      //     backgroundImage ||
+      //     (localStorage.getItem("background") !== "null" &&
+      //       localStorage.getItem("background") !== "undefined") ||
+      //     "/bgImage.svg"
+      //   })`
+      // }}
     >
-      <div className="container mx-auto flex flex-col gap-5 sm:gap-6 justify-center items-center relative ">
+      <div className="container mx-auto flex flex-col gap-5 sm:gap-6 justify-center items-center relative overflow-hidden ">
         <div className="flex gap-6 justify-center items-center relative">
           {open && (
             <div className="absolute top-0 bg-black z-10 flex  flex-col justify-center items-center rounded py-4 px-[5px]">

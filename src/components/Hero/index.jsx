@@ -33,14 +33,14 @@ const Hero = () => {
     document.body.classList.remove("scroll");
   };
 
-  const arr = [1, 2, 3, 4, 5, 6];
+  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const changeSlide = (index) => {
     setSlideNumber(index);
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSlideNumber((prev) => (prev === 5 ? 0 : prev + 1));
+      setSlideNumber((prev) => (prev === 9 ? 0 : prev + 1));
     }, 3000);
 
     return () => clearInterval(interval);
@@ -92,7 +92,7 @@ const Hero = () => {
             className={` w-[100%] overflow-auto scroll-smooth flex h-full snap-x hide`}
           >
             {data
-              ?.filter((e, index) => index < 6)
+              ?.filter((e, index) => index < 10)
               ?.map((e, index) => {
                 const isVisible = slideNumber === index;
                 return (
@@ -132,7 +132,7 @@ const Hero = () => {
           </div>
           <div className="absolute bottom-6 w-full h-full px-6 sm:pl-6 text-white bg-gradient-to-b from-[#1c1c1c4a] to-black">
             {data
-              ?.filter((e, index) => index < 6)
+              ?.filter((e, index) => index < 10)
               .map((movie, index) => {
                 return (
                   <div

@@ -21,9 +21,12 @@ const TvShowsPage = () => {
 
   // Get initial values from searchParams or set defaults
   const page = Number(searchParams.get("page")) || 1;
-  const selectedLanguage = searchParams.get("language") || "en";
-  const selectedCountry = searchParams.get("country") || "US";
-  const selectedGenre = searchParams.get("genre") || "18";
+  const selectedLanguage =
+    searchParams.get("language") || localStorage.getItem("language") || "en";
+  const selectedCountry =
+    searchParams.get("country") || localStorage.getItem("country") || "US";
+  const selectedGenre =
+    searchParams.get("genre") || localStorage.getItem("genre") || "18";
 
   const updateSearchParams = (key, value) => {
     setSearchParams((prevParams) => {

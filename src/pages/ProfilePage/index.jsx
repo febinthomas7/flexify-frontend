@@ -4,6 +4,7 @@ import LoggedInDevices from "../../components/LoggedInDevices";
 import Mylist from "../../components/Mylist";
 import Profile from "../../components/Profile";
 import { Helmet } from "react-helmet";
+import FilterComponent from "../../components/CustomUserContent";
 import { ToastContainer } from "react-toastify";
 
 const ProfilePage = () => {
@@ -17,7 +18,9 @@ const ProfilePage = () => {
       </Helmet>
       <Header />
       <Profile />
+
       <Mylist />
+      <FilterComponent />
       <LoggedInDevices />
       <Footer />
     </>

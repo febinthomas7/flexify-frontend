@@ -13,6 +13,7 @@ import { MessagingContext } from "../../MessageContext";
 import { Animation } from "../Animation";
 import BIRDS from "vanta/dist/vanta.birds.min";
 import FallBack2 from "../FallBack2";
+import FilterComponent from "../CustomUserContent";
 
 const Profile = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -122,7 +123,7 @@ const Profile = () => {
     }
     const formData = new FormData();
     formData.append("avatar", e.target.avatar.files[0]);
-    formData.append("background", e.target.background.files[0]);
+    // formData.append("background", e.target.background.files[0]);
     formData.append("name", editedUserName);
     formData.append("email", userEmail);
     formData.append("userId", localStorage.getItem("userId"));
@@ -257,12 +258,12 @@ const Profile = () => {
                     >
                       remove_dp
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => deleteOption("backgroundImg")}
                       className="px-4 hover:bg-red-700"
                     >
                       remove_bg
-                    </button>
+                    </button> */}
                   </div>
                 )}
               </div>

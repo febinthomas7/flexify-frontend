@@ -19,10 +19,10 @@ const Footer = () => {
       path: "/person",
       name: "Person",
     },
-    {
-      path: "/anime",
-      name: "Anime",
-    },
+    // {
+    //   path: "/anime",
+    //   name: "Anime",
+    // },
   ];
 
   const socialMedia = [

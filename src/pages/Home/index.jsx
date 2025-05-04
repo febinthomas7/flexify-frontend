@@ -21,14 +21,13 @@ const Home = () => {
         <meta name="description" content="Explore movies and series" />
       </Helmet>
       <Header />
-
       <Hero />
       <Recommendation />
       <Continue />
       <Trending />
       <Movies />
       <Series />
-      <Anime />
+      {/* <Anime /> */}
       <UpcomingMovies />
       <UpcomingSeries />
       <Footer />

@@ -43,11 +43,11 @@ const Header = () => {
       label: "TvShows",
       icon: <FaTv />,
     },
-    {
-      path: "/anime",
-      label: "Anime",
-      icon: <BsEmojiSunglasses />,
-    },
+    // {
+    //   path: "/anime",
+    //   label: "Anime",
+    //   icon: <BsEmojiSunglasses />,
+    // },
     {
       path: "/person",
       label: "Person",
